@@ -5,6 +5,7 @@ export function mapToDto(form: SignupFormModel): CreateAccountDto {
   return {
     email: form.email,
     fullName: `${form.firstName} ${form.lastName}`,
+    department: form.department,
     password: form.password,
   };
 }
