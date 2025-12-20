@@ -161,13 +161,3 @@
         }
     }
 }
-
-:host ::ng-deep .p-checkbox {
-    background-color: #000000; /* your primary color */
-    border-color: #000000;
-    border-radius: 8px;
-}
-
-:host ::ng-deep .p-checkbox::after {
-    border-color: #000000; /* checkmark color */
-}

@@ -1,2 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
 @use "./styles/reset";
+
+.p-checkbox {
+    background-color: #000000;
+    border-color: #000000;
+    border-radius: 8px;
+}
+
+.p-checkbox::after {
+    border-color: #000000;
+}
