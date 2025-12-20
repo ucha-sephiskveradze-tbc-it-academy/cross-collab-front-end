@@ -8,11 +8,20 @@ import { AuthService } from './services/auth.service';
 import { CheckboxModule } from 'primeng/checkbox';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputOtpModule } from 'primeng/inputotp';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-sign-up',
   standalone: true,
-  imports: [CommonModule, Button, Field, CheckboxModule, FloatLabelModule, InputOtpModule],
+  imports: [
+    CommonModule,
+    Button,
+    Field,
+    CheckboxModule,
+    FloatLabelModule,
+    InputOtpModule,
+    RouterLink,
+  ],
   templateUrl: './sign-up.html',
   styleUrls: ['./sign-up.scss'],
 })

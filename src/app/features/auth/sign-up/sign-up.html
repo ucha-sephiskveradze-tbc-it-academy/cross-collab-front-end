@@ -49,7 +49,7 @@
     <label>
         <span>Department</span>
         <select [field]="createAccountForm.department">
-            <option value="">Select Department</option>
+            <option value="" disabled>Select Department</option>
             <option value="engineering">Engineering</option>
             <option value="marketing">Marketing</option>
         </select>
@@ -83,6 +83,6 @@
 
     <p class="footer">
         Already have an account?
-        <a href="#">Sign in</a>
+        <a routerLink="/login">Sign in</a>
     </p>
 </form>
