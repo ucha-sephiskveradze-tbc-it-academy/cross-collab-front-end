@@ -1,0 +1,88 @@
+<form class="auth-card" (submit)="onSubmit($event)">
+    <h1>Create Account</h1>
+
+    <!-- Names -->
+    <div class="row">
+        <label>
+            <span>First Name</span>
+            <input type="text" placeholder="First name" [field]="createAccountForm.firstName" />
+        </label>
+        <label>
+            <span>Last Name</span>
+            <input type="text" placeholder="Last name" [field]="createAccountForm.lastName" />
+        </label>
+    </div>
+
+    <!-- Email -->
+    <label>
+        <span>Email</span>
+        <input type="email" placeholder="Enter your email" [field]="createAccountForm.email" />
+    </label>
+
+    <!-- Phone -->
+    <label class="phone-row">
+        <span>Phone Number</span>
+        <div class="phone-input">
+            <input type="text" placeholder="+1 (555) 000-0000" [field]="createAccountForm.phone" />
+            <button type="button" class="otp-btn">Send OTP</button>
+        </div>
+    </label>
+
+    <!-- OTP -->
+    <div class="otp-section">
+        <div class="otp-header">
+            <img src="./assets/icons/security.svg" alt="">
+            <span>Enter OTP Code</span>
+        </div>
+
+        <div class="otp-boxes">
+            <p-inputotp [integerOnly]="true" [length]="6" />
+        </div>
+
+        <div class="otp-footer">
+            <span>Code expires in 05:00</span>
+            <a href="#">Resend Code</a>
+        </div>
+    </div>
+
+    <!-- Department -->
+    <label>
+        <span>Department</span>
+        <select [field]="createAccountForm.department">
+            <option value="">Select Department</option>
+            <option value="engineering">Engineering</option>
+            <option value="marketing">Marketing</option>
+        </select>
+    </label>
+
+    <!-- Password -->
+    <label>
+        <span>Password</span>
+        <input type="password" placeholder="Create password" [field]="createAccountForm.password" />
+        <small>
+            Password must be at least 8 characters with uppercase, lowercase, and number
+        </small>
+    </label>
+
+    <!-- Confirm -->
+    <label>
+        <span>Confirm Password</span>
+        <input type="password" placeholder="Confirm password" [field]="createAccountForm.confirmPassword" />
+    </label>
+
+    <!-- Terms -->
+    <label class="terms">
+        <p-checkbox [binary]="true" [field]="createAccountForm.termsAccepted" />
+        <span>I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></span>
+    </label>
+
+    <!-- Submit -->
+    <app-button label="Create Account" type="submit" variant="primary"
+        [disabled]="!createAccountForm().valid() || isSubmitting()" [loading]="isSubmitting()">
+    </app-button>
+
+    <p class="footer">
+        Already have an account?
+        <a href="#">Sign in</a>
+    </p>
+</form>
