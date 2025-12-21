@@ -1,10 +1,73 @@
-<div class="filter-section">
-    <h4>Category</h4>
+<app-header></app-header>
 
-    @for (cat of ['Team Building','Workshop','Sports','Happy Friday','Cultural','Wellness']; track cat) {
-    <label class="checkbox">
-        <input type="checkbox" [checked]="selectedCategory() === cat" disabled />
-        {{ cat }}
-    </label>
-    }
-</div>
+<main class="events-page">
+    <h1>Browse Events</h1>
+
+    <div class="layout">
+        <!-- FILTERS -->
+        <aside class="filters">
+            <h3>Filters</h3>
+
+            <!-- Category -->
+            <div class="filter-block">
+                <label>Category</label>
+
+                <p-listbox [(ngModel)]="selectedCategories" [options]="categoryOptions()" [multiple]="true"
+                    [checkbox]="true" optionLabel="name" class="w-full md:w-56" />
+
+            </div>
+
+            <div class="filter-block">
+                <label>Location</label>
+
+                <p-listbox [(ngModel)]="selectedLocations" [options]="locationOptions()" [multiple]="true"
+                    [checkbox]="true" optionLabel="name" class="w-full md:w-56" />
+
+            </div>
+
+            <!-- Date Range -->
+            <div class="filter-block">
+                <label>Date Range</label>
+
+                <p-datepicker [(ngModel)]="dateRange" selectionMode="range" [readonlyInput]="true" />
+
+            </div>
+
+            <div class="filter-block">
+                <label>Capacity Availability</label>
+
+                <p-listbox [(ngModel)]="selectedCapacities" [options]="capacityOptions" optionLabel="label"
+                    optionValue="value" [multiple]="true" [checkbox]="true" class="w-full md:w-56" />
+
+            </div>
+
+
+            <div class="filter-block">
+                <label>My Status</label>
+
+                <p-listbox [(ngModel)]="selectedStatuses" [options]="statusOptions" optionLabel="label"
+                    optionValue="value" [multiple]="true" [checkbox]="true" class="w-full" />
+
+            </div>
+        </aside>
+
+        <!-- EVENTS -->
+        <section class="results">
+            <div class="meta">
+                Showing {{ filteredEvents().length }} events
+            </div>
+
+            <div class="event-list">
+                @for (event of pagedEvents(); track event.id) {
+                <app-event-card [event]="event" />
+                }
+            </div>
+
+            <!-- PAGINATION -->
+            <p-paginator [first]="first()" [rows]="rows()" [totalRecords]="filteredEvents().length"
+                [rowsPerPageOptions]="[6, 12, 24]" (onPageChange)="onPageChange($event)" />
+        </section>
+    </div>
+</main>
+
+<app-footer></app-footer>

@@ -1,0 +1,147 @@
+.events-page {
+    margin: 0 auto;
+    padding: 32px 24px 64px;
+
+    h1 {
+        font-size: 28px;
+        font-weight: 600;
+        margin-bottom: 24px;
+        color: #111827;
+    }
+}
+
+/* =======================
+   Layout
+======================= */
+
+.layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 32px;
+    align-items: start;
+}
+
+/* =======================
+   Filters (Left Sidebar)
+======================= */
+
+.filters {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 20px;
+    position: sticky;
+    top: 24px;
+
+    h3 {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 20px;
+        color: #111827;
+    }
+}
+
+/* Individual filter block */
+.filter-block {
+    margin-bottom: 24px;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+
+    label {
+        display: block;
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #374151;
+    }
+
+    /* PrimeNG sizing consistency */
+    ::ng-deep .p-listbox,
+    ::ng-deep .p-datepicker {
+        width: 100%;
+    }
+}
+
+/* =======================
+   Checkbox-style filters
+   (capacity, status, etc.)
+======================= */
+
+.checkbox-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #374151;
+
+    input[type="checkbox"] {
+        width: 14px;
+        height: 14px;
+        accent-color: #111827;
+        cursor: pointer;
+    }
+
+    span {
+        cursor: pointer;
+    }
+}
+
+/* =======================
+   Results Section
+======================= */
+
+.results {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.meta {
+    font-size: 13px;
+    color: #6b7280;
+    margin-bottom: 8px;
+}
+
+/* =======================
+   Event List
+======================= */
+
+.event-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* =======================
+   Paginator
+======================= */
+
+::ng-deep .p-paginator {
+    margin-top: 24px;
+    border-radius: 12px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    padding: 12px;
+}
+
+/* =======================
+   Responsive
+======================= */
+
+@media (max-width: 1024px) {
+    .layout {
+        grid-template-columns: 1fr;
+    }
+
+    .filters {
+        position: static;
+    }
+}
