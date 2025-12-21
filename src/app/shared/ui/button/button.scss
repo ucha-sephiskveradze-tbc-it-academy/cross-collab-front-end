@@ -1,3 +1,5 @@
+@use "../../../../styles/variables" as *;
+
 button {
     padding: $spacing-sm 0;
     font-size: $font-size-lg;
