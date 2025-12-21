@@ -6,6 +6,9 @@ import { InputTextModule } from 'primeng/inputtext';
 import { Button } from '../../../shared/ui/button/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { Router, RouterLink } from '@angular/router';
+import { ILoginFormModel } from './models/login-form.model';
+import { HttpClient } from '@angular/common/http';
+import { take, finalize } from 'rxjs';
 
 @Component({
   selector: 'app-sign-in',
@@ -15,14 +18,14 @@ import { Router, RouterLink } from '@angular/router';
 })
 export class SignIn {
   private route = inject(Router);
+  private http = inject(HttpClient);
 
   isSubmitting = signal(false);
 
   // Signal model for login
-  model = signal({
+  model = signal<ILoginFormModel>({
     email: '',
     password: '',
-    rememberMe: false,
   });
 
   // Signal form schema
@@ -31,24 +34,38 @@ export class SignIn {
     email(schema.email);
     required(schema.password);
     minLength(schema.password, 6);
-    // rememberMe is optional
   });
 
   onSubmit(event: Event) {
     event.preventDefault();
-    if (!this.loginForm().valid()) return;
+    if (!this.loginForm().valid() || this.isSubmitting()) return;
 
     this.isSubmitting.set(true);
 
-    const payload = this.model();
+    const { email, password } = this.model();
 
-    console.log('Login payload:', payload);
+    this.http
+      .get<ILoginFormModel[]>('http://localhost:3000/users', {
+        params: { email, password },
+      })
+      .pipe(
+        take(1), // auto-unsubscribe
+        finalize(() => this.isSubmitting.set(false))
+      )
+      .subscribe({
+        next: ([user]) => {
+          if (!user) {
+            alert('Invalid email or password');
+            return;
+          }
 
-    // Simulate async login
-    setTimeout(() => {
-      this.isSubmitting.set(false);
-      console.log('Signed in successfully');
-    }, 500);
-    this.route.navigate(['dashboard']);
+          localStorage.setItem('user', JSON.stringify(user));
+          this.route.navigate(['dashboard']);
+        },
+        error: (err) => {
+          console.error('Login error:', err);
+          alert('Server error, please try again');
+        },
+      });
   }
 }
