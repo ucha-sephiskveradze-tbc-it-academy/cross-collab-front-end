@@ -53,6 +53,20 @@
         </div>
     </section>
 
+    <section class="browse-category">
+        <h3>Browse by Category</h3>
+
+        <div class="category-grid">
+            @for (cat of categories(); track cat.label) {
+            <div class="category-card">
+                <div class="icon">{{ cat.icon }}</div>
+                <div class="label">{{ cat.label }}</div>
+                <div class="count">{{ cat.count }} events</div>
+            </div>
+            }
+        </div>
+    </section>
+
     <!-- Trending -->
     <section class="section">
         <h2>Trending Events</h2>
