@@ -31,6 +31,10 @@ export class SignUp {
   private authService = inject(AuthService);
   private destroyed$ = new Subject<void>();
 
+  timerText = signal('');
+  isResendDisabled = signal(false);
+  private countdownInterval: any;
+
   createAccountModel = signal<SignupFormModel>({
     firstName: '',
     lastName: '',
@@ -68,6 +72,41 @@ export class SignUp {
     this.authService.createAccount(dto).pipe(takeUntil(this.destroyed$)).subscribe();
   }
 
+  startTimer() {
+    // Disable resend
+    this.isResendDisabled.set(true);
+
+    let remaining = 5 * 60 - 1; // 5 minutes in seconds
+
+    // Immediately show initial value
+    this.updateTimerText(remaining);
+
+    // Clear any previous interval
+    if (this.countdownInterval) {
+      clearInterval(this.countdownInterval);
+    }
+
+    // Start countdown
+    this.countdownInterval = setInterval(() => {
+      remaining--;
+
+      if (remaining <= 0) {
+        clearInterval(this.countdownInterval);
+        this.timerText.set('');
+        this.isResendDisabled.set(false); // enable resend again
+      } else {
+        this.updateTimerText(remaining);
+      }
+    }, 1000);
+  }
+
+  private updateTimerText(seconds: number) {
+    const m = Math.floor(seconds / 60)
+      .toString()
+      .padStart(2, '0');
+    const s = (seconds % 60).toString().padStart(2, '0');
+    this.timerText.set(`${m}:${s}`);
+  }
   ngOnDestroy() {
     this.destroyed$.next();
     this.destroyed$.complete();

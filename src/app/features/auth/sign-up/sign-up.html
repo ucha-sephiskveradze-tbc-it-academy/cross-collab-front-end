@@ -40,8 +40,17 @@
         </div>
 
         <div class="otp-footer">
-            <span>Code expires in 05:00</span>
-            <a href="#">Resend Code</a>
+            <span>Code expires in
+                @if (timerText()) {
+                <span> {{ timerText() }}</span>
+                } @else {
+                <span> 05:00</span>
+                }
+            </span>
+            <a (click)="startTimer()" [class.disabled]="isResendDisabled()"
+                [attr.disabled]="isResendDisabled() ? true : null">
+                Resend Code
+            </a>
         </div>
     </div>
 
