@@ -6,10 +6,11 @@ import { Calendar } from './components/calendar/calendar';
 import { Button } from '../../shared/ui/button/button';
 import { EventService } from '../../shared/services/events.service';
 import { Categories } from './components/categories/categories';
+import { EventCard } from '../../shares/ui/event-card/event-card';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [Header, Footer, CommonModule, Calendar, Button, Categories],
+  imports: [Header, Footer, CommonModule, Calendar, Button, Categories, EventCard],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
 })
