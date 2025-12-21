@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, computed, effect, inject, OnInit, signal } from '@angular/core';
 import { ICalendarDay, ICalendarEvent } from './models/calendar.model';
 import { CommonModule } from '@angular/common';
+import { EventService } from '../../../shared/services/events.service';
+import { mapEventItemToCalendarEvent } from './dto/eventToCalendar.dto';
 
 @Component({
   selector: 'app-calendar',
@@ -8,59 +10,38 @@ import { CommonModule } from '@angular/common';
   templateUrl: './calendar.html',
   styleUrl: './calendar.scss',
 })
-export class Calendar implements OnInit {
-  currentDate = new Date();
-  days: ICalendarDay[] = [];
+export class Calendar {
+  private calendarService = inject(EventService);
 
-  mockEvents: ICalendarEvent[] = [
-    {
-      id: 1,
-      title: 'Team Summit',
-      date: new Date(2025, 11, 18),
-    },
-    {
-      id: 2,
-      title: 'Workshop',
-      date: new Date(2025, 11, 20),
-    },
-    {
-      id: 3,
-      title: 'Game Night',
-      date: new Date(2025, 11, 24),
-    },
-    {
-      id: 4,
-      title: 'Tech Talk',
-      date: new Date(2025, 11, 26),
-    },
-  ];
+  currentDate = signal(new Date()); // make currentDate reactive
+  events = this.calendarService.events;
 
-  ngOnInit() {
-    this.generateCalendar();
-  }
+  calendarEvents = computed<ICalendarEvent[]>(() =>
+    this.events.hasValue() ? this.events.value().map(mapEventItemToCalendarEvent) : []
+  );
 
-  generateCalendar() {
-    this.days = [];
-
-    const year = this.currentDate.getFullYear();
-    const month = this.currentDate.getMonth();
+  days = computed<ICalendarDay[]>(() => {
+    const year = this.currentDate().getFullYear();
+    const month = this.currentDate().getMonth();
 
     const firstDayOfMonth = new Date(year, month, 1);
     const startDay = new Date(firstDayOfMonth);
     startDay.setDate(startDay.getDate() - startDay.getDay());
 
+    const result: ICalendarDay[] = [];
     for (let i = 0; i < 42; i++) {
       const date = new Date(startDay);
       date.setDate(startDay.getDate() + i);
 
-      this.days.push({
+      result.push({
         date,
         inCurrentMonth: date.getMonth() === month,
         isToday: this.isSameDate(date, new Date()),
-        events: this.mockEvents.filter((e) => this.isSameDate(e.date, date)),
+        events: this.calendarEvents().filter((ev) => this.isSameDate(ev.date, date)),
       });
     }
-  }
+    return result;
+  });
 
   isSameDate(a: Date, b: Date): boolean {
     return (
@@ -71,17 +52,18 @@ export class Calendar implements OnInit {
   }
 
   prevMonth() {
-    this.currentDate = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth() - 1, 1);
-    this.generateCalendar();
+    this.currentDate.set(
+      new Date(this.currentDate().getFullYear(), this.currentDate().getMonth() - 1, 1)
+    );
   }
 
   nextMonth() {
-    this.currentDate = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth() + 1, 1);
-    this.generateCalendar();
+    this.currentDate.set(
+      new Date(this.currentDate().getFullYear(), this.currentDate().getMonth() + 1, 1)
+    );
   }
 
   goToday() {
-    this.currentDate = new Date();
-    this.generateCalendar();
+    this.currentDate.set(new Date());
   }
 }

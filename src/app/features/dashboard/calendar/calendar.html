@@ -2,7 +2,7 @@
     <!-- Header -->
     <div class="calendar-header">
         <h2>
-            {{ currentDate | date: 'MMMM yyyy' }}
+            {{ currentDate() | date: 'MMMM yyyy' }}
         </h2>
 
         <div class="actions">
@@ -21,7 +21,7 @@
 
     <!-- Days Grid -->
     <div class="days">
-        @for (day of days; track day.date.getTime()) {
+        @for (day of days(); track day.date.getTime()) {
         <div class="day" [class.outside]="!day.inCurrentMonth" [class.today]="day.isToday">
             <span class="date">{{ day.date.getDate() }}</span>
 
