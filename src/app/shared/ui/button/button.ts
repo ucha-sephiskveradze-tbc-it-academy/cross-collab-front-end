@@ -8,8 +8,8 @@ import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
   styleUrl: './button.scss',
 })
 export class Button {
-  @Input() label = 'Button';
-  @Input() type: 'button' | 'submit' | 'reset' = 'button';
+  @Input() label = '';
+  @Input() type: 'button' | 'submit' = 'button';
   @Input() variant: 'primary' | 'secondary' = 'primary';
   @Input() disabled = false;
   @Input() loading = false;

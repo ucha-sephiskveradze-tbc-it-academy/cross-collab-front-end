@@ -1,11 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { Field, form, required, email, minLength } from '@angular/forms/signals';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { Button } from '../../../shared/ui/button/button';
 import { CheckboxModule } from 'primeng/checkbox';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-sign-in',
@@ -14,6 +14,8 @@ import { RouterLink } from '@angular/router';
   styleUrl: './sign-in.scss',
 })
 export class SignIn {
+  private route = inject(Router);
+
   isSubmitting = signal(false);
 
   // Signal model for login
@@ -46,6 +48,7 @@ export class SignIn {
     setTimeout(() => {
       this.isSubmitting.set(false);
       console.log('Signed in successfully');
-    }, 1000);
+    }, 500);
+    this.route.navigate(['dashboard']);
   }
 }
