@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { httpResource } from '@angular/common/http';
-import { IEventItem } from '../model/event.mode';
+import { IEventItem } from '../../features/dashboard/model/event.mode';
 
 @Injectable({ providedIn: 'root' })
 export class EventService {

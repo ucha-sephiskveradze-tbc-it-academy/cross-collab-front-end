@@ -1,13 +1,10 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { Header } from '../../shared/ui/header/header';
 import { Footer } from '../../shared/ui/footer/footer';
-import { IEventItem } from './model/event.mode';
-import { CalendarIcon } from 'primeng/icons';
 import { CommonModule } from '@angular/common';
 import { Calendar } from './calendar/calendar';
 import { Button } from '../../shared/ui/button/button';
-import { EventService } from './services/events.service';
-import { httpResource } from '@angular/common/http';
+import { EventService } from '../../shared/services/events.service';
 
 @Component({
   selector: 'app-dashboard',
