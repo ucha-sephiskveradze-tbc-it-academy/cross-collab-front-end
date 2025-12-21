@@ -1,0 +1,38 @@
+<div class="calendar">
+    <!-- Header -->
+    <div class="calendar-header">
+        <h2>
+            {{ currentDate | date: 'MMMM yyyy' }}
+        </h2>
+
+        <div class="actions">
+            <button (click)="prevMonth()">‹</button>
+            <button (click)="goToday()">Today</button>
+            <button (click)="nextMonth()">›</button>
+        </div>
+    </div>
+
+    <!-- Weekdays -->
+    <div class="weekdays">
+        @for (d of ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']; track d) {
+        <div>{{ d }}</div>
+        }
+    </div>
+
+    <!-- Days Grid -->
+    <div class="days">
+        @for (day of days; track day.date.getTime()) {
+        <div class="day" [class.outside]="!day.inCurrentMonth" [class.today]="day.isToday">
+            <span class="date">{{ day.date.getDate() }}</span>
+
+            <div class="events">
+                @for (event of day.events; track event.title) {
+                <div class="event">
+                    {{ event.title }}
+                </div>
+                }
+            </div>
+        </div>
+        }
+    </div>
+</div>
