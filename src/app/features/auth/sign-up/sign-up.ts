@@ -61,23 +61,23 @@ export class SignUp {
     required(schema.phone, { message: 'Phone number is required' });
 
     minLength(schema.otp, 6, { message: 'OTP must be 6 digits' });
-    validate(schema.otp, ({ value }) => {
-      const enteredOtp = value();
-      const sentOtp = this.sentOtp(); // signal holding last sent OTP
-      if (!sentOtp) {
-        return {
-          kind: 'otpNotSent',
-          message: 'Please request an OTP first',
-        };
-      }
-      if (enteredOtp !== sentOtp) {
-        return {
-          kind: 'otpMismatch',
-          message: 'OTP does not match the code sent',
-        };
-      }
-      return null;
-    });
+    // validate(schema.otp, ({ value }) => {
+    //   const enteredOtp = value();
+    //   const sentOtp = this.sentOtp(); // signal holding last sent OTP
+    //   if (!sentOtp) {
+    //     return {
+    //       kind: 'otpNotSent',
+    //       message: 'Please request an OTP first',
+    //     };
+    //   }
+    //   if (enteredOtp !== sentOtp) {
+    //     return {
+    //       kind: 'otpMismatch',
+    //       message: 'OTP does not match the code sent',
+    //     };
+    //   }
+    //   return null;
+    // });
 
     required(schema.department, { message: 'Department is required' });
 
@@ -173,60 +173,60 @@ export class SignUp {
     this.destroyed$.complete();
   }
 
-  test() {
-    console.log(
-      'First Name:',
-      this.createAccountForm.firstName().value(),
-      this.createAccountForm.firstName().valid(),
-      this.createAccountForm.firstName().errors()
-    );
-    console.log(
-      'Last Name:',
-      this.createAccountForm.lastName().value(),
-      this.createAccountForm.lastName().valid(),
-      this.createAccountForm.lastName().errors()
-    );
-    console.log(
-      'Email:',
-      this.createAccountForm.email().value(),
-      this.createAccountForm.email().valid(),
-      this.createAccountForm.email().errors()
-    );
-    console.log(
-      'Phone:',
-      this.createAccountForm.phone().value(),
-      this.createAccountForm.phone().valid(),
-      this.createAccountForm.phone().errors()
-    );
-    console.log(
-      'OTP:',
-      this.createAccountForm.otp().value(),
-      this.createAccountForm.otp().valid(),
-      this.createAccountForm.otp().errors()
-    );
-    console.log(
-      'Department:',
-      this.createAccountForm.department().value(),
-      this.createAccountForm.department().valid(),
-      this.createAccountForm.department().errors()
-    );
-    console.log(
-      'Password:',
-      this.createAccountForm.password().value(),
-      this.createAccountForm.password().valid(),
-      this.createAccountForm.password().errors()
-    );
-    console.log(
-      'Confirm Password:',
-      this.createAccountForm.confirmPassword().value(),
-      this.createAccountForm.confirmPassword().valid(),
-      this.createAccountForm.confirmPassword().errors()
-    );
-    console.log(
-      'Terms Accepted:',
-      this.createAccountForm.termsAccepted().value(),
-      this.createAccountForm.termsAccepted().valid(),
-      this.createAccountForm.termsAccepted().errors()
-    );
-  }
+  // test() {
+  //   console.log(
+  //     'First Name:',
+  //     this.createAccountForm.firstName().value(),
+  //     this.createAccountForm.firstName().valid(),
+  //     this.createAccountForm.firstName().errors()
+  //   );
+  //   console.log(
+  //     'Last Name:',
+  //     this.createAccountForm.lastName().value(),
+  //     this.createAccountForm.lastName().valid(),
+  //     this.createAccountForm.lastName().errors()
+  //   );
+  //   console.log(
+  //     'Email:',
+  //     this.createAccountForm.email().value(),
+  //     this.createAccountForm.email().valid(),
+  //     this.createAccountForm.email().errors()
+  //   );
+  //   console.log(
+  //     'Phone:',
+  //     this.createAccountForm.phone().value(),
+  //     this.createAccountForm.phone().valid(),
+  //     this.createAccountForm.phone().errors()
+  //   );
+  //   console.log(
+  //     'OTP:',
+  //     this.createAccountForm.otp().value(),
+  //     this.createAccountForm.otp().valid(),
+  //     this.createAccountForm.otp().errors()
+  //   );
+  //   console.log(
+  //     'Department:',
+  //     this.createAccountForm.department().value(),
+  //     this.createAccountForm.department().valid(),
+  //     this.createAccountForm.department().errors()
+  //   );
+  //   console.log(
+  //     'Password:',
+  //     this.createAccountForm.password().value(),
+  //     this.createAccountForm.password().valid(),
+  //     this.createAccountForm.password().errors()
+  //   );
+  //   console.log(
+  //     'Confirm Password:',
+  //     this.createAccountForm.confirmPassword().value(),
+  //     this.createAccountForm.confirmPassword().valid(),
+  //     this.createAccountForm.confirmPassword().errors()
+  //   );
+  //   console.log(
+  //     'Terms Accepted:',
+  //     this.createAccountForm.termsAccepted().value(),
+  //     this.createAccountForm.termsAccepted().valid(),
+  //     this.createAccountForm.termsAccepted().errors()
+  //   );
+  // }
 }
