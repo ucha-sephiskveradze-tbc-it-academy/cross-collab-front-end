@@ -1,0 +1,92 @@
+header {
+    width: 100vw;
+    display: flex;
+    justify-content: space-between;
+    height: 80px;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid #e5e7eb;
+
+    .left {
+        display: flex;
+        gap: 32px;
+        align-items: center;
+        width: 25%;
+
+        &__logo {
+            display: inherit;
+            align-items: inherit;
+            gap: 12px;
+            > div {
+                width: 32px;
+                height: 32px;
+                background-color: black;
+            }
+        }
+
+        nav {
+            display: inherit;
+            align-items: inherit;
+            width: 100%;
+
+            a {
+                padding: 16px;
+                white-space: nowrap;
+                color: #525252;
+
+                .active-link {
+                    border-bottom: 1px solid black;
+                    color: #171717;
+                }
+            }
+        }
+    }
+
+    .right {
+        display: flex;
+        align-items: center;
+
+        &__notification {
+            margin-right: 16px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            img {
+                filter: brightness(0) saturate(100%) invert(20%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(90%)
+                    contrast(90%);
+            }
+
+            > div {
+                position: absolute;
+                border-radius: 50%;
+                width: 8px;
+                height: 8px;
+                background-color: red;
+                top: -2.5px;
+                right: -2.5px;
+            }
+        }
+
+        &__profile {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            border-left: 1px solid #e5e5e5;
+            padding-left: 16px;
+
+            p {
+                font-weight: 400;
+                font-size: 12px;
+                color: #737373;
+            }
+
+            h1 {
+                font-weight: 400;
+                font-size: 14px;
+                line-height: 20px;
+                color: #171717;
+            }
+        }
+    }
+}
