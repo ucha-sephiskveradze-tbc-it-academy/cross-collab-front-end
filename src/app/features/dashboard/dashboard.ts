@@ -5,7 +5,6 @@ import { CommonModule } from '@angular/common';
 import { Calendar } from './components/calendar/calendar';
 import { Button } from '../../shared/ui/button/button';
 import { EventService } from '../../shared/services/events.service';
-import { ICategoryUI } from './model/catogies.model';
 import { Categories } from './components/categories/categories';
 
 @Component({

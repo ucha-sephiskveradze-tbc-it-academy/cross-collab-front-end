@@ -1,5 +1,5 @@
 import { Component, computed, inject } from '@angular/core';
-import { ICategoryUI } from '../../model/catogies.model';
+import { ICategoryUI } from './models/categories.model';
 import { EventService } from '../../../../shared/services/events.service';
 const CATEGORY_ICONS: Record<string, string> = {
   'Team Building': './assets/icons/categories/team_building.svg',
