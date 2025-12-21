@@ -5,10 +5,11 @@ import { CommonModule } from '@angular/common';
 import { Calendar } from './components/calendar/calendar';
 import { Button } from '../../shared/ui/button/button';
 import { EventService } from '../../shared/services/events.service';
+import { Categories } from './components/categories/categories';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [Header, Footer, CommonModule, Calendar, Button],
+  imports: [Header, Footer, CommonModule, Calendar, Button, Categories],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
 })
@@ -30,5 +31,6 @@ export class Dashboard implements OnInit {
   trendingEvents = computed(() =>
     this.events.hasValue() ? this.events.value().filter((e) => e.isTrending) : []
   );
+
   ngOnInit() {}
 }

@@ -1,7 +1,7 @@
 import { Component, computed, effect, inject, OnInit, signal } from '@angular/core';
 import { ICalendarDay, ICalendarEvent } from './models/calendar.model';
 import { CommonModule } from '@angular/common';
-import { EventService } from '../../../shared/services/events.service';
+import { EventService } from '../../../../shared/services/events.service';
 import { mapEventItemToCalendarEvent } from './dto/eventToCalendar.dto';
 
 @Component({
