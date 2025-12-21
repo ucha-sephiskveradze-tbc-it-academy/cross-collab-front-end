@@ -9,6 +9,8 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputOtpModule } from 'primeng/inputotp';
 import { RouterLink } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
+import { tap } from 'rxjs';
 
 @Component({
   selector: 'app-sign-up',
@@ -27,6 +29,7 @@ import { RouterLink } from '@angular/router';
 })
 export class SignUp {
   private authService = inject(AuthService);
+  private destroyed$ = new Subject<void>();
 
   createAccountModel = signal<SignupFormModel>({
     firstName: '',
@@ -62,9 +65,11 @@ export class SignUp {
     if (!this.createAccountForm().valid()) return;
 
     const dto = mapToDto(this.createAccountModel());
-    this.authService.createAccount(dto).subscribe({
-      next: () => console.log('Account created'),
-      error: (err: unknown) => console.error('Signup failed', err),
-    });
+    this.authService.createAccount(dto).pipe(takeUntil(this.destroyed$)).subscribe();
+  }
+
+  ngOnDestroy() {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }
