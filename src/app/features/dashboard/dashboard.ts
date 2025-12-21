@@ -2,7 +2,7 @@ import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { Header } from '../../shared/ui/header/header';
 import { Footer } from '../../shared/ui/footer/footer';
 import { CommonModule } from '@angular/common';
-import { Calendar } from './calendar/calendar';
+import { Calendar } from './components/calendar/calendar';
 import { Button } from '../../shared/ui/button/button';
 import { EventService } from '../../shared/services/events.service';
 
