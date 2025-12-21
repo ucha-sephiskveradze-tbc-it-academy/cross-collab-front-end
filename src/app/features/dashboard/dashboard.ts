@@ -5,10 +5,11 @@ import { IEventItem } from './model/event.mode';
 import { CalendarIcon } from 'primeng/icons';
 import { CommonModule } from '@angular/common';
 import { Calendar } from './calendar/calendar';
+import { Button } from '../../shared/ui/button/button';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [Header, Footer, CommonModule, Calendar],
+  imports: [Header, Footer, CommonModule, Calendar, Button],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
 })
