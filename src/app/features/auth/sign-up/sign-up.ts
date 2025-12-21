@@ -12,6 +12,7 @@ import { Router, RouterLink } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { tap } from 'rxjs';
 import { OtpService } from './services/otp.service';
+import { Departments } from './models/departments';
 
 @Component({
   selector: 'app-sign-up',
@@ -34,6 +35,8 @@ export class SignUp {
   private otpService = inject(OtpService);
   private router = inject(Router);
   sentOtp = signal<string | null>(null);
+
+  departments = Departments;
 
   timerText = signal('');
   isResendDisabled = signal(false);
