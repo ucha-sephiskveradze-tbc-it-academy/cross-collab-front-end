@@ -6,18 +6,11 @@ import { Calendar } from './components/calendar/calendar';
 import { Button } from '../../shared/ui/button/button';
 import { EventService } from '../../shared/services/events.service';
 import { ICategoryUI } from './model/catogies.model';
-const CATEGORY_ICONS: Record<string, string> = {
-  'Team Building': '👥',
-  Workshop: '🧑‍🏫',
-  'Happy Friday': '🎮',
-  Sports: '⚽',
-  Cultural: '🌍',
-  Wellness: '❤️',
-};
+import { Categories } from './components/categories/categories';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [Header, Footer, CommonModule, Calendar, Button],
+  imports: [Header, Footer, CommonModule, Calendar, Button, Categories],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
 })
@@ -39,22 +32,6 @@ export class Dashboard implements OnInit {
   trendingEvents = computed(() =>
     this.events.hasValue() ? this.events.value().filter((e) => e.isTrending) : []
   );
-
-  categories = computed<ICategoryUI[]>(() => {
-    if (!this.events.hasValue()) return [];
-
-    const map = new Map<string, number>();
-
-    for (const event of this.events.value()) {
-      map.set(event.category, (map.get(event.category) ?? 0) + 1);
-    }
-
-    return Array.from(map.entries()).map(([label, count]) => ({
-      label,
-      count,
-      icon: CATEGORY_ICONS[label] ?? '📌',
-    }));
-  });
 
   ngOnInit() {}
 }

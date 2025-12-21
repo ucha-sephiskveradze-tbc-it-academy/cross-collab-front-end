@@ -1,0 +1,14 @@
+<section class="browse-category">
+    <h3>Browse by Category</h3>
+
+    <div class="category-grid">
+        @for (cat of categories(); track cat.label) {
+        <div class="category-card">
+            <img class="icon" [src]="cat.icon" [alt]="cat.label" />
+
+            <div class="label">{{ cat.label }}</div>
+            <div class="count">{{ cat.count }} events</div>
+        </div>
+        }
+    </div>
+</section>
