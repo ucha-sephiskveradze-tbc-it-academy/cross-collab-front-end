@@ -8,6 +8,7 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   createAccount(dto: CreateAccountDto) {
+    console.log(dto);
     return this.http.post(`${environment.apiUrl}/users`, dto);
   }
 }
