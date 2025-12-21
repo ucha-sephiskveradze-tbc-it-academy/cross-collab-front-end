@@ -1,3 +1,72 @@
 <app-header></app-header>
+<section class="dashboard">
+
+    <!-- Welcome -->
+    <div class="welcome">
+        <h1>Welcome back, {{ user.name }}</h1>
+        <p>Stay connected with upcoming company events and activities</p>
+    </div>
+
+    <!-- Upcoming Events -->
+    <section class="section">
+        <div class="section-header">
+            <h2>Upcoming Events</h2>
+            <a routerLink="/events">View all</a>
+        </div>
+
+        <div class="event-list">
+            @for (event of upcomingEvents(); track event.id) {
+            <div class="event-card">
+                <div class="date">
+                    <span>{{ event.date | date:'MMM' }}</span>
+                    <strong>{{ event.date | date:'dd' }}</strong>
+                </div>
+
+                <div class="content">
+                    <h3>
+                        {{ event.title }}
+                        <span class="badge" [class.waitlisted]="event.status === 'Waitlisted'">
+                            {{ event.status }}
+                        </span>
+                    </h3>
+
+                    <p class="meta">
+                        {{ event.time }} · {{ event.location }} · {{ event.category }}
+                    </p>
+
+                    <p class="desc">{{ event.description }}</p>
+
+                    <small>
+                        {{ event.registeredCount }} registered ·
+                        {{ event.capacity - event.registeredCount }} spots left
+                    </small>
+                </div>
+
+                <button class="outline">View Details</button>
+            </div>
+            }
+        </div>
+    </section>
+
+    <!-- Trending -->
+    <section class="section">
+        <h2>Trending Events</h2>
+
+        <div class="trending">
+            @for (event of trendingEvents(); track event.id) {
+            <div class="trending-card">
+                <div class="image-placeholder"></div>
+                <h4>{{ event.title }}</h4>
+                <p>{{ event.category }}</p>
+                <button>Register</button>
+            </div>
+            }
+        </div>
+    </section>
+
+    <!-- Calendar -->
+    <app-calendar></app-calendar>
+
+</section>
 
 <app-footer></app-footer>
