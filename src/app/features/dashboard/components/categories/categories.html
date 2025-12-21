@@ -4,7 +4,9 @@
     <div class="category-grid">
         @for (cat of categories(); track cat.label) {
         <div class="category-card">
-            <img class="icon" [src]="cat.icon" [alt]="cat.label" />
+            <div class="icon-box">
+                <img class="icon" [src]="cat.icon" [alt]="cat.label" />
+            </div>
 
             <div class="label">{{ cat.label }}</div>
             <div class="count">{{ cat.count }} events</div>
