@@ -16,39 +16,7 @@
 
         <div class="event-list">
             @for (event of upcomingEvents(); track event.id) {
-            <div class="event-card">
-                <div class="date">
-                    <span>{{ event.date | date:'MMM' }}</span>
-                    <strong>{{ event.date | date:'dd' }}</strong>
-                </div>
-
-                <div class="content">
-                    <h3>
-                        {{ event.title }}
-                        <span class="badge" [class.waitlisted]="event.status === 'Waitlisted'">
-                            {{ event.status }}
-                        </span>
-                    </h3>
-
-                    <p class="meta">
-                        <img src="./assets/icons/clock.svg" alt="">
-                        {{ event.time }}
-                        <img src="./assets/icons/location.svg" alt="">
-                        {{ event.location }}
-                        <img src="./assets/icons/tag.svg" alt="">
-                        {{ event.category }}
-                    </p>
-
-                    <p class="desc">{{ event.description }}</p>
-
-                    <small>
-                        {{ event.registeredCount }} registered ·
-                        {{ event.capacity - event.registeredCount }} spots left
-                    </small>
-                </div>
-
-                <button class="outline">View Details</button>
-            </div>
+            <app-event-card [event]="event" />
             }
         </div>
     </section>
