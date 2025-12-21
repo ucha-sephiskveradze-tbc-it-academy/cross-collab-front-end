@@ -1,6 +1,8 @@
 import { Component, computed, inject } from '@angular/core';
 import { ICategoryUI } from './models/categories.model';
 import { EventService } from '../../../../shared/services/events.service';
+import { CommonModule } from '@angular/common';
+import { Router, RouterModule } from '@angular/router';
 const CATEGORY_ICONS: Record<string, string> = {
   'Team Building': './assets/icons/categories/team_building.svg',
   Workshop: './assets/icons/categories/workshop.svg',
@@ -11,7 +13,7 @@ const CATEGORY_ICONS: Record<string, string> = {
 };
 @Component({
   selector: 'app-categories',
-  imports: [],
+  imports: [RouterModule],
   templateUrl: './categories.html',
   styleUrl: './categories.scss',
 })
