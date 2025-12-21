@@ -1,0 +1,10 @@
+<div class="filter-section">
+    <h4>Category</h4>
+
+    @for (cat of ['Team Building','Workshop','Sports','Happy Friday','Cultural','Wellness']; track cat) {
+    <label class="checkbox">
+        <input type="checkbox" [checked]="selectedCategory() === cat" disabled />
+        {{ cat }}
+    </label>
+    }
+</div>
