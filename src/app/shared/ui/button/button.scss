@@ -1,21 +1,21 @@
 button {
-    padding: 8px 0;
-    font-size: 1rem;
+    padding: $spacing-sm 0;
+    font-size: $font-size-lg;
     border: none;
-    border-radius: 6px;
+    border-radius: $radius-sm;
     cursor: pointer;
     align-items: center;
-    gap: 0.5rem;
+    gap: $spacing-sm;
     width: 100%;
 
     &.primary {
-        background-color: #171717;
-        color: white;
+        background-color: $color-gray-900;
+        color: $color-white;
     }
 
     &.secondary {
-        background-color: #f5f5f5;
-        color: #404040;
+        background-color: $color-gray-100;
+        color: $color-gray-700;
     }
 
     &:disabled {
