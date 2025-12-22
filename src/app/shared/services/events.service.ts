@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { httpResource } from '@angular/common/http';
 import { IEventItem } from '../../shares/ui/event-card/model/event.mode';
+import { environment } from '../../../environments/environment.test';
 
 @Injectable({ providedIn: 'root' })
 export class EventService {
   events = httpResource<IEventItem[]>(() => ({
-    url: 'http://localhost:3000/events',
+    url: `${environment.apiUrl}/events`,
     method: 'GET',
   }));
 }
