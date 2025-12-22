@@ -1,4 +1,5 @@
 <app-header></app-header>
+
 <section class="dashboard">
 
     <!-- Welcome -->
@@ -15,7 +16,7 @@
         </div>
 
         <div class="event-list">
-            @for (event of upcomingEvents(); track event.id) {
+            @for (event of upcomingEvents(); track event.eventId) {
             <app-event-card [event]="event" />
             }
         </div>
@@ -28,13 +29,16 @@
         <h2>Trending Events</h2>
 
         <div class="trending">
-            @for (event of trendingEvents(); track event.id) {
+            @for (event of trendingEvents(); track event.eventId) {
             <div class="trending-card">
                 <div class="image-placeholder"></div>
-                <h4>{{ event.title }}</h4>
-                <p>{{ event.category }}</p>
-                <app-button label="Register"></app-button>
 
+                <h4>{{ event.title }}</h4>
+
+                <!-- ✅ FIX -->
+                <p>{{ event.category.categoryName }}</p>
+
+                <app-button label="Register" [disabled]="event.currentUserStatus === 'REGISTERED'"></app-button>
             </div>
             }
         </div>

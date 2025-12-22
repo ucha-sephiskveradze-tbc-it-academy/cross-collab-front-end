@@ -1,5 +1,5 @@
-<button [attr.type]="type" [disabled]="disabled || loading" [ngClass]="[variant]" [routerLink]="routerLink"
-    (click)="onClick()">
+<button class="app-button" [type]="type || 'button'" [disabled]="disabled || loading" [ngClass]="variant"
+    [routerLink]="!disabled && !loading ? routerLink : null" (click)="handleClick($event)">
     @if (loading) {
     <span class="spinner"></span>
     } @else {

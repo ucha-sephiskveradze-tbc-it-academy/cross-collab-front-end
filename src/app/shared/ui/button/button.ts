@@ -21,9 +21,13 @@ export class Button {
 
   isHovered = signal(false);
 
-  onClick() {
-    if (!this.disabled && !this.loading) {
-      this.clicked.emit();
+  handleClick(event: Event) {
+    if (this.disabled || this.loading) {
+      event.preventDefault();
+      event.stopPropagation();
+      return;
     }
+
+    this.clicked.emit();
   }
 }

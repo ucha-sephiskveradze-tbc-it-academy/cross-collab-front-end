@@ -25,12 +25,16 @@ export class Dashboard implements OnInit {
   upcomingEvents = computed(() =>
     this.events.hasValue()
       ? [...this.events.value()]
-          .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+          .sort((a, b) => new Date(a.startDateTime).getTime() - new Date(b.startDateTime).getTime())
           .slice(0, 5)
       : []
   );
   trendingEvents = computed(() =>
-    this.events.hasValue() ? this.events.value().filter((e) => e.isTrending) : []
+    this.events.hasValue()
+      ? [...this.events.value()]
+          .sort((a, b) => new Date(a.startDateTime).getTime() - new Date(b.startDateTime).getTime())
+          .slice(0, 3)
+      : []
   );
 
   ngOnInit() {}
