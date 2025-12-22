@@ -34,7 +34,7 @@ header {
                 white-space: nowrap;
                 color: #525252;
 
-                .active-link {
+                &.active-link {
                     border-bottom: 1px solid black;
                     color: #171717;
                 }
