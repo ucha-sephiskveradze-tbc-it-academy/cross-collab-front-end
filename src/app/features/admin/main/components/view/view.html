@@ -1,0 +1,254 @@
+<app-header></app-header>
+@if (event()) {
+<div class="page">
+    <!-- Breadcrumb -->
+    <div class="crumbs">
+        <span>Event Management</span>
+        <span class="sep">›</span>
+        <span class="muted">{{ event()?.title || 'Event' }}</span>
+        <span class="sep">›</span>
+        <span class="muted">Registrations &amp; Waitlist</span>
+    </div>
+
+    <!-- Event Header Card -->
+    <div class="card header-card">
+        <div class="header-top">
+            <div class="title-wrap">
+                <h1 class="title">{{ event()?.title }}</h1>
+
+                <span class="status-pill" [class.upcoming]="getEventStatus() === 'Upcoming'">
+                    {{ getEventStatus() }}
+                </span>
+            </div>
+
+            <button class="btn-outline" type="button">
+                <i class="pi pi-pencil"></i>
+                Edit Event
+            </button>
+        </div>
+
+        <!-- meta row -->
+        <div class="meta-row">
+            <div class="meta">
+                <i class="pi pi-calendar"></i>
+                <span>{{ event()?.startDateTime | date : 'MMMM d, y' }}</span>
+            </div>
+
+            <div class="meta">
+                <i class="pi pi-clock"></i>
+                <span>
+                    {{ event()?.startDateTime | date : 'h:mm a' }} – {{ event()?.endDateTime | date : 'h:mm a' }}
+                </span>
+            </div>
+
+            <div class="meta">
+                <i class="pi pi-map-marker"></i>
+                <span>{{ event()?.location }}</span>
+            </div>
+
+            <div class="meta">
+                <i class="pi pi-tag"></i>
+                <span>{{ event()?.category?.categoryName }}</span>
+            </div>
+        </div>
+
+        <!-- stat pills row -->
+        <div class="stats-row">
+            <div class="stat">
+                <i class="pi pi-users"></i>
+                <span><b>{{ event()?.capacity ?? 0 }}</b> Capacity</span>
+            </div>
+
+            <div class="stat">
+                <i class="pi pi-user-plus"></i>
+                <span><b>{{ event()?.totalRegistered ?? 0 }}</b> Registered</span>
+            </div>
+
+            <div class="stat">
+                <i class="pi pi-clock"></i>
+                <span><b>{{ waitlistCount() }}</b> Waitlisted</span>
+            </div>
+
+            <div class="stat">
+                <i class="pi pi-check-square"></i>
+                <span><b>{{ getSpotsLeft() }}</b> Available</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Actions row -->
+    <div class="card actions-card">
+        <button class="btn-black" type="button">
+            <i class="pi pi-download"></i>
+            Export All Data
+        </button>
+
+        <div class="search-wrap">
+            <i class="pi pi-search"></i>
+            <input type="text" class="search" placeholder="Search participants..." (input)="globalFilter($event)" />
+        </div>
+    </div>
+
+    <!-- Tabs + participants table -->
+    <div class="card">
+        <div class="tabs">
+            <button class="tab" [class.active]="activeTab() === 'registered'" (click)="setTab('registered')">
+                Registered Participants ({{ registeredCount() }})
+            </button>
+
+            <button class="tab" [class.active]="activeTab() === 'waitlist'" (click)="setTab('waitlist')">
+                Waitlist ({{ waitlistCount() }})
+            </button>
+
+            <button class="tab" [class.active]="activeTab() === 'cancelled'" (click)="setTab('cancelled')">
+                Cancelled ({{ cancelledCount() }})
+            </button>
+
+            <button class="tab" [class.active]="activeTab() === 'all'" (click)="setTab('all')">
+                All Participants ({{ allCount() }})
+            </button>
+        </div>
+
+        <p-table #dt [value]="filteredParticipants()" [paginator]="true" [rows]="10" [rowHover]="true" dataKey="id"
+            [(selection)]="selectedParticipants" [tableStyle]="{ 'width': '100%' }" class="thin-table">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="width: 42px">
+                        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                    </th>
+
+                    <th>
+                        Participant
+                        <i class="pi pi-sort-alt sort-icon"></i>
+                    </th>
+
+                    <th>
+                        Department
+                        <i class="pi pi-sort-alt sort-icon"></i>
+                    </th>
+
+                    <th>
+                        Registration Date
+                        <i class="pi pi-sort-alt sort-icon"></i>
+                    </th>
+
+                    <th>Status</th>
+                    <th class="text-right">Contact</th>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-p>
+                <tr>
+                    <td>
+                        <p-tableCheckbox [value]="p"></p-tableCheckbox>
+                    </td>
+
+                    <td>
+                        <div class="person">
+                            <div class="avatar">{{ p.initials }}</div>
+                            <div>
+                                <div class="name">{{ p.name }}</div>
+                                <div class="email">{{ p.email }}</div>
+                            </div>
+                        </div>
+                    </td>
+
+                    <td class="muted">{{ p.department }}</td>
+                    <td class="muted">{{ p.registrationDate | date : 'MMM d, y' }}</td>
+
+                    <td>
+                        <span class="pill dark">{{ p.statusLabel }}</span>
+                    </td>
+
+                    <td class="text-right">
+                        <button class="icon-btn" type="button" title="Email">
+                            <i class="pi pi-envelope"></i>
+                        </button>
+                        <button class="icon-btn" type="button" title="Call">
+                            <i class="pi pi-phone"></i>
+                        </button>
+                    </td>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="paginatorleft">
+                <div class="pager-left">
+                    Showing {{ paginatorFrom() }}-{{ paginatorTo(dt) }} of {{ filteredParticipants().length }}
+                    participants
+                </div>
+            </ng-template>
+
+            <ng-template pTemplate="paginatorright">
+                <div class="pager-right">
+                    <button class="link-btn" type="button">Clear Selection</button>
+                </div>
+            </ng-template>
+        </p-table>
+
+        <div class="bulk-row">
+            <div class="muted">{{ selectedParticipants.length }} participants selected</div>
+            <div class="bulk-actions">
+                <button class="link-btn" type="button">
+                    <i class="pi pi-download"></i> Export Selected
+                </button>
+                <button class="link-btn danger" type="button">
+                    <i class="pi pi-trash"></i> Delete Selected
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Waitlist Overview -->
+    <div class="waitlist-title">Waitlist Overview</div>
+
+    <div class="card">
+        <p-table [value]="waitlist()" [rows]="5" [paginator]="false" dataKey="id" [tableStyle]="{ 'width': '100%' }"
+            class="thin-table">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="width: 90px">Position</th>
+                    <th>Participant</th>
+                    <th>Department</th>
+                    <th>Waitlisted Since</th>
+                    <th>Priority</th>
+                    <th class="text-right">Actions</th>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-w let-i="rowIndex">
+                <tr>
+                    <td>
+                        <span class="pos">{{ i + 1 }}</span>
+                    </td>
+
+                    <td>
+                        <div class="person">
+                            <div class="avatar">{{ w.initials }}</div>
+                            <div>
+                                <div class="name">{{ w.name }}</div>
+                                <div class="email">{{ w.email }}</div>
+                            </div>
+                        </div>
+                    </td>
+
+                    <td class="muted">{{ w.department }}</td>
+                    <td class="muted">{{ w.waitlistedSince | date : 'MMM d, y' }}</td>
+
+                    <td>
+                        <span class="pill" [class.dark]="w.priority === 'High'">
+                            {{ w.priority }}
+                        </span>
+                    </td>
+
+                    <td class="text-right">
+                        <button class="btn-black small" type="button">Promote</button>
+                        <button class="btn-outline small" type="button">Remove</button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+
+}
+<app-footer></app-footer>

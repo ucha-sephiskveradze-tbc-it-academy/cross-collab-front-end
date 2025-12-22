@@ -19,6 +19,7 @@ import { computed } from '@angular/core';
 import { InputIconModule } from 'primeng/inputicon';
 import { IconFieldModule } from 'primeng/iconfield';
 import { Select } from 'primeng/select';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-main',
   standalone: true,
@@ -48,6 +49,7 @@ import { Select } from 'primeng/select';
 })
 export class Main {
   private eventService = inject(EventService);
+  private router = inject(Router);
 
   statusOptions = [
     { label: 'Registered', value: 'REGISTERED' },
@@ -89,6 +91,9 @@ export class Main {
     return now < start ? 'Upcoming' : 'Past';
   }
 
+  viewPage(event: any) {
+    this.router.navigate(['/admin/main', event.id]);
+  }
   // ---------- CRUD (mock only) ----------
 
   openNew() {
