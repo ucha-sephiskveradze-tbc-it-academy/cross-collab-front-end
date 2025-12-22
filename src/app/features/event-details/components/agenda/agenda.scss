@@ -1,0 +1,16 @@
+.agenda-item {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.time {
+    font-weight: 600;
+    color: #2563eb;
+}
+
+p {
+    margin-top: 4px;
+    color: #4b5563;
+}

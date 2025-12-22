@@ -1,1 +1,13 @@
-<p>agenda works!</p>
+<section class="card">
+    <h2>Agenda</h2>
+
+    @for (item of agenda; track $index) {
+    <div class="agenda-item">
+        <div class="time">{{ item.time }}</div>
+        <div class="content">
+            <strong>{{ item.title }}</strong>
+            <p>{{ item.description }}</p>
+        </div>
+    </div>
+    }
+</section>
