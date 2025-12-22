@@ -1,1 +1,15 @@
-<p>speakers works!</p>
+<section class="card">
+    <h2>Speakers</h2>
+
+    <div class="grid">
+        @for (item of speakers; track $index) {
+        <div class="speaker">
+            <div class="avatar"></div>
+            <div>
+                <strong>{{ item.name }}</strong>
+                <p>{{ item.role }}</p>
+            </div>
+        </div>
+        }
+    </div>
+</section>
