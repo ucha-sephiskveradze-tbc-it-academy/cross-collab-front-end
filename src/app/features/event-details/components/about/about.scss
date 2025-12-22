@@ -1,14 +1,20 @@
-.card {
-    background: white;
-    padding: 24px;
-    border-radius: 12px;
-}
+@use "../../../../../styles/variables" as *;
 
-h2 {
-    margin-bottom: 12px;
-}
+.section-card {
+    background: $color-white;
+    border: 1px solid $color-border-light;
+    border-radius: $radius-lg;
+    padding: $spacing-xl;
+    box-shadow: $shadow-sm;
 
-p {
-    line-height: 1.6;
-    color: #374151;
+    h2 {
+        font-size: $font-size-xl;
+        margin-bottom: $spacing-md;
+    }
+
+    p {
+        font-size: $font-size-md;
+        color: $color-gray-700;
+        line-height: 1.6;
+    }
 }
