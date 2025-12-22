@@ -36,7 +36,7 @@ export class Events {
 
   /* ================= FILTER STATE ================= */
 
-  selectedCategories = signal<string[]>([]);
+  selectedCategories = signal<number[]>([]);
   selectedLocations = signal<string[]>([]);
   selectedCapacities = signal<string[]>([]);
   selectedStatuses = signal<string[]>([]);
@@ -44,14 +44,24 @@ export class Events {
 
   /* ================= PAGINATION ================= */
 
-  first = signal(0);
+  first = signal(1);
   rows = signal(6);
 
   /* ================= OPTIONS ================= */
 
   categoryOptions = computed(() => {
     if (!this.events.hasValue()) return [];
-    return [...new Set(this.events.value().map((e) => e.category))].map((c) => ({ name: c }));
+
+    const map = new Map<number, string>();
+
+    for (const e of this.events.value()) {
+      map.set(e.category.categoryId, e.category.categoryName);
+    }
+
+    return Array.from(map.entries()).map(([id, name]) => ({
+      id,
+      name,
+    }));
   });
 
   locationOptions = computed(() => {
@@ -60,15 +70,15 @@ export class Events {
   });
 
   capacityOptions = [
-    { label: 'Available spots', value: 'available' },
-    { label: 'Limited (1–5 left)', value: 'limited' },
-    { label: 'Full', value: 'full' },
+    { id: null, name: 'Available Spots', value: 'Available', count: 7 },
+    { id: null, name: 'Limited (1-5 spots)', value: 'Limited', count: 4 },
+    { id: null, name: 'Full (Waitlist)', value: 'Full', count: 6 },
   ];
 
   statusOptions = [
-    { label: 'Registered', value: 'Registered' },
-    { label: 'Waitlisted', value: 'Waitlisted' },
-    { label: 'Not Registered', value: 'Open' },
+    { id: null, name: 'Registered', value: 'Registered', count: 2 },
+    { id: null, name: 'Waitlisted', value: 'Waitlisted', count: 1 },
+    { id: null, name: 'Not Registered', value: 'NotRegistered', count: 14 },
   ];
 
   /* ================= PAGED EVENTS ================= */
@@ -86,8 +96,8 @@ export class Events {
 
   /* ================= FILTER HANDLERS ================= */
 
-  onCategoryChange(v: string[]) {
-    this.selectedCategories.set(v);
+  onCategoryChange(ids: number[]) {
+    this.selectedCategories.set(ids);
     this.first.set(0);
     this.syncQueryParams();
   }
@@ -149,7 +159,7 @@ export class Events {
 
   ngOnInit() {
     this.route.queryParamMap.subscribe((params) => {
-      this.selectedCategories.set(params.getAll('category'));
+      this.selectedCategories.set(params.getAll('categoryId').map(Number));
       this.selectedLocations.set(params.getAll('location'));
       this.selectedCapacities.set(params.getAll('capacity'));
       this.selectedStatuses.set(params.getAll('status'));
