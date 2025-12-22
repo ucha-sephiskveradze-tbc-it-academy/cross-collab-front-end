@@ -1,8 +1,18 @@
-.faq-item {
-    margin-bottom: 16px;
-}
+@use "../../../../../styles/variables" as *;
 
-p {
-    margin-top: 4px;
-    color: #4b5563;
+.faq {
+    .item {
+        padding: $spacing-md 0;
+        border-bottom: 1px solid $color-gray-200;
+
+        h4 {
+            font-size: $font-size-md;
+            margin-bottom: $spacing-xs;
+        }
+
+        p {
+            font-size: $font-size-sm;
+            color: $color-gray-600;
+        }
+    }
 }
