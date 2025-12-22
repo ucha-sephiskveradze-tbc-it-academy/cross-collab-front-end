@@ -41,7 +41,7 @@
         <!-- RESULTS -->
         <section class="results">
             <div class="event-list">
-                @for (event of pagedEvents(); track event.id) {
+                @for (event of pagedEvents(); track event.eventId) {
                 <app-event-card [event]="event" />
                 }
             </div>

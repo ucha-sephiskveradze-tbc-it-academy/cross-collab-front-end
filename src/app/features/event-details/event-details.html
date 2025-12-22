@@ -1,18 +1,29 @@
 <app-header></app-header>
-@if (event.hasValue()) {
+
+@if (event()) {
 <main class="event-details">
-    <app-event-hero [event]="event.value()"></app-event-hero>
+    <app-event-hero [event]="event()!"></app-event-hero>
 
     <div class="content-grid">
         <section class="main">
-            <app-event-about [event]="event.value()"></app-event-about>
-            <app-event-agenda [agenda]="event.value().agenda"></app-event-agenda>
-            <app-event-speakers [speakers]="event.value().speakers"></app-event-speakers>
-            <app-event-faq [faqs]="event.value().faqs"></app-event-faq>
+            <app-event-about [event]="event()!"></app-event-about>
+
+            @if (event()?.agenda) {
+            <app-event-agenda [agenda]="event()!.agenda"></app-event-agenda>
+            }
+
+            @if (event()?.speakers) {
+            <app-event-speakers [speakers]="event()!.speakers"></app-event-speakers>
+            }
+
+            @if (event()?.faqs) {
+            <app-event-faq [faqs]="event()!.faqs"></app-event-faq>
+            }
         </section>
 
-        <app-event-sidebar [event]="event.value()"></app-event-sidebar>
+        <app-event-sidebar [event]="event()!"></app-event-sidebar>
     </div>
 </main>
 }
+
 <app-footer></app-footer>

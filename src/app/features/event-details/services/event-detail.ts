@@ -9,12 +9,12 @@ import { IEventDetails } from '../models/event-details.model';
 export class EventDetailService {
   private eventId = signal<number | null>(null);
 
-  event = httpResource<IEventDetails>(() => {
+  eventResource = httpResource<IEventDetails[]>(() => {
     const id = this.eventId();
     if (!id) return undefined;
 
     return {
-      url: `${environment.apiUrl}/events/${id}`,
+      url: `${environment.apiUrl}/events?eventId=${id}`,
       method: 'GET',
     };
   });

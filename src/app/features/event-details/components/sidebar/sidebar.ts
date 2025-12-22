@@ -13,7 +13,7 @@ export class Sidebar {
 
   onRegister() {
     // TEMP (until backend is ready)
-    console.log('Register clicked for event:', this.event.id);
+    console.log('Register clicked for event:', this.event.eventId);
 
     // FUTURE:
     // this.eventDetailsService.register(this.event.id)

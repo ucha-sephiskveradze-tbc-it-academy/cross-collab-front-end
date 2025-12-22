@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, computed, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EventDetailService } from './services/event-detail';
 import { Footer } from '../../shared/ui/footer/footer';
@@ -20,10 +20,15 @@ export class EventDetails implements OnInit {
   private route = inject(ActivatedRoute);
   private detailsService = inject(EventDetailService);
 
+  event = computed(() => {
+    const list = this.detailsService.eventResource.value();
+    return list?.[0] ?? null;
+  });
+
   ngOnInit() {
     const id = Number(this.route.snapshot.paramMap.get('id'));
+    if (!Number.isFinite(id)) return;
+
     this.detailsService.loadEvent(id);
   }
-
-  event = this.detailsService.event;
 }

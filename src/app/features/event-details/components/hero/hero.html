@@ -1,17 +1,23 @@
 <section class="event-hero">
     <div class="meta">
-        <span class="category">{{ event.category }}</span>
-        <span class="status" [class.waitlisted]="event.status === 'Waitlisted'">
-            {{ event.status }}
+        <span class="category">
+            {{ event.category.categoryName }}
+        </span>
+
+        <span class="status" [class.registered]="event.currentUserStatus === 'REGISTERED'">
+            {{ event.currentUserStatus }}
         </span>
     </div>
 
     <h1>{{ event.title }}</h1>
 
     <p class="info">
-        <span>{{ event.date | date:'fullDate' }}</span>
+        <span>{{ event.startDateTime | date: 'fullDate' }}</span>
         <span>•</span>
-        <span>{{ event.time }}</span>
+        <span>
+            {{ event.startDateTime | date: 'HH:mm' }} –
+            {{ event.endDateTime | date: 'HH:mm' }}
+        </span>
         <span>•</span>
         <span>{{ event.location }}</span>
     </p>

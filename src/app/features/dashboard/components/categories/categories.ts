@@ -26,7 +26,9 @@ export class Categories {
     const map = new Map<string, number>();
 
     for (const event of this.events.value()) {
-      map.set(event.category, (map.get(event.category) ?? 0) + 1);
+      const label = event.category.categoryName;
+
+      map.set(label, (map.get(label) ?? 0) + 1);
     }
 
     return Array.from(map.entries()).map(([label, count]) => ({
