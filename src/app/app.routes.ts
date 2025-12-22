@@ -24,21 +24,23 @@ export const routes: Routes = [
   },
   {
     path: 'dashboard',
-    canActivate: [authGuard],
+    // canActivate: [authGuard],
     loadComponent: () => import('./features/dashboard/dashboard').then((c) => c.Dashboard),
   },
   {
     path: 'events',
+    // canActivate: [authGuard],
     loadComponent: () => import('./features/events/events').then((c) => c.Events),
   },
   {
     path: 'events/:id',
+    // canActivate: [authGuard],
     loadComponent: () =>
       import('./features/event-details/event-details').then((c) => c.EventDetails),
   },
   {
-    path: 'admin',
-    canActivate: [adminGuard],
+    path: 'admin/main',
+    // canActivate: [authGuard, adminGuard],
     loadComponent: () => import('./features/admin/main/main').then((c) => c.Main),
   },
   {

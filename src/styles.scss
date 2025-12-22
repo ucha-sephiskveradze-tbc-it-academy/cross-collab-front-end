@@ -12,6 +12,21 @@
     border-color: #000000;
 }
 
+/* Base */
+.p-button.add-event {
+    background: #16a34a !important;
+    border: none;
+    color: white !important;
+}
+
+.p-button.add-event .pi {
+    color: white !important;
+}
+
+.p-button.add-event:not(.p-disabled):hover {
+    background: #15803d !important;
+}
+
 body {
     overflow-x: hidden;
 }
