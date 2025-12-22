@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { httpResource } from '@angular/common/http';
-import { IEventItem } from '../../shares/ui/event-card/model/event.mode';
+import { IEventItem } from '../ui/event-card/model/event.mode';
 import { environment } from '../../../environments/environment.test';
 
 @Injectable({ providedIn: 'root' })
