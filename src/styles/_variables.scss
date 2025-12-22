@@ -17,8 +17,12 @@ $color-border-light: #e3e3e3;
 $color-border-dark: #111827;
 
 $color-primary: #1976d2;
+$color-primary-soft: #e3f2fd; // ✅ added (used for highlights)
 $color-danger: red;
+$color-warning: #f59e0b; // ✅ added
+$color-success: #16a34a; // ✅ added
 
+// FOOTER
 $footer-bg: #ffffff;
 $footer-border: #eaeaea;
 $footer-text: #1f2937;
@@ -28,6 +32,7 @@ $footer-icon-bg: #f3f4f6;
 
 // TYPOGRAPHY
 $font-family-base: "Inter", sans-serif;
+
 $font-size-xs: 12px;
 $font-size-sm: 13px;
 $font-size-md: 14px;
