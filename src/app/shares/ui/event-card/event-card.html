@@ -1,0 +1,36 @@
+<div class="event-card">
+    <div class="date">
+        <span>{{ event.date | date:'MMM' }}</span>
+        <strong>{{ event.date | date:'dd' }}</strong>
+    </div>
+
+    <div class="content">
+        <h3>
+            {{ event.title }}
+
+            <span class="badge" [class.waitlisted]="event.status === 'Waitlisted'">
+                {{ event.status }}
+            </span>
+        </h3>
+
+        <p class="meta">
+            <img src="assets/icons/clock.svg" alt="Time" />
+            {{ event.time }}
+
+            <img src="assets/icons/location.svg" alt="Location" />
+            {{ event.location }}
+
+            <img src="assets/icons/tag.svg" alt="Category" />
+            {{ event.category }}
+        </p>
+
+        <p class="desc">{{ event.description }}</p>
+
+        <small>
+            {{ event.registeredCount }} registered ·
+            {{ spotsLeft }} spots left
+        </small>
+    </div>
+
+    <button class="outline">View Details</button>
+</div>

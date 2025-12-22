@@ -1,0 +1,56 @@
+<app-header />
+
+<main class="events-page">
+    <h1>Browse Events</h1>
+
+    <div class="layout">
+        <!-- FILTERS -->
+        <aside class="filters">
+            <h3>Filters</h3>
+
+            <div class="filter-block">
+                <label>Category</label>
+                <p-listbox [options]="categoryOptions()" optionLabel="name" optionValue="name" [multiple]="true"
+                    [checkbox]="true" (onChange)="onCategoryChange($event.value)" />
+            </div>
+
+            <div class="filter-block">
+                <label>Location</label>
+                <p-listbox [options]="locationOptions()" optionLabel="name" optionValue="name" [multiple]="true"
+                    [checkbox]="true" (onChange)="onLocationChange($event.value)" />
+            </div>
+
+            <div class="filter-block">
+                <label>Date Range</label>
+                <p-datepicker selectionMode="range" [readonlyInput]="true" (onChange)="onDateChange($event)" />
+            </div>
+
+            <div class="filter-block">
+                <label>Capacity</label>
+                <p-listbox [options]="capacityOptions" optionLabel="label" optionValue="value" [multiple]="true"
+                    [checkbox]="true" (onChange)="onCapacityChange($event.value)" />
+            </div>
+
+            <div class="filter-block">
+                <label>My Status</label>
+                <p-listbox [options]="statusOptions" optionLabel="label" optionValue="value" [multiple]="true"
+                    [checkbox]="true" (onChange)="onStatusChange($event.value)" />
+            </div>
+        </aside>
+
+        <!-- RESULTS -->
+        <section class="results">
+            <div class="event-list">
+                @for (event of pagedEvents(); track event.id) {
+                <app-event-card [event]="event" />
+                }
+            </div>
+
+            <p-paginator [first]="first()" [rows]="rows()"
+                [totalRecords]="events.hasValue() ? events.value().length : 0" [rowsPerPageOptions]="[6, 12, 24]"
+                (onPageChange)="onPageChange($event)" />
+        </section>
+    </div>
+</main>
+
+<app-footer />

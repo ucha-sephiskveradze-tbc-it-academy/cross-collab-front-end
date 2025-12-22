@@ -20,4 +20,12 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/auth/forgot-password/forgot-password').then((c) => c.ForgotPassword),
   },
+  {
+    path: 'dashboard',
+    loadComponent: () => import('./features/dashboard/dashboard').then((c) => c.Dashboard),
+  },
+  {
+    path: 'events',
+    loadComponent: () => import('./features/events/events').then((m) => m.Events),
+  },
 ];

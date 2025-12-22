@@ -1,0 +1,80 @@
+.dashboard {
+    margin: 0 auto;
+    padding: 32px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+    background: #fafafa;
+}
+
+.welcome {
+    h1 {
+        font-size: 28px;
+        margin-bottom: 4px;
+    }
+
+    p {
+        color: #6b7280;
+    }
+}
+
+.section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    a {
+        font-size: 14px;
+        color: #2563eb;
+        text-decoration: none;
+    }
+}
+
+.event-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.trending {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.trending-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    .image-placeholder {
+        height: 120px;
+        background: #e5e7eb;
+        border-radius: 6px;
+    }
+
+    button {
+        margin-top: auto;
+        background: #111827;
+        color: white;
+    }
+}
+
+@media (max-width: 900px) {
+    .trending {
+        grid-template-columns: 1fr;
+    }
+
+    .event-card {
+        grid-template-columns: 1fr;
+    }
+}

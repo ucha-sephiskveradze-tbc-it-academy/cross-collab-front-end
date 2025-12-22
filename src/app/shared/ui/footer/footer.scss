@@ -1,0 +1,111 @@
+@use "../../../../styles/variables" as *;
+
+footer {
+    background: $footer-bg;
+    border-top: 1px solid $footer-border;
+    color: $footer-text;
+
+    /* TOP SECTION */
+    .footer__content {
+        border-bottom: 1px solid $footer-border;
+
+        margin: 0 auto;
+        padding: 48px 24px;
+
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 1fr;
+        gap: 48px;
+
+        > div {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+
+            p {
+                font-size: 14px;
+                color: $footer-muted;
+                line-height: 1.6;
+            }
+
+            h4 {
+                font-size: 14px;
+                font-weight: 600;
+                color: $footer-heading;
+            }
+
+            nav {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+
+                a {
+                    font-size: 14px;
+                    color: $footer-muted;
+                    text-decoration: none;
+                    transition: color 0.2s ease;
+
+                    &:hover {
+                        color: $footer-heading;
+                    }
+                }
+            }
+        }
+    }
+
+    .footer__logo {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        font-weight: 600;
+        font-size: 18px;
+
+        .icon {
+            width: 36px;
+            height: 36px;
+            background: $color-gray-900;
+            border-radius: 8px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            img {
+                width: 18px;
+                height: 18px;
+            }
+        }
+    }
+
+    /* BOTTOM LEGAL SECTION */
+    .footer__legal {
+        padding: 20px 24px;
+
+        margin: 0 auto;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+
+        p {
+            font-size: 13px;
+            color: $footer-muted;
+        }
+
+        nav {
+            display: flex;
+            gap: 20px;
+
+            a {
+                font-size: 13px;
+                color: $footer-muted;
+                text-decoration: none;
+
+                &:hover {
+                    color: $footer-heading;
+                }
+            }
+        }
+    }
+}

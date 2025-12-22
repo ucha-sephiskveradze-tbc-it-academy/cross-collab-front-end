@@ -13,15 +13,15 @@
     </label>
 
     <div class="options-row">
-        <p-checkbox [binary]="true" [field]="loginForm.rememberMe"></p-checkbox>
+        <p-checkbox [binary]="true"></p-checkbox>
         <label>Remember me</label>
 
         <a routerLink="/forgot-password">Forgot password?</a>
     </div>
 
 
-    <app-button label="Create Account" type="submit" variant="primary"
-        [disabled]="!loginForm().valid() || isSubmitting()" [loading]="isSubmitting()">
+    <app-button label="Login" type="submit" variant="primary" [disabled]="!loginForm().valid() || isSubmitting()"
+        [loading]="isSubmitting()">
     </app-button>
 
     <p class="signup-text">
