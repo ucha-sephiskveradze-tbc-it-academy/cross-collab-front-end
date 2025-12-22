@@ -1,16 +1,32 @@
-.agenda-item {
-    display: grid;
-    grid-template-columns: 80px 1fr;
-    gap: 16px;
-    margin-bottom: 16px;
-}
+@use "../../../../../styles/variables" as *;
 
-.time {
-    font-weight: 600;
-    color: #2563eb;
-}
+.agenda {
+    .item {
+        display: flex;
+        gap: $spacing-lg;
+        padding: $spacing-md 0;
+        border-bottom: 1px solid $color-gray-200;
 
-p {
-    margin-top: 4px;
-    color: #4b5563;
+        &:last-child {
+            border-bottom: none;
+        }
+
+        .time {
+            font-weight: 600;
+            color: $color-primary;
+            min-width: 80px;
+        }
+
+        .details {
+            h4 {
+                font-size: $font-size-md;
+                margin-bottom: 4px;
+            }
+
+            p {
+                font-size: $font-size-sm;
+                color: $color-gray-600;
+            }
+        }
+    }
 }
