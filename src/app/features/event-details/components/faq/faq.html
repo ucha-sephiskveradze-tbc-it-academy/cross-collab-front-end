@@ -1,1 +1,10 @@
-<p>faq works!</p>
+<section class="card">
+    <h2>FAQ</h2>
+
+    @for (item of faqs; track $index) {
+    <div class="faq-item">
+        <strong>{{ item.question }}</strong>
+        <p>{{ item.answer }}</p>
+    </div>
+    }
+</section>
