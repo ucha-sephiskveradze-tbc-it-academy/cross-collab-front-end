@@ -1,5 +1,7 @@
 import { Routes } from '@angular/router';
 import { SignIn } from './features/auth/sign-in/sign-in';
+import { authGuard } from './core/guards/auth.guard';
+import { adminGuard } from './core/guards/admin.guard';
 
 export const routes: Routes = [
   {
@@ -22,15 +24,27 @@ export const routes: Routes = [
   },
   {
     path: 'dashboard',
+    // canActivate: [authGuard],
     loadComponent: () => import('./features/dashboard/dashboard').then((c) => c.Dashboard),
   },
   {
     path: 'events',
+    // canActivate: [authGuard],
     loadComponent: () => import('./features/events/events').then((c) => c.Events),
   },
   {
     path: 'events/:id',
+    // canActivate: [authGuard],
     loadComponent: () =>
       import('./features/event-details/event-details').then((c) => c.EventDetails),
+  },
+  {
+    path: 'admin/main',
+    // canActivate: [authGuard, adminGuard],
+    loadComponent: () => import('./features/admin/main/main').then((c) => c.Main),
+  },
+  {
+    path: '**',
+    redirectTo: 'login',
   },
 ];

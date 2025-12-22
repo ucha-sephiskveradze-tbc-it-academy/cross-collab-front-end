@@ -1,0 +1,158 @@
+<app-header></app-header>
+
+<p-toolbar class="mb-6">
+
+
+    <ng-template #start>
+        <p-button label="New Event" icon="pi pi-plus" styleClass="add-event" (onClick)="openNew()" />
+
+        <p-button severity="danger" label="Delete" icon="pi pi-trash" outlined (onClick)="deleteSelectedEvents()"
+            [disabled]="!selectedEvents || !selectedEvents.length" />
+    </ng-template>
+</p-toolbar>
+
+<p-table #dt [value]="events()" dataKey="eventId" [rows]="10" [paginator]="true" [(selection)]="selectedEvents"
+    [rowHover]="true" [tableStyle]="{ 'min-width': '75rem' }">
+    <ng-template #caption>
+        <div class="table-caption">
+            <!-- LEFT -->
+            <h5 class="m-0">Manage Events</h5>
+
+            <!-- RIGHT -->
+            <div class="filter__div">
+                <!-- STATUS SELECT -->
+                <p-select [options]="statusOptions" optionLabel="label" optionValue="value" placeholder="Status"
+                    class="w-40" (onChange)="dt.filter($event.value, 'currentUserStatus', 'contains')"
+                    [showClear]="true">
+                </p-select>
+
+                <!-- CATEGORY SELECT -->
+                <p-select [options]="categoryOptions" optionLabel="label" optionValue="value" placeholder="Category"
+                    class="w-48" (onChange)="dt.filter($event.value, 'category.categoryName', 'contains')"
+                    [showClear]="true">
+                </p-select>
+
+                <!-- SEARCH -->
+                <p-iconfield>
+                    <p-inputicon class="pi pi-search" />
+                    <input pInputText type="text" placeholder="Search..."
+                        (input)="dt.filterGlobal($event.target.value, 'contains')" />
+                </p-iconfield>
+            </div>
+        </div>
+    </ng-template>
+    <!-- TABLE HEADER -->
+    <ng-template #header>
+        <tr>
+            <th style="width: 3rem">
+                <p-tableHeaderCheckbox />
+            </th>
+            <th pSortableColumn="title">
+                Title
+                <p-sortIcon field="title" />
+            </th>
+            <th pSortableColumn="startDateTime">
+                Date & Time
+                <p-sortIcon field="startDateTime"></p-sortIcon>
+            </th>
+            <th pSortableColumn="location">
+                Location
+                <p-sortIcon field="location" />
+            </th>
+            <th>Category</th>
+            <th>Registrations</th>
+            <th>Capacity</th>
+            <th>Status</th>
+            <th></th>
+        </tr>
+    </ng-template>
+
+    <!-- TABLE BODY -->
+    <ng-template #body let-event>
+        <tr>
+            <td>
+                <p-tableCheckbox [value]="event" />
+            </td>
+
+            <td>
+                <strong>{{ event.title }}</strong>
+                <div class="text-sm text-gray-500">
+                    {{ event.description }}
+                </div>
+            </td>
+
+            <td>
+                {{ event.startDateTime | date:'MMM d, y, h:mm a' }} –
+                {{ event.endDateTime | date:'h:mm a' }}
+            </td>
+
+            <td>{{ event.location }}</td>
+
+            <td>
+                <p-tag [value]="event.category.categoryName" />
+            </td>
+
+
+            <td>
+                {{ event.totalRegistered }} / {{ event.capacity }}
+            </td>
+
+            <td>
+                <div class="flex flex-col">
+                    <strong>{{ getCapacityPercent(event)| number:'1.2-2' }}%</strong>
+                    <br>
+                    <span class="text-sm text-gray-500">
+                        {{ getSpotsLeft(event) }} spots left
+                    </span>
+                </div>
+            </td>
+
+            <td>
+                <p-tag [value]="getEventStatus(event)"
+                    [severity]="getEventStatus(event) === 'Upcoming' ? 'success' : 'secondary'">
+                </p-tag>
+            </td>
+
+            <td style="min-width: 8rem">
+                <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true" class="mr-2"
+                    (click)="editEvent(event)" />
+                <p-button icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true"
+                    (click)="deleteEvent(event)" />
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+
+<!-- EVENT DIALOG -->
+<p-dialog [(visible)]="eventDialog" [style]="{ width: '450px' }" header="Event Details" [modal]="true">
+    <ng-template #content>
+        <div class="flex flex-col gap-4" *ngIf="event">
+            <div>
+                <label class="block font-bold mb-2">Title</label>
+                <input type="text" pInputText [(ngModel)]="event.title" required />
+            </div>
+
+            <div>
+                <label class="block font-bold mb-2">Description</label>
+                <textarea pTextarea [(ngModel)]="event.description" rows="3"></textarea>
+            </div>
+
+            <div>
+                <label class="block font-bold mb-2">Location</label>
+                <input type="text" pInputText [(ngModel)]="event.location" />
+            </div>
+
+            <div>
+                <label class="block font-bold mb-2">Capacity</label>
+                <p-inputNumber [(ngModel)]="event.capacity"></p-inputNumber>
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template #footer>
+        <p-button label="Cancel" icon="pi pi-times" text (click)="hideDialog()" />
+        <p-button label="Save" icon="pi pi-check" (click)="saveEvent()" />
+    </ng-template>
+</p-dialog>
+
+<app-footer></app-footer>
