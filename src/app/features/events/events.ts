@@ -1,5 +1,5 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { EventService } from '../../shared/services/events.service';
 import { IEventItem } from '../../shares/ui/event-card/model/event.mode';
 import { Header } from '../../shared/ui/header/header';
@@ -29,18 +29,19 @@ import { createEventFilterForm } from './events.filters';
 })
 export class Events {
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
   private eventService = inject(EventService);
 
   /* ================= DATA ================= */
 
-  events = this.eventService.events;
+  events = this.eventService.events; // backend data (future: filtered)
 
-  /* ================= FILTER STATE (SIGNALS) ================= */
+  /* ================= FILTER STATE ================= */
 
   selectedCategories = signal<string[]>([]);
   selectedLocations = signal<string[]>([]);
-  selectedCapacities: string[] = [];
-  selectedStatuses: string[] = [];
+  selectedCapacities = signal<string[]>([]);
+  selectedStatuses = signal<string[]>([]);
   dateRange = signal<[Date | null, Date | null] | null>(null);
 
   /* ================= PAGINATION ================= */
@@ -48,7 +49,7 @@ export class Events {
   first = signal(0);
   rows = signal(6);
 
-  /* ================= OPTIONS (FROM BACKEND) ================= */
+  /* ================= OPTIONS ================= */
 
   categoryOptions = computed(() => {
     if (!this.events.hasValue()) return [];
@@ -72,72 +73,92 @@ export class Events {
     { label: 'Not Registered', value: 'Open' },
   ];
 
-  /* ================= HELPERS ================= */
-
-  getCapacityState(event: IEventItem): 'available' | 'limited' | 'full' {
-    const remaining = event.capacity - event.registeredCount;
-    if (remaining === 0) return 'full';
-    if (remaining <= 5) return 'limited';
-    return 'available';
-  }
-
-  /* ================= FILTERING ================= */
-
-  filteredEvents = computed(() => {
-    if (!this.events.hasValue()) return [];
-
-    let data = this.events.value();
-
-    if (this.selectedCategories().length) {
-      data = data.filter((e) => this.selectedCategories().includes(e.category));
-    }
-
-    if (this.selectedLocations().length) {
-      data = data.filter((e) => this.selectedLocations().includes(e.location));
-    }
-
-    if (this.selectedCapacities.length) {
-      data = data.filter((e) => this.selectedCapacities.includes(this.getCapacityState(e)));
-    }
-
-    if (this.selectedStatuses.length) {
-      data = data.filter((e) => this.selectedStatuses.includes(e.status));
-    }
-
-    if (this.dateRange()) {
-      const [from, to] = this.dateRange()!;
-      if (from && to) {
-        data = data.filter((e) => {
-          const d = new Date(e.date);
-          return d >= from && d <= to;
-        });
-      }
-    }
-
-    return data;
-  });
-
   /* ================= PAGED EVENTS ================= */
 
   pagedEvents = computed(() => {
     const start = this.first();
-    const end = start + this.rows();
-    return this.filteredEvents().slice(start, end);
+    return this.events.hasValue() ? this.events.value().slice(start, start + this.rows()) : [];
   });
 
   onPageChange(e: any) {
     this.first.set(e.first);
     this.rows.set(e.rows);
+    this.syncQueryParams();
   }
 
-  /* ================= URL PRESELECTION ================= */
+  /* ================= FILTER HANDLERS ================= */
+
+  onCategoryChange(v: string[]) {
+    this.selectedCategories.set(v);
+    this.first.set(0);
+    this.syncQueryParams();
+  }
+
+  onLocationChange(v: string[]) {
+    this.selectedLocations.set(v);
+    this.first.set(0);
+    this.syncQueryParams();
+  }
+
+  onCapacityChange(v: string[]) {
+    this.selectedCapacities.set(v);
+    this.first.set(0);
+    this.syncQueryParams();
+  }
+
+  onStatusChange(v: string[]) {
+    this.selectedStatuses.set(v);
+    this.first.set(0);
+    this.syncQueryParams();
+  }
+
+  onDateChange(event: any) {
+    const value = event.value as [Date | null, Date | null];
+    this.dateRange.set(value);
+    this.first.set(0);
+    this.syncQueryParams();
+  }
+
+  /* ================= URL SYNC ================= */
+
+  private syncQueryParams() {
+    const params: any = {};
+
+    if (this.selectedCategories().length) params.category = this.selectedCategories();
+    if (this.selectedLocations().length) params.location = this.selectedLocations();
+    if (this.selectedCapacities().length) params.capacity = this.selectedCapacities();
+    if (this.selectedStatuses().length) params.status = this.selectedStatuses();
+
+    if (this.dateRange()) {
+      const [from, to] = this.dateRange()!;
+      if (from && to) {
+        params.from = from.toISOString();
+        params.to = to.toISOString();
+      }
+    }
+
+    params.page = this.first() / this.rows();
+    params.pageSize = this.rows();
+
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: params,
+      replaceUrl: true, // ✅ IMPORTANT
+    });
+  }
+
+  /* ================= INIT FROM URL ================= */
 
   ngOnInit() {
     this.route.queryParamMap.subscribe((params) => {
-      const category = params.get('category');
-      if (category) {
-        this.selectedCategories.set([category]);
-      }
+      this.selectedCategories.set(params.getAll('category'));
+      this.selectedLocations.set(params.getAll('location'));
+      this.selectedCapacities.set(params.getAll('capacity'));
+      this.selectedStatuses.set(params.getAll('status'));
+
+      const from = params.get('from');
+      const to = params.get('to');
+      this.dateRange.set(from && to ? [new Date(from), new Date(to)] : null);
     });
   }
 }

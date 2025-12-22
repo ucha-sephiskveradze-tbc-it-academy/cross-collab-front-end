@@ -1,4 +1,4 @@
-<app-header></app-header>
+<app-header />
 
 <main class="events-page">
     <h1>Browse Events</h1>
@@ -8,66 +8,49 @@
         <aside class="filters">
             <h3>Filters</h3>
 
-            <!-- Category -->
             <div class="filter-block">
                 <label>Category</label>
-
-                <p-listbox [(ngModel)]="selectedCategories" [options]="categoryOptions()" [multiple]="true"
-                    [checkbox]="true" optionLabel="name" class="w-full md:w-56" />
-
+                <p-listbox [options]="categoryOptions()" optionLabel="name" optionValue="name" [multiple]="true"
+                    [checkbox]="true" (onChange)="onCategoryChange($event.value)" />
             </div>
 
             <div class="filter-block">
                 <label>Location</label>
-
-                <p-listbox [(ngModel)]="selectedLocations" [options]="locationOptions()" [multiple]="true"
-                    [checkbox]="true" optionLabel="name" class="w-full md:w-56" />
-
+                <p-listbox [options]="locationOptions()" optionLabel="name" optionValue="name" [multiple]="true"
+                    [checkbox]="true" (onChange)="onLocationChange($event.value)" />
             </div>
 
-            <!-- Date Range -->
             <div class="filter-block">
                 <label>Date Range</label>
-
-                <p-datepicker [(ngModel)]="dateRange" selectionMode="range" [readonlyInput]="true" />
-
+                <p-datepicker selectionMode="range" [readonlyInput]="true" (onChange)="onDateChange($event)" />
             </div>
 
             <div class="filter-block">
-                <label>Capacity Availability</label>
-
-                <p-listbox [(ngModel)]="selectedCapacities" [options]="capacityOptions" optionLabel="label"
-                    optionValue="value" [multiple]="true" [checkbox]="true" class="w-full md:w-56" />
-
+                <label>Capacity</label>
+                <p-listbox [options]="capacityOptions" optionLabel="label" optionValue="value" [multiple]="true"
+                    [checkbox]="true" (onChange)="onCapacityChange($event.value)" />
             </div>
-
 
             <div class="filter-block">
                 <label>My Status</label>
-
-                <p-listbox [(ngModel)]="selectedStatuses" [options]="statusOptions" optionLabel="label"
-                    optionValue="value" [multiple]="true" [checkbox]="true" class="w-full" />
-
+                <p-listbox [options]="statusOptions" optionLabel="label" optionValue="value" [multiple]="true"
+                    [checkbox]="true" (onChange)="onStatusChange($event.value)" />
             </div>
         </aside>
 
-        <!-- EVENTS -->
+        <!-- RESULTS -->
         <section class="results">
-            <div class="meta">
-                Showing {{ filteredEvents().length }} events
-            </div>
-
             <div class="event-list">
                 @for (event of pagedEvents(); track event.id) {
                 <app-event-card [event]="event" />
                 }
             </div>
 
-            <!-- PAGINATION -->
-            <p-paginator [first]="first()" [rows]="rows()" [totalRecords]="filteredEvents().length"
-                [rowsPerPageOptions]="[6, 12, 24]" (onPageChange)="onPageChange($event)" />
+            <p-paginator [first]="first()" [rows]="rows()"
+                [totalRecords]="events.hasValue() ? events.value().length : 0" [rowsPerPageOptions]="[6, 12, 24]"
+                (onPageChange)="onPageChange($event)" />
         </section>
     </div>
 </main>
 
-<app-footer></app-footer>
+<app-footer />
