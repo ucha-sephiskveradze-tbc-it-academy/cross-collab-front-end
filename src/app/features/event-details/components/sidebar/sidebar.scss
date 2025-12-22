@@ -1,0 +1,25 @@
+@use "../../../../../styles/variables" as *;
+
+.sidebar {
+    background: $color-white;
+    border: 1px solid $color-border-light;
+    border-radius: $radius-lg;
+    padding: $spacing-lg;
+    box-shadow: $shadow-sm;
+
+    h3 {
+        font-size: $font-size-lg;
+        margin-bottom: $spacing-md;
+    }
+
+    p {
+        font-size: $font-size-sm;
+        color: $color-gray-700;
+        margin-bottom: $spacing-sm;
+    }
+
+    app-button {
+        margin-top: $spacing-lg;
+        width: 100%;
+    }
+}

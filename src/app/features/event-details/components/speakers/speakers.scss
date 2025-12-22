@@ -1,0 +1,28 @@
+@use "../../../../../styles/variables" as *;
+
+.speakers {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: $spacing-lg;
+
+    .speaker {
+        text-align: center;
+
+        img {
+            width: 96px;
+            height: 96px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: $spacing-sm;
+        }
+
+        h4 {
+            font-size: $font-size-md;
+        }
+
+        span {
+            font-size: $font-size-sm;
+            color: $color-gray-500;
+        }
+    }
+}

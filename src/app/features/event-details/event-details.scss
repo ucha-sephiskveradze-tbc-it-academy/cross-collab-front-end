@@ -1,0 +1,24 @@
+@use "../../../styles/variables" as *;
+
+.event-details {
+    max-width: $breakpoint-desktop;
+    margin: 0 auto;
+    padding: $spacing-xxl $spacing-lg;
+
+    .content-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 360px;
+        gap: $spacing-xxxl;
+        margin-top: $spacing-xxl;
+
+        @media (max-width: $breakpoint-tablet) {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    section.main {
+        display: flex;
+        flex-direction: column;
+        gap: $spacing-xxxl;
+    }
+}

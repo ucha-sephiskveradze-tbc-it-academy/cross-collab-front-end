@@ -1,0 +1,18 @@
+@use "../../../../../styles/variables" as *;
+
+.faq {
+    .item {
+        padding: $spacing-md 0;
+        border-bottom: 1px solid $color-gray-200;
+
+        h4 {
+            font-size: $font-size-md;
+            margin-bottom: $spacing-xs;
+        }
+
+        p {
+            font-size: $font-size-sm;
+            color: $color-gray-600;
+        }
+    }
+}

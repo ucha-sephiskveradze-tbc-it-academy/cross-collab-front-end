@@ -1,4 +1,4 @@
-import { IEventItem } from '../../../../../shares/ui/event-card/model/event.mode';
+import { IEventItem } from '../../../../../shared/ui/event-card/model/event.mode';
 import { ICalendarEvent } from '../models/calendar.model';
 
 export function mapEventItemToCalendarEvent(event: IEventItem): ICalendarEvent {

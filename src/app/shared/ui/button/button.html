@@ -1,4 +1,5 @@
-<button [attr.type]="type" [disabled]="disabled || loading" [ngClass]="[variant]" (click)="onClick()">
+<button [attr.type]="type" [disabled]="disabled || loading" [ngClass]="[variant]" [routerLink]="routerLink"
+    (click)="onClick()">
     @if (loading) {
     <span class="spinner"></span>
     } @else {

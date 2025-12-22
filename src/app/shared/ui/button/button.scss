@@ -1,7 +1,7 @@
 @use "../../../../styles/variables" as *;
 
 button {
-    padding: $spacing-sm 0;
+    padding: $spacing-sm;
     font-size: $font-size-lg;
     border: none;
     border-radius: $radius-sm;

@@ -1,16 +1,14 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EventService } from '../../shared/services/events.service';
-import { IEventItem } from '../../shares/ui/event-card/model/event.mode';
 import { Header } from '../../shared/ui/header/header';
 import { Footer } from '../../shared/ui/footer/footer';
 import { CommonModule } from '@angular/common';
 import { DatePickerModule } from 'primeng/datepicker';
 import { ListboxModule } from 'primeng/listbox';
 import { PaginatorModule } from 'primeng/paginator';
-import { EventCard } from '../../shares/ui/event-card/event-card';
+import { EventCard } from '../../shared/ui/event-card/event-card';
 import { FormsModule } from '@angular/forms';
-import { createEventFilterForm } from './events.filters';
 
 @Component({
   selector: 'app-events',
