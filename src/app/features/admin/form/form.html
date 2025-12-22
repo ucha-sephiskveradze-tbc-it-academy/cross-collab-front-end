@@ -1,0 +1,76 @@
+<h1>
+    {{ formService.isEditMode() ? 'Edit Event' : 'Create New Event' }}
+</h1>
+
+<form [formGroup]="formService.form" (ngSubmit)="submit()" class="event-form">
+
+    <!-- Title -->
+    <label>
+        <span>Title</span>
+        <input type="text" formControlName="title" placeholder="Event title" />
+    </label>
+
+    <!-- Category -->
+    <label>
+        <span>Category</span>
+        <select formControlName="category">
+            <option value="">Select category</option>
+            <option value="Workshop">Workshop</option>
+            <option value="Conference">Conference</option>
+            <option value="Meetup">Meetup</option>
+        </select>
+    </label>
+
+    <!-- Description -->
+    <label>
+        <span>Description</span>
+        <textarea rows="4" formControlName="description" placeholder="Event description"></textarea>
+    </label>
+
+    <!-- Date -->
+    <label>
+        <span>Date</span>
+        <input type="date" formControlName="date" />
+    </label>
+
+    <!-- Time -->
+    <div class="time-row">
+        <label>
+            <span>Start time</span>
+            <input type="time" formControlName="startTime" />
+        </label>
+
+        <label>
+            <span>End time</span>
+            <input type="time" formControlName="endTime" />
+        </label>
+    </div>
+
+    <!-- Location type -->
+    <label>
+        <span>Location type</span>
+        <select formControlName="locationType">
+            <option value="in-person">In person</option>
+            <option value="virtual">Virtual</option>
+            <option value="hybrid">Hybrid</option>
+        </select>
+    </label>
+
+    <!-- Capacity -->
+    <label>
+        <span>Capacity</span>
+        <input type="number" min="1" formControlName="capacity" placeholder="Number of seats" />
+    </label>
+
+    <!-- Actions -->
+    <div class="actions">
+        <button type="submit" [disabled]="formService.form.invalid">
+            {{ formService.isEditMode() ? 'Update Event' : 'Create Event' }}
+        </button>
+
+        <button type="button" (click)="cancel()">
+            Cancel
+        </button>
+    </div>
+
+</form>
