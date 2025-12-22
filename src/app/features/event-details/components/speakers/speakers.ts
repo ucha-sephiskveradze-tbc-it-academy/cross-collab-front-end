@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { IEventDetails } from '../../models/event-details.model';
 
 @Component({
   selector: 'app-event-speakers',
@@ -6,4 +7,6 @@ import { Component } from '@angular/core';
   templateUrl: './speakers.html',
   styleUrl: './speakers.scss',
 })
-export class Speakers {}
+export class Speakers {
+  @Input({ required: true }) speakers!: IEventDetails['speakers'];
+}

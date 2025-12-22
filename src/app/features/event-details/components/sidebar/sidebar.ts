@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { IEventDetails } from '../../models/event-details.model';
 
 @Component({
   selector: 'app-event-sidebar',
@@ -6,4 +7,6 @@ import { Component } from '@angular/core';
   templateUrl: './sidebar.html',
   styleUrl: './sidebar.scss',
 })
-export class Sidebar {}
+export class Sidebar {
+  @Input({ required: true }) event!: IEventDetails;
+}
