@@ -44,14 +44,16 @@ export class Events {
 
   /* ================= PAGINATION ================= */
 
-  first = signal(0);
+  first = signal(1);
   rows = signal(6);
 
   /* ================= OPTIONS ================= */
 
   categoryOptions = computed(() => {
     if (!this.events.hasValue()) return [];
-    return [...new Set(this.events.value().map((e) => e.category))].map((c) => ({ name: c }));
+    return [...new Set(this.events.value().map((e) => e.category.categoryName))].map((c) => ({
+      name: c,
+    }));
   });
 
   locationOptions = computed(() => {
@@ -60,15 +62,15 @@ export class Events {
   });
 
   capacityOptions = [
-    { label: 'Available spots', value: 'available' },
-    { label: 'Limited (1–5 left)', value: 'limited' },
-    { label: 'Full', value: 'full' },
+    { id: null, name: 'Available Spots', value: 'Available', count: 7 },
+    { id: null, name: 'Limited (1-5 spots)', value: 'Limited', count: 4 },
+    { id: null, name: 'Full (Waitlist)', value: 'Full', count: 6 },
   ];
 
   statusOptions = [
-    { label: 'Registered', value: 'Registered' },
-    { label: 'Waitlisted', value: 'Waitlisted' },
-    { label: 'Not Registered', value: 'Open' },
+    { id: null, name: 'Registered', value: 'Registered', count: 2 },
+    { id: null, name: 'Waitlisted', value: 'Waitlisted', count: 1 },
+    { id: null, name: 'Not Registered', value: 'NotRegistered', count: 14 },
   ];
 
   /* ================= PAGED EVENTS ================= */

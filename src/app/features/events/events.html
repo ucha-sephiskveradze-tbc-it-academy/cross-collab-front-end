@@ -27,13 +27,13 @@
 
             <div class="filter-block">
                 <label>Capacity</label>
-                <p-listbox [options]="capacityOptions" optionLabel="label" optionValue="value" [multiple]="true"
+                <p-listbox [options]="capacityOptions" optionLabel="name" optionValue="value" [multiple]="true"
                     [checkbox]="true" (onChange)="onCapacityChange($event.value)" />
             </div>
 
             <div class="filter-block">
                 <label>My Status</label>
-                <p-listbox [options]="statusOptions" optionLabel="label" optionValue="value" [multiple]="true"
+                <p-listbox [options]="statusOptions" optionLabel="name" optionValue="value" [multiple]="true"
                     [checkbox]="true" (onChange)="onStatusChange($event.value)" />
             </div>
         </aside>
