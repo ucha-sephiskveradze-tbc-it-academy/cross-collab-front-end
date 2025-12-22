@@ -33,4 +33,12 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/event-details/event-details').then((c) => c.EventDetails),
   },
+  {
+    path: 'admin',
+    loadComponent: () => import('./features/admin/main/main').then((c) => c.Main),
+  },
+  {
+    path: '**',
+    redirectTo: 'login',
+  },
 ];
