@@ -1,35 +1,51 @@
 import { Injectable } from '@angular/core';
 
-export type UserRole = 'USER' | 'ADMIN';
+interface JwtPayload {
+  sub: string;
+  role: string;
+  exp: number;
+}
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private isLoggedIn = false;
-  private role: UserRole | null = null;
+  private readonly TOKEN_KEY = 'access_token';
 
-  // --- Auth state ---
-  login(role: UserRole = 'USER') {
-    this.isLoggedIn = true;
-    this.role = role;
+  // ---- Token handling ----
+  setToken(token: string) {
+    localStorage.setItem(this.TOKEN_KEY, token);
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem(this.TOKEN_KEY);
   }
 
   logout() {
-    this.isLoggedIn = false;
-    this.role = null;
+    localStorage.removeItem(this.TOKEN_KEY);
   }
 
-  // --- Checks ---
+  // ---- JWT helpers ----
+  private decodeToken(): JwtPayload | null {
+    const token = this.getToken();
+    if (!token) return null;
+
+    try {
+      return JSON.parse(atob(token.split('.')[1]));
+    } catch {
+      return null;
+    }
+  }
+
   isAuthenticated(): boolean {
-    return this.isLoggedIn;
+    const payload = this.decodeToken();
+    if (!payload) return false;
+
+    return payload.exp * 1000 > Date.now();
   }
 
-  isAdmin(): boolean {
-    return this.isLoggedIn && this.role === 'ADMIN';
-  }
-
-  getRole(): UserRole | null {
-    return this.role;
+  hasRole(role: string): boolean {
+    const payload = this.decodeToken();
+    return !!payload && payload.role === role;
   }
 }
