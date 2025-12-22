@@ -6,7 +6,7 @@ import { IEventDetails } from '../models/event-details.model';
 @Injectable({
   providedIn: 'root',
 })
-export class EventDetail {
+export class EventDetailService {
   private eventId = signal<number | null>(null);
 
   event = httpResource<IEventDetails>(() => {

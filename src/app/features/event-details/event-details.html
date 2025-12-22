@@ -1,1 +1,18 @@
-<p>event-details works!</p>
+<app-header></app-header>
+@if (event.hasValue()) {
+<main class="event-details">
+    <app-event-hero [event]="event.value()"></app-event-hero>
+
+    <div class="content-grid">
+        <section class="main">
+            <app-event-about [event]="event.value()"></app-event-about>
+            <app-event-agenda [agenda]="event.value().agenda"></app-event-agenda>
+            <app-event-speakers [speakers]="event.value().speakers"></app-event-speakers>
+            <app-event-faq [faqs]="event.value().faqs"></app-event-faq>
+        </section>
+
+        <app-event-sidebar [event]="event.value()"></app-event-sidebar>
+    </div>
+</main>
+}
+<app-footer></app-footer>

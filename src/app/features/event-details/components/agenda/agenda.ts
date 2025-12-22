@@ -1,11 +1,9 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-agenda',
+  selector: 'app-event-agenda',
   imports: [],
   templateUrl: './agenda.html',
   styleUrl: './agenda.scss',
 })
-export class Agenda {
-
-}
+export class Agenda {}
