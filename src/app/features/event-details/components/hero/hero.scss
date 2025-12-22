@@ -1,0 +1,30 @@
+.hero {
+    height: 260px;
+    background: linear-gradient(135deg, #1f2937, #111827);
+    color: white;
+    display: flex;
+    align-items: flex-end;
+}
+
+.overlay {
+    padding: 32px;
+    width: 100%;
+}
+
+.category {
+    font-size: 12px;
+    text-transform: uppercase;
+    opacity: 0.8;
+}
+
+h1 {
+    margin: 8px 0;
+    font-size: 32px;
+}
+
+.meta {
+    display: flex;
+    gap: 16px;
+    font-size: 14px;
+    opacity: 0.9;
+}
