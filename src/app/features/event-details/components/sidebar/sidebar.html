@@ -1,1 +1,12 @@
-<p>sidebar works!</p>
+<aside class="sidebar card">
+    <h3>Registration</h3>
+
+    <p><strong>Status:</strong> {{ event.status }}</p>
+    <p>
+        <strong>Spots:</strong>
+        {{ event.capacity - event.registeredCount }} / {{ event.capacity }}
+    </p>
+
+    <app-button label="Register for Event" variant="primary" [disabled]="event.status !== 'Open'"
+        (clicked)="onRegister()" />
+</aside>
