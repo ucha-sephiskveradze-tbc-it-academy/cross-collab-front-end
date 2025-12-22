@@ -1,18 +1,28 @@
-.grid {
+@use "../../../../../styles/variables" as *;
+
+.speakers {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-}
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: $spacing-lg;
 
-.speaker {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-}
+    .speaker {
+        text-align: center;
 
-.avatar {
-    width: 48px;
-    height: 48px;
-    background: #e5e7eb;
-    border-radius: 50%;
+        img {
+            width: 96px;
+            height: 96px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: $spacing-sm;
+        }
+
+        h4 {
+            font-size: $font-size-md;
+        }
+
+        span {
+            font-size: $font-size-sm;
+            color: $color-gray-500;
+        }
+    }
 }
