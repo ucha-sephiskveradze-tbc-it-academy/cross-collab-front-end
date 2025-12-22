@@ -1,11 +1,18 @@
-<section class="hero">
-    <div class="overlay">
+<section class="event-hero">
+    <div class="meta">
         <span class="category">{{ event.category }}</span>
-        <h1>{{ event.title }}</h1>
-
-        <div class="meta">
-            <span>{{ event.date }} · {{ event.time }}</span>
-            <span>{{ event.location }}</span>
-        </div>
+        <span class="status" [class.waitlisted]="event.status === 'Waitlisted'">
+            {{ event.status }}
+        </span>
     </div>
+
+    <h1>{{ event.title }}</h1>
+
+    <p class="info">
+        <span>{{ event.date | date:'fullDate' }}</span>
+        <span>•</span>
+        <span>{{ event.time }}</span>
+        <span>•</span>
+        <span>{{ event.location }}</span>
+    </p>
 </section>
