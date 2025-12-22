@@ -10,7 +10,7 @@
 
             <div class="filter-block">
                 <label>Category</label>
-                <p-listbox [options]="categoryOptions()" optionLabel="name" optionValue="name" [multiple]="true"
+                <p-listbox [options]="categoryOptions()" optionLabel="name" optionValue="id" [multiple]="true"
                     [checkbox]="true" (onChange)="onCategoryChange($event.value)" />
             </div>
 

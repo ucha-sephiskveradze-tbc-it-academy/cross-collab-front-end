@@ -36,7 +36,7 @@ export class Events {
 
   /* ================= FILTER STATE ================= */
 
-  selectedCategories = signal<string[]>([]);
+  selectedCategories = signal<number[]>([]);
   selectedLocations = signal<string[]>([]);
   selectedCapacities = signal<string[]>([]);
   selectedStatuses = signal<string[]>([]);
@@ -51,8 +51,16 @@ export class Events {
 
   categoryOptions = computed(() => {
     if (!this.events.hasValue()) return [];
-    return [...new Set(this.events.value().map((e) => e.category.categoryName))].map((c) => ({
-      name: c,
+
+    const map = new Map<number, string>();
+
+    for (const e of this.events.value()) {
+      map.set(e.category.categoryId, e.category.categoryName);
+    }
+
+    return Array.from(map.entries()).map(([id, name]) => ({
+      id,
+      name,
     }));
   });
 
@@ -88,8 +96,8 @@ export class Events {
 
   /* ================= FILTER HANDLERS ================= */
 
-  onCategoryChange(v: string[]) {
-    this.selectedCategories.set(v);
+  onCategoryChange(ids: number[]) {
+    this.selectedCategories.set(ids);
     this.first.set(0);
     this.syncQueryParams();
   }
@@ -151,7 +159,7 @@ export class Events {
 
   ngOnInit() {
     this.route.queryParamMap.subscribe((params) => {
-      this.selectedCategories.set(params.getAll('category'));
+      this.selectedCategories.set(params.getAll('categoryId').map(Number));
       this.selectedLocations.set(params.getAll('location'));
       this.selectedCapacities.set(params.getAll('capacity'));
       this.selectedStatuses.set(params.getAll('status'));
