@@ -65,7 +65,10 @@ export const routes: Routes = [
     path: 'admin/edit/:id',
     loadComponent: () => import('./features/admin/form/form').then((c) => c.Form),
   },
-
+  {
+    path: 'admin/analytics',
+    loadComponent: () => import('./features/admin/analytics/analytics').then((c) => c.Analytics),
+  },
   {
     path: '**',
     redirectTo: 'login',
