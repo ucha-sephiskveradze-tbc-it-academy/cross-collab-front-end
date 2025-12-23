@@ -1,13 +1,24 @@
-<section class="card">
-    <h2>Agenda</h2>
+<section class="section-card">
+  <h2>Event Agenda</h2>
 
-    @for (item of agenda; track $index) {
-    <div class="agenda-item">
-        <div class="time">{{ item.time }}</div>
-        <div class="content">
-            <strong>{{ item.title }}</strong>
-            <p>{{ item.description }}</p>
-        </div>
+  @for (item of agenda; track $index) {
+  <div class="agenda-item">
+    <div class="agenda-time">
+      <span class="time">{{ item.time }}</span>
+      @if (item.duration) {
+      <span class="duration">({{ item.duration }})</span>
+      }
     </div>
-    }
+    <div class="agenda-content">
+      <strong class="agenda-title">{{ item.title }}</strong>
+      @if (item.description) {
+      <p class="agenda-description">{{ item.description }}</p>
+      } @if (item.location) {
+      <span class="agenda-location">Location: {{ item.location }}</span>
+      } @if (item.speaker) {
+      <span class="agenda-speaker">Led by {{ item.speaker }}</span>
+      }
+    </div>
+  </div>
+  }
 </section>

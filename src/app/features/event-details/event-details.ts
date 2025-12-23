@@ -25,6 +25,16 @@ export class EventDetails implements OnInit {
     return list?.[0] ?? null;
   });
 
+  hasAgenda = computed(() => {
+    const evt = this.event();
+    return evt?.agenda && evt.agenda.length > 0;
+  });
+
+  hasSpeakers = computed(() => {
+    const evt = this.event();
+    return evt?.speakers && evt.speakers.length > 0;
+  });
+
   ngOnInit() {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     if (!Number.isFinite(id)) return;

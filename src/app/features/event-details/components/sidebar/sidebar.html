@@ -1,12 +1,101 @@
-<aside class="sidebar card">
-    <h3>Registration</h3>
-
-    <p><strong>Status:</strong> {{ event.currentUserStatus }}</p>
-    <p>
-        <strong>Spots:</strong>
-        {{ event.capacity - event.totalRegistered }} / {{ event.capacity }}
+<aside class="sidebar">
+  <!-- Registration Status -->
+  <div class="sidebar-card">
+    <h3>Registration Status</h3>
+    <div class="status-info">
+      <div class="info-row">
+        <span class="label">Status:</span>
+        <span class="value status-open">Open</span>
+      </div>
+      <div class="info-row">
+        <span class="label">Available Spots:</span>
+        <span class="value"
+          >{{ event.capacity - event.totalRegistered }} / {{ event.capacity }}</span
+        >
+      </div>
+      <div class="info-row">
+        <span class="label">Current Waitlist:</span>
+        <span class="value">0 people</span>
+      </div>
+      <div class="info-row">
+        <span class="label">Registration Closes:</span>
+        <span class="value">{{ event.startDateTime | date : 'MMM d, h:mm a' }}</span>
+      </div>
+      <div class="info-row">
+        <span class="label">Your Status:</span>
+        <span class="value">{{
+          event.currentUserStatus === 'REGISTERED' ? 'Registered' : 'Not Registered'
+        }}</span>
+      </div>
+    </div>
+    <app-button
+      [label]="
+        event.currentUserStatus === 'REGISTERED' ? 'Already Registered' : 'Register for This Event'
+      "
+      variant="primary"
+      [disabled]="event.currentUserStatus === 'REGISTERED'"
+      (clicked)="onRegister()"
+    />
+    <p class="registration-note">
+      By registering, you agree to attend the full event. Cancellations must be made 48 hours in
+      advance.
     </p>
+  </div>
 
-    <app-button label="Register for Event" variant="primary" [disabled]="event.currentUserStatus === 'REGISTERED'"
-        (clicked)="onRegister()" />
+  <!-- Event Organizer -->
+  <div class="sidebar-card">
+    <h3>Event Organizer</h3>
+    <div class="organizer-info">
+      <div class="organizer-name">Jennifer Adams</div>
+      <div class="organizer-title">HR Events Manager</div>
+      <div class="organizer-department">Human Resources Department</div>
+      <app-button label="Contact Organizer" variant="secondary" (clicked)="onContactOrganizer()" />
+    </div>
+  </div>
+
+  <!-- Event Details -->
+  <div class="sidebar-card">
+    <h3>Event Details</h3>
+    <div class="details-info">
+      <div class="detail-item">
+        <span class="detail-label">Date & Time:</span>
+        <span class="detail-value">
+          {{ event.startDateTime | date : 'EEEE, MMMM d, y, h:mm a' }} -
+          {{ event.endDateTime | date : 'h:mm a' }} EST
+        </span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">Location:</span>
+        <span class="detail-value">
+          {{ event.location }}
+          <a href="#" class="view-map-link">View Map</a>
+        </span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">Category:</span>
+        <span class="detail-value">{{ event.category.categoryName }}</span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">Capacity:</span>
+        <span class="detail-value">
+          {{ event.capacity }} attendees maximum, {{ event.totalRegistered }} currently registered
+        </span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">Duration:</span>
+        <span class="detail-value">
+          @if (getDuration()) {
+          {{ getDuration() }}
+          } @else { Full day }
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Need Help? -->
+  <div class="sidebar-card">
+    <h3>Need Help?</h3>
+    <p class="help-text">Have questions about this event or need assistance with registration?</p>
+    <a href="#" class="contact-support-link">Contact Support</a>
+  </div>
 </aside>

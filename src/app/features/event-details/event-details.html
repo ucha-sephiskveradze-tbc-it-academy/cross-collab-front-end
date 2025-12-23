@@ -20,13 +20,13 @@
     <section class="main">
       <app-event-about [event]="event()!"></app-event-about>
 
-      @if (event()?.agenda) {
-      <app-event-agenda [agenda]="event()!.agenda"></app-event-agenda>
-      } @if (event()?.speakers) {
-      <app-event-speakers [speakers]="event()!.speakers"></app-event-speakers>
-      } @if (event()?.faqs) {
-      <app-event-faq [faqs]="event()!.faqs"></app-event-faq>
+      @if (hasAgenda()) {
+      <app-event-agenda [agenda]="event()!.agenda!"></app-event-agenda>
+      } @if (hasSpeakers()) {
+      <app-event-speakers [speakers]="event()!.speakers!"></app-event-speakers>
       }
+
+      <app-event-faq></app-event-faq>
     </section>
 
     <app-event-sidebar [event]="event()!"></app-event-sidebar>

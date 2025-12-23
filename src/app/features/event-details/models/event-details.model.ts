@@ -1,4 +1,5 @@
 export interface IEventDetails {
+  id?: number;
   eventId: number;
   title: string;
   description: string;
@@ -19,7 +20,25 @@ export interface IEventDetails {
   currentUserStatus: 'REGISTERED' | 'CANCELLED' | 'NONE';
 
   // optional (details-only)
-  agenda?: any[];
-  speakers?: any[];
-  faqs?: any[];
+  about?: string;
+  agenda?: AgendaItem[];
+  speakers?: SpeakerItem[];
+}
+
+export interface AgendaItem {
+  time: string;
+  duration?: string;
+  title: string;
+  description?: string;
+  location?: string;
+  speaker?: string;
+}
+
+export interface SpeakerItem {
+  name: string;
+  title: string;
+  description?: string;
+  linkedin?: string;
+  website?: string;
+  avatar?: string;
 }

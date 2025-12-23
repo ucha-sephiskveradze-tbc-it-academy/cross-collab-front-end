@@ -1,28 +1,124 @@
 @use "../../../../../styles/variables" as *;
 
-.speakers {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: $spacing-lg;
+.section-card {
+  background: $color-white;
+  border: 1px solid $color-border-light;
+  border-radius: $radius-xl;
+  padding: $spacing-xxl;
+  box-shadow: $shadow-sm;
+  transition: box-shadow 0.3s ease;
 
-    .speaker {
-        text-align: center;
+  &:hover {
+    box-shadow: $shadow-md;
+  }
+
+  h2 {
+    font-size: $font-size-xxl;
+    font-weight: 700;
+    color: $color-gray-900;
+    margin: 0 0 $spacing-xl 0;
+    padding-bottom: $spacing-md;
+    border-bottom: 2px solid $color-gray-200;
+  }
+
+  .speakers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: $spacing-xl;
+
+    .speaker-card {
+      display: flex;
+      gap: $spacing-lg;
+      padding: $spacing-lg;
+      border: 1px solid $color-gray-200;
+      border-radius: $radius-lg;
+      transition: all 0.3s ease;
+      background: $color-white;
+
+      &:hover {
+        transform: translateY(-4px);
+        box-shadow: $shadow-md;
+        border-color: $color-primary;
+      }
+
+      .speaker-avatar {
+        flex-shrink: 0;
 
         img {
-            width: 96px;
-            height: 96px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin-bottom: $spacing-sm;
+          width: 80px;
+          height: 80px;
+          border-radius: 50%;
+          object-fit: cover;
+          border: 3px solid $color-gray-200;
         }
 
-        h4 {
-            font-size: $font-size-md;
+        .avatar-placeholder {
+          width: 80px;
+          height: 80px;
+          border-radius: 50%;
+          background: linear-gradient(135deg, $color-primary 0%, lighten($color-primary, 10%) 100%);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: $color-white;
+          font-weight: 700;
+          font-size: $font-size-xl;
+          border: 3px solid $color-gray-200;
+        }
+      }
+
+      .speaker-info {
+        flex: 1;
+        min-width: 0;
+
+        .speaker-name {
+          font-size: $font-size-lg;
+          font-weight: 700;
+          color: $color-gray-900;
+          margin: 0 0 $spacing-xs 0;
+          display: block;
         }
 
-        span {
+        .speaker-title {
+          font-size: $font-size-md;
+          color: $color-primary;
+          font-weight: 600;
+          margin: 0 0 $spacing-sm 0;
+          display: block;
+        }
+
+        .speaker-description {
+          font-size: $font-size-sm;
+          color: $color-gray-600;
+          line-height: 1.6;
+          margin: $spacing-sm 0;
+        }
+
+        .speaker-links {
+          display: flex;
+          gap: $spacing-md;
+          margin-top: $spacing-sm;
+
+          .speaker-link {
             font-size: $font-size-sm;
-            color: $color-gray-500;
+            color: $color-primary;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+
+            &:hover {
+              color: darken($color-primary, 10%);
+              text-decoration: underline;
+            }
+          }
         }
+      }
     }
+  }
+
+  @media (max-width: $breakpoint-tablet) {
+    .speakers-grid {
+      grid-template-columns: 1fr;
+    }
+  }
 }

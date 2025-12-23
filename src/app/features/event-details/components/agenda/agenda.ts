@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { IEventDetails } from '../../models/event-details.model';
+import { AgendaItem } from '../../models/event-details.model';
 
 @Component({
   selector: 'app-event-agenda',
@@ -8,5 +8,5 @@ import { IEventDetails } from '../../models/event-details.model';
   styleUrl: './agenda.scss',
 })
 export class Agenda {
-  @Input({ required: true }) agenda!: IEventDetails['agenda'];
+  @Input({ required: true }) agenda!: AgendaItem[];
 }

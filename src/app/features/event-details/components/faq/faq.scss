@@ -1,18 +1,98 @@
 @use "../../../../../styles/variables" as *;
 
-.faq {
-    .item {
-        padding: $spacing-md 0;
-        border-bottom: 1px solid $color-gray-200;
+.section-card {
+  background: $color-white;
+  border: 1px solid $color-border-light;
+  border-radius: $radius-xl;
+  padding: $spacing-xxl;
+  box-shadow: $shadow-sm;
+  transition: box-shadow 0.3s ease;
 
-        h4 {
-            font-size: $font-size-md;
-            margin-bottom: $spacing-xs;
-        }
+  &:hover {
+    box-shadow: $shadow-md;
+  }
 
-        p {
-            font-size: $font-size-sm;
-            color: $color-gray-600;
-        }
+  h2 {
+    font-size: $font-size-xxl;
+    font-weight: 700;
+    color: $color-gray-900;
+    margin: 0 0 $spacing-xl 0;
+    padding-bottom: $spacing-md;
+    border-bottom: 2px solid $color-gray-200;
+  }
+
+  .faq-item {
+    border-bottom: 1px solid $color-gray-200;
+    transition: background-color 0.2s ease;
+
+    &:last-child {
+      border-bottom: none;
     }
+
+    .faq-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: $spacing-lg 0;
+      cursor: pointer;
+      user-select: none;
+      transition: color 0.2s ease;
+
+      &:hover {
+        color: $color-primary;
+      }
+
+      strong {
+        font-size: $font-size-lg;
+        font-weight: 600;
+        color: $color-gray-900;
+        flex: 1;
+        padding-right: $spacing-md;
+      }
+
+      .faq-icon {
+        font-size: $font-size-xxl;
+        font-weight: 300;
+        color: $color-primary;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: $color-primary-soft;
+        padding-bottom: 2px;
+        border-radius: 50%;
+        flex-shrink: 0;
+        transition: transform 0.3s ease, background-color 0.2s ease;
+
+        &:hover {
+          background: $color-primary;
+          color: $color-white;
+        }
+      }
+    }
+
+    .faq-answer {
+      padding: 0 0 $spacing-lg $spacing-md;
+      animation: slideDown 0.3s ease;
+
+      p {
+        font-size: $font-size-md;
+        color: $color-gray-700;
+        line-height: 1.7;
+        margin: 0;
+      }
+    }
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

@@ -1,10 +1,17 @@
-<section class="card">
-    <h2>FAQ</h2>
+<section class="section-card">
+  <h2>Frequently Asked Questions</h2>
 
-    @for (item of faqs; track $index) {
-    <div class="faq-item">
-        <strong>{{ item.question }}</strong>
-        <p>{{ item.answer }}</p>
+  @for (item of faqs(); track $index) {
+  <div class="faq-item">
+    <div class="faq-header" (click)="toggleFaq($index)">
+      <strong>{{ item.question }}</strong>
+      <span class="faq-icon">{{ item.expanded ? '-' : '+' }}</span>
+    </div>
+    @if (item.expanded) {
+    <div class="faq-answer">
+      <p>{{ item.answer }}</p>
     </div>
     }
+  </div>
+  }
 </section>
