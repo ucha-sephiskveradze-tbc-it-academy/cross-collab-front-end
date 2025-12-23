@@ -1,1 +1,46 @@
-<p>analytics works!</p>
+<app-header></app-header>
+<section class="analytics">
+    <div class="analytics__header">
+        <header>
+            <div>
+                <h1>Analytics Dashboard</h1>
+                <p>Comprehensive insights into engagement metrics, event demand, and utilization patterns</p>
+            </div>
+            <button pButton>
+                <img src="./assets/icons/admin/analytics/export.svg" alt="Export Icon">
+                <span pButtonLabel>Export Report</span>
+            </button>
+        </header>
+        <main class="analytics__filter">
+
+            <div class="filter-item">
+                <label>Date Range</label>
+                <p-select [field]="filterForm.dateRange" [options]="dateRangeOptions" optionLabel="label"
+                    optionValue="value" placeholder="Select range" />
+            </div>
+
+            <div class="filter-item">
+                <label>Category</label>
+                <p-select [field]="filterForm.category" [options]="categoryOptions" optionLabel="label"
+                    optionValue="value" placeholder="All Categories" />
+            </div>
+
+            <div class="filter-item">
+                <label>Location</label>
+                <p-select [field]="filterForm.location" [options]="locationOptions" optionLabel="label"
+                    optionValue="value" placeholder="All Locations" />
+            </div>
+
+            <div class="filter-item">
+                <label>Event Status</label>
+                <p-select [field]="filterForm.status" [options]="statusOptions" optionLabel="label" optionValue="value"
+                    placeholder="All Events" />
+            </div>
+
+            <button class="apply-btn" (click)="applyFilters()">Apply Filters</button>
+
+
+        </main>
+    </div>
+</section>
+<app-footer></app-footer>

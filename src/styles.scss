@@ -2,6 +2,8 @@
 @use "./styles/reset";
 @use "./styles/variables" as *;
 
+@import "primeicons/primeicons.css";
+
 /* ✅ Checkbox */
 .p-checkbox {
     background-color: #000000;
