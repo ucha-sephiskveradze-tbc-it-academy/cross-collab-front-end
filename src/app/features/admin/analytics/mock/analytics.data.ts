@@ -114,3 +114,65 @@ export const MOCK_KPIS = [
     icon: 'pi pi-times',
   },
 ];
+
+// analytics.data.ts
+
+export const REGISTRATION_TREND_DATA = {
+  labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+  datasets: [
+    {
+      label: 'Registrations',
+      data: [120, 150, 180, 210, 170, 260, 200, 180, 230, 210, 195, 180],
+
+      // 🔥 THIS is the trick
+      backgroundColor: (ctx: any) => {
+        const currentMonthIndex = new Date().getMonth();
+        return ctx.dataIndex === currentMonthIndex
+          ? '#111111' // current month (black)
+          : '#d4d4d4'; // other months (gray)
+      },
+
+      borderRadius: 4,
+      maxBarThickness: 36,
+    },
+  ],
+};
+
+export const REGISTRATION_TREND_OPTIONS = {
+  plugins: {
+    legend: { display: false },
+  },
+  scales: {
+    x: {
+      grid: { display: false },
+    },
+    y: {
+      grid: { color: '#e5e7eb' },
+      ticks: { display: false },
+    },
+  },
+};
+
+export const CATEGORY_CHART_DATA = {
+  labels: ['Team Building', 'Workshops', 'Sports', 'Happy Friday', 'Cultural', 'Wellness'],
+  datasets: [
+    {
+      data: [30, 20, 15, 12.5, 10, 12.5],
+      backgroundColor: ['#111111', '#4b5563', '#6b7280', '#9ca3af', '#d1d5db', '#e5e7eb'],
+      borderWidth: 0,
+    },
+  ],
+};
+
+export const CATEGORY_CHART_OPTIONS = {
+  cutout: '70%',
+  plugins: {
+    legend: {
+      position: 'right',
+      labels: {
+        boxWidth: 10,
+        padding: 16,
+      },
+    },
+  },
+};

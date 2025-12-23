@@ -72,5 +72,36 @@
         </div>
 
     </div>
+
+    <div class="analytics__charts">
+        <div class="charts-grid">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div>
+                        <h4>Registration Trend</h4>
+                        <p>Monthly registration patterns over time</p>
+                    </div>
+
+                    <div class="range-toggle">
+                        <button>Week</button>
+                        <button class="active">Month</button>
+                        <button>Year</button>
+                    </div>
+                </div>
+
+                <p-chart type="bar" [data]="registrationTrendData" [options]="registrationTrendOptions"
+                    style="height: 260px"></p-chart>
+            </div>
+
+            <div class="chart-card">
+                <h4>Category Distribution</h4>
+                <p>Events by category type</p>
+
+                <p-chart type="doughnut" [data]="categoryChartData" [options]="categoryChartOptions"
+                    style="height: 260px"></p-chart>
+            </div>
+        </div>
+
+    </div>
 </section>
 <app-footer></app-footer>

@@ -5,18 +5,23 @@ import { Button } from 'primeng/button';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { form, required, Field } from '@angular/forms/signals';
 import { SelectModule } from 'primeng/select';
+import { ChartModule } from 'primeng/chart';
 import {
+  CATEGORY_CHART_DATA,
+  CATEGORY_CHART_OPTIONS,
   CATEGORY_OPTIONS,
   DATE_RANGE_OPTIONS,
   LOCATION_OPTIONS,
   MOCK_EVENTS,
   MOCK_KPIS,
+  REGISTRATION_TREND_DATA,
+  REGISTRATION_TREND_OPTIONS,
   STATUS_OPTIONS,
 } from './mock/analytics.data';
 
 @Component({
   selector: 'app-analytics',
-  imports: [Header, Footer, SelectButtonModule, SelectModule, Field],
+  imports: [Header, Footer, SelectButtonModule, SelectModule, Field, ChartModule],
   templateUrl: './analytics.html',
   styleUrl: './analytics.scss',
 })
@@ -25,6 +30,12 @@ export class Analytics {
   readonly categoryOptions = CATEGORY_OPTIONS;
   readonly locationOptions = LOCATION_OPTIONS;
   readonly statusOptions = STATUS_OPTIONS;
+
+  readonly registrationTrendData = REGISTRATION_TREND_DATA;
+  readonly registrationTrendOptions = REGISTRATION_TREND_OPTIONS;
+
+  readonly categoryChartData = CATEGORY_CHART_DATA;
+  readonly categoryChartOptions = CATEGORY_CHART_OPTIONS;
 
   readonly events = MOCK_EVENTS;
   readonly KPIS = MOCK_KPIS;
