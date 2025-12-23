@@ -1,76 +1,146 @@
-<h1>
-    {{ formService.isEditMode() ? 'Edit Event' : 'Create New Event' }}
-</h1>
+<app-header></app-header>
+<div class="event-page" [formGroup]="formService.form">
 
-<form [formGroup]="formService.form" (ngSubmit)="submit()" class="event-form">
+    <!-- LEFT COLUMN -->
+    <div class="left">
 
-    <!-- Title -->
-    <label>
-        <span>Title</span>
-        <input type="text" formControlName="title" placeholder="Event title" />
-    </label>
+        <!-- BASIC INFO -->
+        <p-card class="section">
+            <ng-template pTemplate="title">Basic Information</ng-template>
 
-    <!-- Category -->
-    <label>
-        <span>Category</span>
-        <select formControlName="category">
-            <option value="">Select category</option>
-            <option value="Workshop">Workshop</option>
-            <option value="Conference">Conference</option>
-            <option value="Meetup">Meetup</option>
-        </select>
-    </label>
+            <div class="field">
+                <label>Event Title</label>
+                <input pInputText formControlName="title" placeholder="Enter event title" />
+            </div>
 
-    <!-- Description -->
-    <label>
-        <span>Description</span>
-        <textarea rows="4" formControlName="description" placeholder="Event description"></textarea>
-    </label>
+            <div class="field">
+                <label>Category</label>
+                <p-select formControlName="category" [options]="categoryOptions" optionLabel="label" optionValue="value"
+                    placeholder="Select a category" />
+            </div>
 
-    <!-- Date -->
-    <label>
-        <span>Date</span>
-        <input type="date" formControlName="date" />
-    </label>
+            <div class="field">
+                <label>Description</label>
+                <textarea pInputTextarea rows="4" formControlName="description"
+                    placeholder="Provide a detailed description"></textarea>
+            </div>
+        </p-card>
 
-    <!-- Time -->
-    <div class="time-row">
-        <label>
-            <span>Start time</span>
-            <input type="time" formControlName="startTime" />
-        </label>
+        <!-- DATE & TIME -->
+        <p-card class="section">
+            <ng-template pTemplate="title">Date & Time</ng-template>
 
-        <label>
-            <span>End time</span>
-            <input type="time" formControlName="endTime" />
-        </label>
+            <div class="grid-2">
+                <div class="field">
+                    <label>Date</label>
+                    <p-datePicker formControlName="date" showIcon />
+                </div>
+
+                <div class="field">
+                    <label>Registration Deadline</label>
+                    <p-datePicker formControlName="deadline" showIcon />
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="field">
+                    <label>Start Time</label>
+                    <p-datePicker timeOnly hourFormat="24" formControlName="startTime" />
+                </div>
+
+                <div class="field">
+                    <label>End Time</label>
+                    <p-datePicker timeOnly hourFormat="24" formControlName="endTime" />
+                </div>
+            </div>
+        </p-card>
+
+        <!-- LOCATION -->
+        <p-card class="section">
+            <ng-template pTemplate="title">Location</ng-template>
+
+            <div class="location-types">
+                <button pButton *ngFor="let l of locationOptions" type="button"
+                    [outlined]="formService.form.value.locationType !== l.value"
+                    (click)="formService.form.patchValue({ locationType: l.value })">
+                    {{ l.label }}
+                </button>
+            </div>
+
+            <div class="grid-2">
+                <input pInputText placeholder="Venue name" formControlName="venue" />
+                <input pInputText placeholder="City" formControlName="city" />
+            </div>
+        </p-card>
+
+        <!-- CAPACITY -->
+        <p-card class="section">
+            <ng-template pTemplate="title">Capacity & Registration</ng-template>
+
+            <div class="grid-2">
+                <p-inputNumber formControlName="capacity" placeholder="Max capacity" showButtons />
+                <p-inputNumber formControlName="minCapacity" placeholder="Minimum participants" />
+            </div>
+
+            <p-checkbox binary formControlName="waitlist" label="Enable waitlist"></p-checkbox>
+        </p-card>
+
+        <!-- NOTIFICATIONS -->
+        <p-card class="section">
+            <ng-template pTemplate="title">Notification Settings</ng-template>
+
+            <p-checkbox binary label="Registration confirmation" />
+            <p-checkbox binary label="24-hour reminder" />
+            <p-checkbox binary label="1-hour reminder" />
+        </p-card>
+
     </div>
 
-    <!-- Location type -->
-    <label>
-        <span>Location type</span>
-        <select formControlName="locationType">
-            <option value="in-person">In person</option>
-            <option value="virtual">Virtual</option>
-            <option value="hybrid">Hybrid</option>
-        </select>
-    </label>
+    <!-- RIGHT COLUMN -->
+    <div class="right">
 
-    <!-- Capacity -->
-    <label>
-        <span>Capacity</span>
-        <input type="number" min="1" formControlName="capacity" placeholder="Number of seats" />
-    </label>
+        <!-- IMAGE -->
+        <p-card class="section">
+            <ng-template pTemplate="title">Event Image</ng-template>
 
-    <!-- Actions -->
-    <div class="actions">
-        <button type="submit" [disabled]="formService.form.invalid">
-            {{ formService.isEditMode() ? 'Update Event' : 'Create Event' }}
-        </button>
+            <div class="upload-box">
+                <i class="pi pi-image"></i>
+                <button pButton label="Upload Image" outlined></button>
+            </div>
+        </p-card>
 
-        <button type="button" (click)="cancel()">
-            Cancel
-        </button>
+        <!-- PREVIEW -->
+        <p-card class="section preview">
+            <ng-template pTemplate="title">Event Preview</ng-template>
+
+            <div class="preview-row">
+                <span>Category</span>
+                <span>{{ formService.form.value.category || 'Not set' }}</span>
+            </div>
+
+            <div class="preview-row">
+                <span>Date</span>
+                <span>{{ formService.form.value.date || 'Not set' }}</span>
+            </div>
+
+            <div class="preview-row">
+                <span>Location</span>
+                <span>{{ formService.form.value.locationType || 'Not set' }}</span>
+            </div>
+
+            <div class="preview-row">
+                <span>Status</span>
+                <span class="status">Draft</span>
+            </div>
+        </p-card>
+
+        <!-- ACTIONS -->
+        <button pButton label="Publish Event" class="publish" [disabled]="formService.form.invalid"></button>
+
+        <button pButton label="Cancel" severity="secondary" outlined></button>
+
     </div>
 
-</form>
+</div>
+
+<app-footer></app-footer>

@@ -6,9 +6,32 @@ import { EventMockService } from './services/event.mock.service';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 
+import { InputTextModule } from 'primeng/inputtext';
+import { Select } from 'primeng/select';
+import { DatePickerModule } from 'primeng/datepicker';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { ButtonModule } from 'primeng/button';
+import { CardModule } from 'primeng/card';
+import { Header } from '../../../shared/ui/header/header';
+import { Footer } from '../../../shared/ui/footer/footer';
+import { Checkbox } from 'primeng/checkbox';
+type LocationType = 'in-person' | 'virtual' | 'hybrid';
+
 @Component({
   selector: 'app-form',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    InputTextModule,
+    Select,
+    DatePickerModule,
+    InputNumberModule,
+    ButtonModule,
+    CardModule,
+    Header,
+    Checkbox,
+    Footer,
+  ],
   templateUrl: './form.html',
   styleUrl: './form.scss',
 })
@@ -36,6 +59,18 @@ export class Form {
       this.formService.initCreate();
     }
   }
+
+  categoryOptions = [
+    { label: 'Workshop', value: 'Workshop' },
+    { label: 'Conference', value: 'Conference' },
+    { label: 'Meetup', value: 'Meetup' },
+  ];
+
+  locationOptions: { label: string; value: LocationType }[] = [
+    { label: 'In person', value: 'in-person' },
+    { label: 'Virtual', value: 'virtual' },
+    { label: 'Hybrid', value: 'hybrid' },
+  ];
 
   submit(): void {
     if (this.formService.form.invalid) return;

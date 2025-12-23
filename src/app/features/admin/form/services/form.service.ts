@@ -22,14 +22,24 @@ export class FormService {
 
   // ✅ signal-based form
   readonly form = this.fb.nonNullable.group({
-    title: this.fb.control('', { validators: [Validators.required], nonNullable: true }),
-    category: this.fb.control('', { validators: [Validators.required], nonNullable: true }),
-    description: this.fb.control('', { validators: [Validators.required], nonNullable: true }),
-    date: this.fb.control('', { validators: [Validators.required], nonNullable: true }),
-    startTime: this.fb.control('', { validators: [Validators.required], nonNullable: true }),
-    endTime: this.fb.control('', { validators: [Validators.required], nonNullable: true }),
-    locationType: this.fb.control<'in-person' | 'virtual' | 'hybrid'>('in-person'), // 👈 typed union
-    capacity: this.fb.control(0, { validators: [Validators.min(1)], nonNullable: true }),
+    title: ['', Validators.required],
+    category: ['', Validators.required],
+    description: ['', Validators.required],
+
+    date: ['', Validators.required],
+    deadline: ['', Validators.required],
+
+    startTime: ['', Validators.required],
+    endTime: ['', Validators.required],
+
+    locationType: this.fb.nonNullable.control<'in-person' | 'virtual' | 'hybrid'>('in-person'),
+
+    venue: [''],
+    city: [''],
+
+    capacity: [0, [Validators.min(1)]],
+    minCapacity: [0],
+    waitlist: [false],
   });
 
   /** initialize create mode */
@@ -56,10 +66,8 @@ export class FormService {
 
   /** submit payload */
   getPayload(): AppEvent {
-    const raw = this.form.getRawValue();
     return {
-      ...raw,
-      locationType: raw.locationType as 'in-person' | 'virtual' | 'hybrid', // 👈 cast
+      ...this.form.getRawValue(),
       id: this.currentEvent()?.id ?? 0,
     };
   }
