@@ -1,0 +1,81 @@
+.notification-card {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    border: 1px solid #e5e7eb;
+    background: #fff;
+    border-radius: 6px;
+
+    &.unread {
+        background: #f9fafb;
+    }
+}
+
+.icon {
+    width: 40px;
+    height: 40px;
+    background: #111827;
+    color: #fff;
+    border-radius: 4px;
+    display: grid;
+    place-items: center;
+}
+
+.content {
+    flex: 1;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.25rem;
+
+    .time {
+        font-size: 0.75rem;
+        color: #6b7280;
+    }
+}
+
+.message {
+    margin: 0.5rem 0;
+    color: #374151;
+}
+
+.meta {
+    display: flex;
+    gap: 0.75rem;
+    font-size: 0.75rem;
+    color: #6b7280;
+}
+
+.actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+
+    .btn {
+        padding: 0.35rem 0.75rem;
+        border: 1px solid #d1d5db;
+        background: #fff;
+        cursor: pointer;
+
+        &.primary {
+            background: #111827;
+            color: #fff;
+        }
+
+        &.danger {
+            border-color: #ef4444;
+            color: #ef4444;
+        }
+    }
+
+    .mark-read {
+        margin-left: auto;
+        background: none;
+        border: none;
+        font-size: 0.75rem;
+        color: #6b7280;
+        cursor: pointer;
+    }
+}
