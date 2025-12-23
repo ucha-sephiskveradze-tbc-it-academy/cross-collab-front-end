@@ -8,8 +8,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputOtpModule } from 'primeng/inputotp';
 import { Router, RouterLink } from '@angular/router';
-import { Subject, takeUntil } from 'rxjs';
-import { tap } from 'rxjs';
+import { Subject, takeUntil, finalize } from 'rxjs';
 import { OtpService } from './services/otp.service';
 import { Departments } from './models/departments';
 import { noEmojiRegex } from '../../../shared/validations/validator';
@@ -71,11 +70,12 @@ export class SignUp {
     required(schema.phone, { message: 'Phone number is required' });
     validate(schema.phone, ({ value }) => {
       const phone = value().trim();
-      const regex = /^[0-9]{9,15}$/; // only digits, length 9–15
+      // Format: +995577966977 (starts with +, then 10-15 digits, no spaces)
+      const regex = /^\+[0-9]{10,15}$/;
       if (!regex.test(phone)) {
         return {
           kind: 'invalidPhone',
-          message: 'Phone number must contain only digits (9–15 characters)',
+          message: 'Phone number must start with country code (e.g., +995123456789)',
         };
       }
       return null;
@@ -91,12 +91,7 @@ export class SignUp {
     //       message: 'Please request an OTP first',
     //     };
     //   }
-    //   if (enteredOtp !== sentOtp) {
-    //     return {
-    //       kind: 'otpMismatch',
-    //       message: 'OTP does not match the code sent',
-    //     };
-    //   }
+
     //   return null;
     // });
 
@@ -133,13 +128,72 @@ export class SignUp {
 
   onSubmit(event: Event) {
     event.preventDefault();
-    if (!this.createAccountForm().valid()) return;
+    if (!this.createAccountForm().valid() || this.isSubmitting()) return;
+
+    this.isSubmitting.set(true);
+    this.errorMessage.set(null);
 
     const dto = mapToDto(this.createAccountModel());
+    console.log('📝 [SIGNUP] Sending registration request:', {
+      userName: dto.userName,
+      email: dto.email,
+      department: dto.department,
+      phoneNumber: dto.phoneNumber,
+      hasOtp: !!dto.oneTimePassword,
+      password: '***hidden***',
+      timestamp: new Date().toISOString(),
+    });
+
     this.authService
       .createAccount(dto)
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe(() => this.router.navigate(['/login']));
+      .pipe(
+        takeUntil(this.destroyed$),
+        finalize(() => this.isSubmitting.set(false))
+      )
+      .subscribe({
+        next: (response) => {
+          console.log('✅ [SIGNUP] Registration successful:', {
+            response,
+            timestamp: new Date().toISOString(),
+          });
+          console.log('🚀 [SIGNUP] Navigating to login page');
+          this.router.navigate(['/login']);
+        },
+        error: (err) => {
+          console.error(`[${new Date().toISOString()}] ❌ [SIGNUP] Registration failed:`, {
+            error: err,
+            errorBody: err.error,
+            errorStringified: JSON.stringify(err.error),
+            errorMessage: err.error?.message || err.error?.errors || err.message,
+            status: err.status,
+            statusText: err.statusText,
+            url: err.url,
+            fullError: err,
+            timestamp: new Date().toISOString(),
+          });
+          
+          // Extract error message from various possible formats
+          let errorMessage = 'Failed to create account. Please try again later.';
+          if (err.error) {
+            if (err.error.message) {
+              errorMessage = err.error.message;
+            } else if (err.error.errors) {
+              // Handle validation errors object
+              const errors = err.error.errors;
+              const errorMessages = Object.keys(errors).map(key => 
+                Array.isArray(errors[key]) ? errors[key].join(', ') : errors[key]
+              );
+              errorMessage = errorMessages.join('; ') || errorMessage;
+            } else if (typeof err.error === 'string') {
+              errorMessage = err.error;
+            }
+          } else if (err.message) {
+            errorMessage = err.message;
+          }
+          
+          this.errorMessage.set(errorMessage);
+        },
+      });
   }
 
   sendOtp() {
@@ -149,15 +203,59 @@ export class SignUp {
       return;
     }
 
+    // Get value from field, fallback to model signal
+    let phoneNumber = phone.value();
+    if (!phoneNumber || phoneNumber.trim() === '') {
+      phoneNumber = this.createAccountModel().phone;
+    }
+
+    console.log(`[${new Date().toISOString()}] 📱 [SIGNUP] Sending OTP request:`, {
+      phoneValue: phoneNumber,
+      phoneType: typeof phoneNumber,
+      isEmpty: !phoneNumber || phoneNumber.trim() === '',
+      fieldValue: phone.value(),
+      modelValue: this.createAccountModel().phone,
+      timestamp: new Date().toISOString(),
+    });
+
+    if (!phoneNumber || phoneNumber.trim() === '') {
+      this.errorMessage.set('Please enter a valid phone number first');
+      return;
+    }
+
     this.errorMessage.set(null);
-    this.otpService.sendOtp(phone.value()).subscribe({
+    this.otpService.sendOtp(phoneNumber.trim()).subscribe({
       next: () => {
         // start your timer after sending
         this.startTimer();
         this.errorMessage.set(null);
       },
-      error: () => {
-        this.errorMessage.set('Failed to send OTP. Please try again later.');
+      error: (err) => {
+        console.error(`[${new Date().toISOString()}] ❌ [SIGNUP] OTP send failed:`, err);
+        console.error(`[${new Date().toISOString()}] ❌ [SIGNUP] Full error details:`, {
+          status: err.status,
+          statusText: err.statusText,
+          error: err.error,
+          errorStringified: JSON.stringify(err.error),
+          headers: err.headers,
+        });
+        
+        // Check for CORS errors (status 0 typically indicates CORS/network issues)
+        if (err.status === 0 || err.statusText === 'Unknown Error') {
+          this.errorMessage.set(
+            'Unable to connect to the server. This may be a CORS configuration issue. Please contact support or try again later.'
+          );
+          return;
+        }
+        
+        // Handle backend validation errors
+        const errorMessage =
+          err.error?.errors?.phoneNumber?.[0] ||
+          err.error?.message ||
+          err.error?.title ||
+          err.message ||
+          'Failed to send OTP. Please try again later.';
+        this.errorMessage.set(errorMessage);
       },
     });
   }

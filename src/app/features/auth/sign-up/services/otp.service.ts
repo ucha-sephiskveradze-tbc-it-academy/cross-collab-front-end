@@ -1,18 +1,20 @@
-import { Injectable } from '@angular/core';
-import { Observable, of, delay } from 'rxjs';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient, HttpParams  } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { environment } from '../../../../../environments/environment.test';
 
 @Injectable({ providedIn: 'root' })
 export class OtpService {
-  private generatedOtp: string | null = null;
+  private http = inject(HttpClient);
+  private baseUrl = environment.authApiUrl;
 
-  sendOtp(phone: string): Observable<void> {
-    // simulate server generating OTP
-    this.generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
-    console.log('Mock OTP:', this.generatedOtp); // for training
-    return of(void 0).pipe(delay(1000)); // simulate network delay
-  }
+  sendOtp(phoneNumber: string): Observable<void> {
+    const params = new HttpParams().set('phoneNumber', phoneNumber);
 
-  validateOtp(enteredOtp: string): boolean {
-    return enteredOtp === this.generatedOtp;
+    return this.http.post<void>(
+      `${this.baseUrl}/users-auth/preregister`,
+      null,          // ✅ NO BODY
+      { params }     // ✅ QUERY PARAM
+    );
   }
 }

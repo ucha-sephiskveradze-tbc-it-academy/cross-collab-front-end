@@ -45,7 +45,7 @@
   <label class="phone-row">
     <span>Phone Number</span>
     <div class="phone-input">
-      <input type="text" placeholder="+1 (555) 000-0000" [field]="createAccountForm.phone" />
+      <input type="tel" placeholder="+995123456789" [field]="createAccountForm.phone" />
       <button
         type="button"
         class="otp-btn"
@@ -63,7 +63,7 @@
     </ul>
     } @if (errorMessage()) {
     <div class="error-message" role="alert">
-      {{ errorMessage() }}
+      <p>Please, try again later.</p>
     </div>
     }
   </label>

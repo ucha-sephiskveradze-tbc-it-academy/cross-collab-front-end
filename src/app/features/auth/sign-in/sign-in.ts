@@ -6,7 +6,7 @@ import { Button } from '../../../shared/ui/button/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { Router, RouterLink } from '@angular/router';
 import { ILoginFormModel } from './models/login-form.model';
-import { HttpClient } from '@angular/common/http';
+import { AuthService } from '../../../core/services/auth.service';
 import { take, finalize } from 'rxjs';
 import { noEmojiRegex } from '../../../shared/validations/validator';
 
@@ -18,7 +18,7 @@ import { noEmojiRegex } from '../../../shared/validations/validator';
 })
 export class SignIn {
   private route = inject(Router);
-  private http = inject(HttpClient);
+  private authService = inject(AuthService);
 
   isSubmitting = signal(false);
   errorMessage = signal<string | null>(null);
@@ -49,26 +49,54 @@ export class SignIn {
 
     const { email, password } = this.model();
 
-    this.http
-      .get<ILoginFormModel[]>('http://localhost:3000/users', {
-        params: { email, password },
-      })
+    const loginPayload = { email, password };
+    console.log('🔐 [LOGIN] Sending authentication request:', {
+      email: loginPayload.email,
+      password: '***hidden***',
+      timestamp: new Date().toISOString(),
+    });
+
+    this.authService
+      .authenticate(loginPayload)
       .pipe(
         take(1), // auto-unsubscribe
         finalize(() => this.isSubmitting.set(false))
       )
       .subscribe({
-        next: ([user]) => {
-          if (!user) {
-            this.errorMessage.set('Invalid email or password. Please check your credentials and try again.');
-            return;
-          }
+        next: (response) => {
+          console.log('✅ [LOGIN] Authentication successful:', {
+            hasToken: !!response.access_token,
+            hasUser: !!response.user,
+            user: response.user,
+            timestamp: new Date().toISOString(),
+          });
 
-          localStorage.setItem('user', JSON.stringify(user));
-          this.route.navigate(['dashboard']);
+          if (response.access_token) {
+            console.log('💾 [LOGIN] Storing token and user data');
+            this.authService.setToken(response.access_token);
+            if (response.user) {
+              this.authService.setUser(response.user);
+              console.log('👤 [LOGIN] User stored:', response.user);
+            }
+            console.log('🚀 [LOGIN] Navigating to dashboard');
+            this.route.navigate(['dashboard']);
+          } else {
+            console.warn('⚠️ [LOGIN] No access token in response:', response);
+            this.errorMessage.set('Invalid response from server. Please try again.');
+          }
         },
-        error: () => {
-          this.errorMessage.set('Unable to connect to the server. Please check your connection and try again.');
+        error: (err) => {
+          console.error('❌ [LOGIN] Authentication failed:', {
+            error: err,
+            errorMessage: err.error?.message || err.message,
+            status: err.status,
+            statusText: err.statusText,
+            fullError: err,
+            timestamp: new Date().toISOString(),
+          });
+          const errorMessage =
+            err.error?.message || err.message || 'Unable to connect to the server. Please check your connection and try again.';
+          this.errorMessage.set(errorMessage);
         },
       });
   }
