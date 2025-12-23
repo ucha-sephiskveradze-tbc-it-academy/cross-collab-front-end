@@ -1,4 +1,4 @@
-import { Component, computed, effect, signal } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 import { Footer } from '../../shared/ui/footer/footer';
 import { Header } from '../../shared/ui/header/header';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -120,10 +120,7 @@ export class Notifications {
   /* ---------- DEBUG / SIDE EFFECT ---------- */
 
   constructor() {
-    effect(() => {
-      console.log('Active tab:', this.activeTab());
-      console.log('Sort order:', this.sortSignal());
-    });
+    // Effect removed - no side effects needed for debugging
   }
 
   markRead(notificationId: number) {
@@ -133,8 +130,7 @@ export class Notifications {
   }
 
   handleAction(event: { notificationId: number; action: string }) {
-    console.log('Action clicked:', event);
-    // later → route / API / dialog
+    // TODO: Implement action handling (route / API / dialog)
   }
   /* ---------- EXAMPLE: derived signal ---------- */
 

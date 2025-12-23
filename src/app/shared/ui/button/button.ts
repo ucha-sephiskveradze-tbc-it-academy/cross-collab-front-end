@@ -1,10 +1,9 @@
-import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-button',
-  imports: [CommonModule, RouterLink],
+  imports: [RouterLink],
   templateUrl: './button.html',
   styleUrl: './button.scss',
 })

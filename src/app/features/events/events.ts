@@ -1,9 +1,8 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EventService } from '../../shared/services/events.service';
 import { Header } from '../../shared/ui/header/header';
 import { Footer } from '../../shared/ui/footer/footer';
-import { CommonModule } from '@angular/common';
 import { DatePickerModule } from 'primeng/datepicker';
 import { ListboxModule } from 'primeng/listbox';
 import { PaginatorModule } from 'primeng/paginator';
@@ -13,7 +12,6 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-events',
   imports: [
-    CommonModule,
     Header,
     Footer,
     EventCard,
@@ -25,7 +23,7 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './events.html',
   styleUrl: './events.scss',
 })
-export class Events {
+export class Events implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private eventService = inject(EventService);

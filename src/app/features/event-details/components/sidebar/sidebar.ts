@@ -12,10 +12,7 @@ export class Sidebar {
   @Input({ required: true }) event!: IEventDetails;
 
   onRegister() {
-    // TEMP (until backend is ready)
-    console.log('Register clicked for event:', this.event.eventId);
-
-    // FUTURE:
-    // this.eventDetailsService.register(this.event.id)
+    // TODO: Implement event registration when backend is ready
+    // this.eventDetailsService.register(this.event.eventId)
   }
 }

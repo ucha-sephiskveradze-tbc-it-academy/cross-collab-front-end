@@ -18,7 +18,7 @@ import { Sidebar } from './components/sidebar/sidebar';
 })
 export class EventDetails implements OnInit {
   private route = inject(ActivatedRoute);
-  private detailsService = inject(EventDetailService);
+  protected detailsService = inject(EventDetailService);
 
   event = computed(() => {
     const list = this.detailsService.eventResource.value();

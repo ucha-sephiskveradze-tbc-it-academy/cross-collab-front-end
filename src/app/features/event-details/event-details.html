@@ -1,28 +1,42 @@
 <app-header></app-header>
 
-@if (event()) {
+@if (detailsService.eventResource.isLoading()) {
 <main class="event-details">
-    <app-event-hero [event]="event()!"></app-event-hero>
+  <div class="loading-state">
+    <p>Loading event details...</p>
+  </div>
+</main>
+} @else if (detailsService.eventResource.error()) {
+<main class="event-details">
+  <div class="error-state" role="alert">
+    <p>Failed to load event details. Please try again later.</p>
+  </div>
+</main>
+} @else if (event()) {
+<main class="event-details">
+  <app-event-hero [event]="event()!"></app-event-hero>
 
-    <div class="content-grid">
-        <section class="main">
-            <app-event-about [event]="event()!"></app-event-about>
+  <div class="content-grid">
+    <section class="main">
+      <app-event-about [event]="event()!"></app-event-about>
 
-            @if (event()?.agenda) {
-            <app-event-agenda [agenda]="event()!.agenda"></app-event-agenda>
-            }
+      @if (event()?.agenda) {
+      <app-event-agenda [agenda]="event()!.agenda"></app-event-agenda>
+      } @if (event()?.speakers) {
+      <app-event-speakers [speakers]="event()!.speakers"></app-event-speakers>
+      } @if (event()?.faqs) {
+      <app-event-faq [faqs]="event()!.faqs"></app-event-faq>
+      }
+    </section>
 
-            @if (event()?.speakers) {
-            <app-event-speakers [speakers]="event()!.speakers"></app-event-speakers>
-            }
-
-            @if (event()?.faqs) {
-            <app-event-faq [faqs]="event()!.faqs"></app-event-faq>
-            }
-        </section>
-
-        <app-event-sidebar [event]="event()!"></app-event-sidebar>
-    </div>
+    <app-event-sidebar [event]="event()!"></app-event-sidebar>
+  </div>
+</main>
+} @else {
+<main class="event-details">
+  <div class="empty-state">
+    <p>Event not found.</p>
+  </div>
 </main>
 }
 

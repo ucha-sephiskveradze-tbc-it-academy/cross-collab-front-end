@@ -1,37 +1,37 @@
 <div class="notification-card" [class.unread]="notification.unread">
-    <div class="icon">
-        <i class="pi" [ngClass]="icon()"></i>
+  <div class="icon">
+    <i class="pi" [class]="icon()"></i>
+  </div>
+
+  <div class="content">
+    <div class="header">
+      <strong>{{ notification.title }}</strong>
+      <span class="time">{{ notification.timeAgo }}</span>
     </div>
 
-    <div class="content">
-        <div class="header">
-            <strong>{{ notification.title }}</strong>
-            <span class="time">{{ notification.timeAgo }}</span>
-        </div>
+    <p class="message">{{ notification.message }}</p>
 
-        <p class="message">{{ notification.message }}</p>
-
-        @if (notification.meta?.length) {
-        <div class="meta">
-            @for (item of notification.meta; track item) {
-            <span class="meta-item">{{ item }}</span>
-            }
-        </div>
-        }
-
-        <div class="actions">
-            @for (action of notification.actions; track action.label) {
-            <button class="btn" [class.primary]="action.variant === 'primary'"
-                [class.danger]="action.variant === 'danger'" (click)="onAction(action.action)">
-                {{ action.label }}
-            </button>
-            }
-
-            @if (notification.unread) {
-            <button class="mark-read" (click)="onMarkRead()">
-                ✓ Mark as Read
-            </button>
-            }
-        </div>
+    @if (notification.meta?.length) {
+    <div class="meta">
+      @for (item of notification.meta; track item) {
+      <span class="meta-item">{{ item }}</span>
+      }
     </div>
+    }
+
+    <div class="actions">
+      @for (action of notification.actions; track action.label) {
+      <button
+        class="btn"
+        [class.primary]="action.variant === 'primary'"
+        [class.danger]="action.variant === 'danger'"
+        (click)="onAction(action.action)"
+      >
+        {{ action.label }}
+      </button>
+      } @if (notification.unread) {
+      <button class="mark-read" (click)="onMarkRead()">✓ Mark as Read</button>
+      }
+    </div>
+  </div>
 </div>

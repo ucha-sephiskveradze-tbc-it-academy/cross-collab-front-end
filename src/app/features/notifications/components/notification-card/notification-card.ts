@@ -1,10 +1,9 @@
 import { Component, computed, EventEmitter, Input, Output } from '@angular/core';
 import { Notification } from '../../models/notification.model';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-notification-card',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './notification-card.html',
   styleUrl: './notification-card.scss',
 })

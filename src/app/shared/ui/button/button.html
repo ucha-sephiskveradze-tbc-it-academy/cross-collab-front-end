@@ -1,8 +1,14 @@
-<button class="app-button" [type]="type || 'button'" [disabled]="disabled || loading" [ngClass]="variant"
-    [routerLink]="!disabled && !loading ? routerLink : null" (click)="handleClick($event)">
-    @if (loading) {
-    <span class="spinner"></span>
-    } @else {
-    {{ label }}
-    }
+<button
+  class="app-button"
+  [type]="type || 'button'"
+  [disabled]="disabled || loading"
+  [class]="variant"
+  [routerLink]="!disabled && !loading ? routerLink : null"
+  (click)="handleClick($event)"
+>
+  @if (loading) {
+  <span class="spinner"></span>
+  } @else {
+  {{ label }}
+  }
 </button>
