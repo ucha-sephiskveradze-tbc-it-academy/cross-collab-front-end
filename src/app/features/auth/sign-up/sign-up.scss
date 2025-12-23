@@ -1,5 +1,6 @@
 .auth-card {
-    width: 420px;
+    width: 100%;
+    max-width: 420px; // cap width for desktop
     margin: 40px auto;
     padding: 32px;
     border-radius: 12px;
@@ -143,12 +144,15 @@
         font-size: 12px;
         margin-bottom: 20px;
         align-items: center;
+
         input {
             width: auto;
             height: auto;
         }
+
         span {
             margin-bottom: 0;
+
             a {
                 text-decoration: none;
                 font-weight: 500;
@@ -174,6 +178,57 @@
         a {
             font-weight: 500;
             text-decoration: none;
+        }
+    }
+
+    /*  Responsive tweaks */
+    @media (max-width: 768px) {
+        margin: 20px;
+        padding: 24px;
+
+        h1 {
+            font-size: 20px;
+        }
+
+        input,
+        select {
+            font-size: 13px;
+            height: 38px;
+        }
+
+        .otp-boxes input {
+            width: 36px;
+            height: 40px;
+            font-size: 16px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        margin: 16px;
+        padding: 20px;
+
+        h1 {
+            font-size: 18px;
+        }
+
+        .row {
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .phone-input {
+            flex-direction: column;
+
+            .otp-btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        .otp-footer {
+            flex-direction: column;
+            gap: 8px;
+            align-items: center;
         }
     }
 }
