@@ -5,6 +5,14 @@ import { Button } from 'primeng/button';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { form, required, Field } from '@angular/forms/signals';
 import { SelectModule } from 'primeng/select';
+import {
+  CATEGORY_OPTIONS,
+  DATE_RANGE_OPTIONS,
+  LOCATION_OPTIONS,
+  MOCK_EVENTS,
+  MOCK_KPIS,
+  STATUS_OPTIONS,
+} from './mock/analytics.data';
 
 @Component({
   selector: 'app-analytics',
@@ -13,111 +21,13 @@ import { SelectModule } from 'primeng/select';
   styleUrl: './analytics.scss',
 })
 export class Analytics {
-  readonly events = [
-    {
-      id: 1,
-      eventId: 101,
-      title: 'Happy Friday: Retro Game Night',
-      description: 'Unwind with classics and snacks.',
-      startDateTime: '2025-01-17T18:00:00Z',
-      endDateTime: '2025-01-17T21:00:00Z',
-      location: 'Recreation Lounge',
-      category: {
-        categoryId: 5,
-        categoryName: 'Happy Friday',
-      },
-      capacity: 40,
-      totalRegistered: 22,
-      currentUserStatus: 'REGISTERED',
-    },
-    {
-      id: 2,
-      eventId: 102,
-      title: 'Team Building: Escape Room Challenge',
-      description: 'Solve puzzles together in a timed escape room.',
-      startDateTime: '2025-01-20T15:00:00Z',
-      endDateTime: '2025-01-20T17:00:00Z',
-      location: 'Off-site',
-      category: {
-        categoryId: 2,
-        categoryName: 'Team Building',
-      },
-      capacity: 20,
-      totalRegistered: 10,
-      currentUserStatus: 'REGISTERED',
-    },
-    {
-      id: 3,
-      eventId: 103,
-      title: 'Happy Friday: Karaoke & Pizza',
-      description: 'Sing your heart out and enjoy pizza with colleagues.',
-      startDateTime: '2025-02-07T19:00:00Z',
-      endDateTime: '2025-02-07T22:00:00Z',
-      location: 'Training Room B',
-      category: {
-        categoryId: 5,
-        categoryName: 'Happy Friday',
-      },
-      capacity: 30,
-      totalRegistered: 12,
-      currentUserStatus: 'REGISTERED',
-    },
-    {
-      id: 4,
-      eventId: 104,
-      title: 'Team Building: Blindfold Trust Walk',
-      description: 'Build trust through guided blindfold activities.',
-      startDateTime: '2025-02-12T10:00:00Z',
-      endDateTime: '2025-02-12T12:00:00Z',
-      location: 'Grand Conference Hall',
-      category: {
-        categoryId: 2,
-        categoryName: 'Team Building',
-      },
-      capacity: 50,
-      totalRegistered: 35,
-      currentUserStatus: 'NONE',
-    },
-    {
-      id: 5,
-      eventId: 105,
-      title: 'Happy Friday: Office Olympics',
-      description: 'Compete in fun mini-games across departments.',
-      startDateTime: '2025-02-21T16:00:00Z',
-      endDateTime: '2025-02-21T18:00:00Z',
-      location: 'Training Room A',
-      category: {
-        categoryId: 5,
-        categoryName: 'Happy Friday',
-      },
-      capacity: 60,
-      totalRegistered: 48,
-      currentUserStatus: 'REGISTERED',
-    },
-  ];
+  readonly dateRangeOptions = DATE_RANGE_OPTIONS;
+  readonly categoryOptions = CATEGORY_OPTIONS;
+  readonly locationOptions = LOCATION_OPTIONS;
+  readonly statusOptions = STATUS_OPTIONS;
 
-  readonly dateRangeOptions = [
-    { label: 'Last 7 Days', value: 'last7' },
-    { label: 'Last 30 Days', value: 'last30' },
-    { label: 'Last 90 Days', value: 'last90' },
-  ];
-
-  readonly categoryOptions = [
-    { label: 'All Categories', value: 'all' },
-    { label: 'Conference', value: 'conference' },
-  ];
-
-  readonly locationOptions = [
-    { label: 'All Locations', value: 'all' },
-    { label: 'Tbilisi', value: 'tbilisi' },
-    { label: 'Online', value: 'online' },
-  ];
-
-  readonly statusOptions = [
-    { label: 'All Events', value: 'all' },
-    { label: 'Draft', value: 'draft' },
-    { label: 'Published', value: 'published' },
-  ];
+  readonly events = MOCK_EVENTS;
+  readonly KPIS = MOCK_KPIS;
 
   filterModel = signal({
     dateRange: 'last30',

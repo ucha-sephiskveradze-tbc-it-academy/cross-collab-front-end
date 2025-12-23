@@ -38,9 +38,39 @@
             </div>
 
             <button class="apply-btn" (click)="applyFilters()">Apply Filters</button>
-
-
         </main>
+    </div>
+
+    <div class="analytics__kpi">
+        <h3 class="section-title">Key Performance Indicators</h3>
+
+        <div class="kpi-grid">
+            @for (kpi of KPIS; track $index) {
+            <div class="kpi-card">
+
+                <div class="kpi-header">
+                    <div class="icon-box">
+                        <i [class]="kpi.icon"></i>
+                    </div>
+
+                    <span class="change" [class.up]="kpi.trend === 'up'" [class.down]="kpi.trend === 'down'">
+                        {{ kpi.change }}
+                    </span>
+                </div>
+
+                <div class="kpi-value">{{ kpi.value }}</div>
+                <div class="kpi-label">{{ kpi.label }}</div>
+
+                <div class="kpi-footer">
+                    <i class="pi" [class.pi-arrow-up]="kpi.trend === 'up'"
+                        [class.pi-arrow-down]="kpi.trend === 'down'"></i>
+                    <span>{{ kpi.description }}</span>
+                </div>
+
+            </div>
+            }
+        </div>
+
     </div>
 </section>
 <app-footer></app-footer>
