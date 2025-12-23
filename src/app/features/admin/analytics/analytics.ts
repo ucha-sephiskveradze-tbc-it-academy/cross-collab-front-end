@@ -11,17 +11,20 @@ import {
   CATEGORY_CHART_OPTIONS,
   CATEGORY_OPTIONS,
   DATE_RANGE_OPTIONS,
+  DEPARTMENT_PARTICIPATION,
   LOCATION_OPTIONS,
   MOCK_EVENTS,
   MOCK_KPIS,
   REGISTRATION_TREND_DATA,
   REGISTRATION_TREND_OPTIONS,
   STATUS_OPTIONS,
+  TOP_EVENTS,
 } from './mock/analytics.data';
+import { TableModule } from 'primeng/table';
 
 @Component({
   selector: 'app-analytics',
-  imports: [Header, Footer, SelectButtonModule, SelectModule, Field, ChartModule],
+  imports: [Header, Footer, SelectButtonModule, SelectModule, Field, ChartModule, TableModule],
   templateUrl: './analytics.html',
   styleUrl: './analytics.scss',
 })
@@ -36,6 +39,10 @@ export class Analytics {
 
   readonly categoryChartData = CATEGORY_CHART_DATA;
   readonly categoryChartOptions = CATEGORY_CHART_OPTIONS;
+
+  readonly topEvents = TOP_EVENTS;
+
+  readonly departmentParticipation = DEPARTMENT_PARTICIPATION;
 
   readonly events = MOCK_EVENTS;
   readonly KPIS = MOCK_KPIS;

@@ -103,5 +103,128 @@
         </div>
 
     </div>
+
+    <div class="table-card">
+        <div class="table-header">
+            <div>
+                <h4>Top Events by Demand</h4>
+                <p>Most popular events based on registration rate</p>
+            </div>
+
+            <a class="view-link">View Full Report →</a>
+        </div>
+
+        <p-table [value]="topEvents" [tableStyle]="{ 'width': '100%' }">
+            <!-- HEADER -->
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Rank</th>
+                    <th>Event Name</th>
+                    <th>Category</th>
+                    <th>Date</th>
+                    <th>Registrations</th>
+                    <th>Capacity</th>
+                    <th>Utilization</th>
+                    <th>Waitlist</th>
+                </tr>
+            </ng-template>
+
+            <!-- BODY -->
+            <ng-template pTemplate="body" let-event>
+                <tr>
+                    <!-- Rank -->
+                    <td>
+                        <span class="rank-box">{{ event.rank }}</span>
+                    </td>
+
+                    <!-- Name -->
+                    <td class="event-name">{{ event.name }}</td>
+
+                    <!-- Category -->
+                    <td>
+                        <span class="category-pill">{{ event.category }}</span>
+                    </td>
+
+                    <!-- Date -->
+                    <td>{{ event.date }}</td>
+
+                    <!-- Registrations -->
+                    <td>{{ event.registrations }}</td>
+
+                    <!-- Capacity -->
+                    <td>{{ event.capacity }}</td>
+
+                    <!-- Utilization -->
+                    <td>
+                        <div class="utilization">
+                            <div class="bar">
+                                <div class="fill" [style.width.%]="event.utilization"></div>
+                            </div>
+                            <span>{{ event.utilization }}%</span>
+                        </div>
+                    </td>
+
+                    <!-- Waitlist -->
+                    <td>{{ event.waitlist }}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+
+    <div class="table-card">
+        <div class="table-header">
+            <div>
+                <h4>Department Participation</h4>
+                <p>Event engagement breakdown by department</p>
+            </div>
+        </div>
+
+        <p-table [value]="departmentParticipation">
+            <!-- HEADER -->
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Department</th>
+                    <th>Total Employees</th>
+                    <th>Active Participants</th>
+                    <th>Participation Rate</th>
+                    <th>Total Registrations</th>
+                    <th>Avg Events/Employee</th>
+                    <th>Trend</th>
+                </tr>
+            </ng-template>
+
+            <!-- BODY -->
+            <ng-template pTemplate="body" let-row>
+                <tr>
+                    <td class="dept-name">{{ row.department }}</td>
+
+                    <td>{{ row.totalEmployees }}</td>
+                    <td>{{ row.activeParticipants }}</td>
+
+                    <!-- Participation Rate -->
+                    <td>
+                        <div class="rate-cell">
+                            <div class="rate-bar">
+                                <div class="rate-fill" [style.width.%]="row.participationRate"></div>
+                            </div>
+                            <span>{{ row.participationRate }}%</span>
+                        </div>
+                    </td>
+
+                    <td>{{ row.totalRegistrations }}</td>
+                    <td>{{ row.avgEventsPerEmployee }}</td>
+
+                    <!-- Trend -->
+                    <td>
+                        <span class="trend-pill" [class.up]="row.trend.startsWith('+')"
+                            [class.down]="row.trend.startsWith('-')">
+                            {{ row.trend }}
+                        </span>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+
 </section>
 <app-footer></app-footer>
