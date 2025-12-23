@@ -28,7 +28,7 @@
   <ng-template #caption>
     <div class="table-caption">
       <!-- LEFT -->
-      <h5 class="m-0">Manage Events</h5>
+      <h5>Manage Events</h5>
 
       <!-- RIGHT -->
       <div class="filter__div">
@@ -104,7 +104,7 @@
 
       <td>
         <strong>{{ event.title }}</strong>
-        <div class="text-sm text-gray-500">
+        <div class="event-description">
           {{ event.description }}
         </div>
       </td>
@@ -123,10 +123,10 @@
       <td>{{ event.totalRegistered }} / {{ event.capacity }}</td>
 
       <td>
-        <div class="flex flex-col">
+        <div class="capacity-info">
           <strong>{{ getCapacityPercent(event) | number : '1.2-2' }}%</strong>
           <br />
-          <span class="text-sm text-gray-500"> {{ getSpotsLeft(event) }} spots left </span>
+          <span class="spots-left"> {{ getSpotsLeft(event) }} spots left </span>
         </div>
       </td>
 
@@ -175,24 +175,24 @@
 >
   <ng-template #content>
     @if (event) {
-    <div class="flex flex-col gap-4">
-      <div>
-        <label class="block font-bold mb-2">Title</label>
+    <div class="dialog-form">
+      <div class="form-field">
+        <label>Title</label>
         <input type="text" pInputText [(ngModel)]="event.title" required />
       </div>
 
-      <div>
-        <label class="block font-bold mb-2">Description</label>
+      <div class="form-field">
+        <label>Description</label>
         <textarea pTextarea [(ngModel)]="event.description" rows="3"></textarea>
       </div>
 
-      <div>
-        <label class="block font-bold mb-2">Location</label>
+      <div class="form-field">
+        <label>Location</label>
         <input type="text" pInputText [(ngModel)]="event.location" />
       </div>
 
-      <div>
-        <label class="block font-bold mb-2">Capacity</label>
+      <div class="form-field">
+        <label>Capacity</label>
         <p-inputNumber [(ngModel)]="event.capacity"></p-inputNumber>
       </div>
     </div>
