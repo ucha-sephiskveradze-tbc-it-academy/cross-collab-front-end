@@ -5,7 +5,7 @@ import { ButtonModule } from 'primeng/button';
 import { Button } from '../../../shared/ui/button/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { RouterLink } from '@angular/router';
-import { noEmojiRegex } from '../../../shared/validations/validator';
+import { EMAIL_REGEX, noEmojiRegex } from '../../../shared/validations/validator';
 
 @Component({
   selector: 'app-forgot-password',
@@ -22,6 +22,9 @@ export class ForgotPassword {
     required(schema.email);
     email(schema.email);
     pattern(schema.email, noEmojiRegex, { message: 'No Emojis Allowed!' });
+    pattern(schema.email, EMAIL_REGEX, {
+      message: 'Please enter a valid email address',
+    });
   });
 
   onSubmit(event: Event) {
