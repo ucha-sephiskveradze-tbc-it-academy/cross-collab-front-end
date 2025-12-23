@@ -60,11 +60,14 @@
             <ng-template pTemplate="title">Location</ng-template>
 
             <div class="location-types">
-                <button pButton *ngFor="let l of locationOptions" type="button"
-                    [outlined]="formService.form.value.locationType !== l.value"
-                    (click)="formService.form.patchValue({ locationType: l.value })">
-                    {{ l.label }}
+                @for (item of locationOptions; track item) {
+                <button pButton type="button" class="p-button-outlined button"
+                    [outlined]="formService.form.value.locationType !== item.value"
+                    (click)="formService.form.patchValue({ locationType: item.value })">
+                    {{ item.label }}
                 </button>
+
+                }
             </div>
 
             <div class="grid-2">
