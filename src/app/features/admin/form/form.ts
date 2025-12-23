@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EventMockService } from './services/event.mock.service';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-
+import { FileUploadModule } from 'primeng/fileupload';
 import { InputTextModule } from 'primeng/inputtext';
 import { Select } from 'primeng/select';
 import { DatePickerModule } from 'primeng/datepicker';
@@ -28,6 +28,7 @@ type LocationType = 'in-person' | 'virtual' | 'hybrid';
     InputNumberModule,
     ButtonModule,
     CardModule,
+    FileUploadModule,
     Header,
     Checkbox,
     Footer,
