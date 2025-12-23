@@ -1,7 +1,8 @@
-/* You can add global styles to this file, and also import other style files */
+/* Global styles entry point */
 @use "./styles/reset";
 @use "./styles/variables" as *;
 
+/* ✅ Checkbox */
 .p-checkbox {
     background-color: #000000;
     border-color: #000000;
@@ -12,7 +13,7 @@
     border-color: #000000;
 }
 
-/* Base */
+/* ✅ Custom Button Variant */
 .p-button.add-event {
     background: #16a34a !important;
     border: none;
@@ -20,13 +21,19 @@
 }
 
 .p-button.add-event .pi {
-    color: white !important;
+    color: white !important; // icon color
 }
 
 .p-button.add-event:not(.p-disabled):hover {
     background: #15803d !important;
 }
 
+/* ✅ Prevent horizontal scrollbars */
 body {
     overflow-x: hidden;
+}
+
+:root {
+    --p-button-primary-color: #222 !important;
+    --p-button-primary-hover-color: #131313 !important;
 }

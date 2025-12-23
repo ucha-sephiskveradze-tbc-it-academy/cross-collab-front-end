@@ -6,8 +6,10 @@
 
         <!-- BASIC INFO -->
         <p-card class="section">
-            <ng-template pTemplate="title">Basic Information</ng-template>
-
+            <div class="table__header">
+                <div class="icon"><img src="./assets/icons/admin/info.svg" alt=""></div>
+                <h1>Basic Information</h1>
+            </div>
             <div class="field">
                 <label>Event Title</label>
                 <input pInputText formControlName="title" placeholder="Enter event title" />
@@ -28,7 +30,10 @@
 
         <!-- DATE & TIME -->
         <p-card class="section">
-            <ng-template pTemplate="title">Date & Time</ng-template>
+            <div class="table__header">
+                <div class="icon"><img src="./assets/icons/admin/date.svg" alt=""></div>
+                <h1>Date & Time</h1>
+            </div>
 
             <div class="grid-2">
                 <div class="field">
@@ -57,7 +62,10 @@
 
         <!-- LOCATION -->
         <p-card class="section">
-            <ng-template pTemplate="title">Location</ng-template>
+            <div class="table__header">
+                <div class="icon"><img src="./assets/icons/admin/location.svg" alt=""></div>
+                <h1>Location</h1>
+            </div>
 
             <div class="location-types">
                 @for (item of locationOptions; track item) {
@@ -78,14 +86,17 @@
 
         <!-- CAPACITY -->
         <p-card class="section">
-            <ng-template pTemplate="title">Capacity & Registration</ng-template>
+            <div class="table__header">
+                <div class="icon"><img src="./assets/icons/admin/people.svg" alt=""></div>
+                <h1>Capacity & Registration</h1>
+            </div>
 
             <div class="grid-2">
                 <p-inputNumber formControlName="capacity" placeholder="Max capacity" showButtons />
                 <p-inputNumber formControlName="minCapacity" placeholder="Minimum participants" />
             </div>
 
-            <div class="flex">
+            <div class="flex checkbox">
                 <p-checkbox binary formControlName="waitlist" label="Enable waitlist">
                 </p-checkbox>
                 <h2>Enable Waitlist</h2>
@@ -94,11 +105,34 @@
 
         <!-- NOTIFICATIONS -->
         <p-card class="section">
-            <ng-template pTemplate="title">Notification Settings</ng-template>
+            <div class="table__header">
+                <div class="icon"><img src="./assets/icons/admin/notification.svg" alt=""></div>
+                <h1>Notification Settings</h1>
+            </div>
 
-            <p-checkbox binary label="Registration confirmation" />
-            <p-checkbox binary label="24-hour reminder" />
-            <p-checkbox binary label="1-hour reminder" />
+            <div class="flex checkbox">
+                <p-checkbox binary label="Registration confirmation" />
+                <div>
+                    <h2>Registration Confirmation</h2>
+                    <p>Send confirmation email immediately after registration</p>
+                </div>
+            </div>
+            <div class="flex checkbox">
+                <p-checkbox binary label="24-hour reminder" />
+                <div>
+                    <h2>24-Hour Reminder</h2>
+                    <p>Remind participants 24 hours before the event</p>
+                </div>
+            </div>
+            <div class="flex checkbox">
+                <p-checkbox binary label="1-hour reminder" />
+                <div>
+                    <h2>1-Hour Reminder</h2>
+                    <p>Send final reminder 1 hour before event start</p>
+                </div>
+            </div>
+
+
         </p-card>
 
     </div>
@@ -112,7 +146,9 @@
 
             <div class="upload-box">
                 <i class="pi pi-image"></i>
-                <button pButton label="Upload Image" outlined></button>
+                <p-fileupload mode="basic" name="demo[]" chooseIcon="pi pi-upload"
+                    url="https://www.primefaces.org/cdn/api/upload.php" accept="image/*" maxFileSize="1000000"
+                    [auto]="true" chooseLabel="Browse" />
             </div>
         </p-card>
 
@@ -122,17 +158,18 @@
 
             <div class="preview-row">
                 <span>Category</span>
-                <span>{{ formService.form.value.category || 'Not set' }}</span>
+                <span>{{ formService.form.value.category }}</span>
             </div>
 
             <div class="preview-row">
                 <span>Date</span>
-                <span>{{ formService.form.value.date || 'Not set' }}</span>
+                <span>{{ formService.form.value.date ? (formService.form.value.date | date:'dd MMM yyyy')
+                    : 'Not set' }}</span>
             </div>
 
             <div class="preview-row">
                 <span>Location</span>
-                <span>{{ formService.form.value.locationType || 'Not set' }}</span>
+                <span>{{ formService.form.value.locationType || 'Not Set' }}</span>
             </div>
 
             <div class="preview-row">
@@ -142,9 +179,11 @@
         </p-card>
 
         <!-- ACTIONS -->
-        <button pButton label="Publish Event" class="publish" [disabled]="formService.form.invalid"></button>
+        <div class="submit">
+            <button pButton label="Publish Event" class="publish" [disabled]="formService.form.invalid"></button>
 
-        <button pButton label="Cancel" severity="secondary" outlined></button>
+            <button pButton label="Cancel" severity="secondary" outlined></button>
+        </div>
 
     </div>
 
