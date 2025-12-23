@@ -13,6 +13,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { tap } from 'rxjs';
 import { OtpService } from './services/otp.service';
 import { Departments } from './models/departments';
+import { noEmojiRegex } from '../../../shared/validations/validator';
 
 @Component({
   selector: 'app-sign-up',
@@ -56,12 +57,31 @@ export class SignUp {
 
   createAccountForm = form(this.createAccountModel, (schema) => {
     required(schema.firstName, { message: 'First name is required' });
+    pattern(schema.firstName, noEmojiRegex, {
+      message: 'First name must not contain emojis or special characters',
+    });
+
     required(schema.lastName, { message: 'Last name is required' });
+    pattern(schema.lastName, noEmojiRegex, {
+      message: 'Last name must not contain emojis or special characters',
+    });
 
     required(schema.email, { message: 'Email is required' });
+    pattern(schema.email, noEmojiRegex, { message: 'Emojis are restricted' });
     email(schema.email, { message: 'Please enter a valid email address' });
 
     required(schema.phone, { message: 'Phone number is required' });
+    validate(schema.phone, ({ value }) => {
+      const phone = value().trim();
+      const regex = /^[0-9]{9,15}$/; // only digits, length 9–15
+      if (!regex.test(phone)) {
+        return {
+          kind: 'invalidPhone',
+          message: 'Phone number must contain only digits (9–15 characters)',
+        };
+      }
+      return null;
+    });
 
     minLength(schema.otp, 6, { message: 'OTP must be 6 digits' });
     // validate(schema.otp, ({ value }) => {
@@ -85,7 +105,9 @@ export class SignUp {
     required(schema.department, { message: 'Department is required' });
 
     required(schema.password, { message: 'Password is required' });
+    pattern(schema.password, noEmojiRegex, { message: 'No Emojis allowed in Password' });
     minLength(schema.password, 8, { message: 'Password must be at least 8 characters' });
+
     pattern(schema.password, /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/, {
       message: 'Password must contain uppercase, lowercase, and a number',
     });

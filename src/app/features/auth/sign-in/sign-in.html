@@ -5,11 +5,21 @@
     <label>
         <span>Email</span>
         <input type="email" pInputText placeholder="Enter your email" [field]="loginForm.email" />
+        @if (loginForm.email().invalid()) {
+        @for (error of loginForm.email().errors(); track error) {
+        <li>{{ error.message }}</li>
+        }
+        }
     </label>
 
     <label>
         <span>Password</span>
         <input type="password" pInputText placeholder="Enter your password" [field]="loginForm.password" />
+        @if (loginForm.password().invalid()) {
+        @for (error of loginForm.password ().errors(); track error) {
+        <li>{{ error.message }}</li>
+        }
+        }
     </label>
 
     <div class="options-row">

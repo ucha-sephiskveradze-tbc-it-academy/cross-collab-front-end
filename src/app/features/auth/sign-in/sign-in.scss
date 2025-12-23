@@ -26,6 +26,12 @@
         gap: 0.3rem;
         font-weight: 500;
         font-size: 0.95rem;
+
+        li {
+            list-style: none;
+            color: red;
+            font-size: 12px;
+        }
     }
 
     input[pInputText] {

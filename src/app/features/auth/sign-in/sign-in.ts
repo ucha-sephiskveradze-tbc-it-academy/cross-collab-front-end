@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
-import { Field, form, required, email, minLength } from '@angular/forms/signals';
+import { Field, form, required, email, minLength, pattern } from '@angular/forms/signals';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { Button } from '../../../shared/ui/button/button';
@@ -9,6 +9,7 @@ import { Router, RouterLink } from '@angular/router';
 import { ILoginFormModel } from './models/login-form.model';
 import { HttpClient } from '@angular/common/http';
 import { take, finalize } from 'rxjs';
+import { noEmojiRegex } from '../../../shared/validations/validator';
 
 @Component({
   selector: 'app-sign-in',
@@ -32,8 +33,11 @@ export class SignIn {
   loginForm = form(this.model, (schema) => {
     required(schema.email);
     email(schema.email);
+    pattern(schema.email, noEmojiRegex, { message: 'No Emojis Allowed!' });
+
     required(schema.password);
     minLength(schema.password, 6);
+    pattern(schema.password, noEmojiRegex, { message: 'No Emojis Allowed!' });
   });
 
   onSubmit(event: Event) {
