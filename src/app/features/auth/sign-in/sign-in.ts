@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { Field, form, required, email, minLength, pattern } from '@angular/forms/signals';
 import { ButtonModule } from 'primeng/button';
@@ -13,7 +12,7 @@ import { noEmojiRegex } from '../../../shared/validations/validator';
 
 @Component({
   selector: 'app-sign-in',
-  imports: [CommonModule, InputTextModule, CheckboxModule, ButtonModule, Field, Button, RouterLink],
+  imports: [InputTextModule, CheckboxModule, ButtonModule, Field, Button, RouterLink],
   templateUrl: './sign-in.html',
   styleUrl: './sign-in.scss',
 })
@@ -22,6 +21,7 @@ export class SignIn {
   private http = inject(HttpClient);
 
   isSubmitting = signal(false);
+  errorMessage = signal<string | null>(null);
 
   // Signal model for login
   model = signal<ILoginFormModel>({
@@ -45,6 +45,7 @@ export class SignIn {
     if (!this.loginForm().valid() || this.isSubmitting()) return;
 
     this.isSubmitting.set(true);
+    this.errorMessage.set(null);
 
     const { email, password } = this.model();
 
@@ -59,16 +60,15 @@ export class SignIn {
       .subscribe({
         next: ([user]) => {
           if (!user) {
-            alert('Invalid email or password');
+            this.errorMessage.set('Invalid email or password. Please check your credentials and try again.');
             return;
           }
 
           localStorage.setItem('user', JSON.stringify(user));
           this.route.navigate(['dashboard']);
         },
-        error: (err) => {
-          console.error('Login error:', err);
-          alert('Server error, please try again');
+        error: () => {
+          this.errorMessage.set('Unable to connect to the server. Please check your connection and try again.');
         },
       });
   }

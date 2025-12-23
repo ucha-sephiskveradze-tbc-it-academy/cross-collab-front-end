@@ -1,7 +1,7 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { Header } from '../../shared/ui/header/header';
 import { Footer } from '../../shared/ui/footer/footer';
-import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { Calendar } from './components/calendar/calendar';
 import { Button } from '../../shared/ui/button/button';
 import { EventService } from '../../shared/services/events.service';
@@ -10,11 +10,11 @@ import { EventCard } from '../../shared/ui/event-card/event-card';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [Header, Footer, CommonModule, Calendar, Button, Categories, EventCard],
+  imports: [Header, Footer, RouterLink, Calendar, Button, Categories, EventCard],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
 })
-export class Dashboard implements OnInit {
+export class Dashboard {
   private eventService = inject(EventService);
   user = {
     name: 'Sarah',
@@ -36,6 +36,4 @@ export class Dashboard implements OnInit {
           .slice(0, 3)
       : []
   );
-
-  ngOnInit() {}
 }

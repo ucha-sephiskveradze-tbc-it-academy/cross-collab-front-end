@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { Button } from '../../../shared/ui/button/button';
 import { form, required, email, minLength, pattern, Field, validate } from '@angular/forms/signals';
@@ -19,7 +18,6 @@ import { noEmojiRegex } from '../../../shared/validations/validator';
   selector: 'app-sign-up',
   standalone: true,
   imports: [
-    CommonModule,
     Button,
     Field,
     CheckboxModule,
@@ -130,6 +128,7 @@ export class SignUp {
   });
 
   isSubmitting = signal(false);
+  errorMessage = signal<string | null>(null);
   click: any;
 
   onSubmit(event: Event) {
@@ -145,18 +144,20 @@ export class SignUp {
 
   sendOtp() {
     const phone = this.createAccountForm.phone(); // get phone field value
-    if (!phone) {
-      alert('Please enter your phone number first');
+    if (!phone || phone.invalid()) {
+      this.errorMessage.set('Please enter a valid phone number first');
       return;
     }
 
+    this.errorMessage.set(null);
     this.otpService.sendOtp(phone.value()).subscribe({
       next: () => {
         // start your timer after sending
         this.startTimer();
+        this.errorMessage.set(null);
       },
       error: () => {
-        alert('Failed to send OTP');
+        this.errorMessage.set('Failed to send OTP. Please try again later.');
       },
     });
   }

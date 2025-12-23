@@ -1,32 +1,115 @@
 @use "../../../../../styles/variables" as *;
 
-.agenda {
-    .item {
-        display: flex;
-        gap: $spacing-lg;
-        padding: $spacing-md 0;
-        border-bottom: 1px solid $color-gray-200;
+.section-card {
+  background: $color-white;
+  border: 1px solid $color-border-light;
+  border-radius: $radius-xl;
+  padding: $spacing-xxl;
+  box-shadow: $shadow-sm;
+  transition: box-shadow 0.3s ease;
 
-        &:last-child {
-            border-bottom: none;
-        }
+  &:hover {
+    box-shadow: $shadow-md;
+  }
 
-        .time {
-            font-weight: 600;
-            color: $color-primary;
-            min-width: 80px;
-        }
+  h2 {
+    font-size: $font-size-xxl;
+    font-weight: 700;
+    color: $color-gray-900;
+    margin: 0 0 $spacing-xl 0;
+    padding-bottom: $spacing-md;
+    border-bottom: 2px solid $color-gray-200;
+  }
 
-        .details {
-            h4 {
-                font-size: $font-size-md;
-                margin-bottom: 4px;
-            }
+  .agenda-item {
+    display: flex;
+    gap: $spacing-xl;
+    padding: $spacing-lg 0;
+    border-bottom: 1px solid $color-gray-200;
+    transition: background-color 0.2s ease;
 
-            p {
-                font-size: $font-size-sm;
-                color: $color-gray-600;
-            }
-        }
+    &:last-child {
+      border-bottom: none;
     }
+
+    &:hover {
+      background-color: $color-gray-50;
+      margin: 0 (-$spacing-xxl);
+      padding-left: $spacing-xxl;
+      padding-right: $spacing-xxl;
+      border-radius: $radius-md;
+    }
+
+    .agenda-time {
+      min-width: 140px;
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-xs;
+
+      .time {
+        font-weight: 700;
+        color: $color-primary;
+        font-size: $font-size-md;
+      }
+
+      .duration {
+        font-size: $font-size-xs;
+        color: $color-gray-500;
+        font-weight: 500;
+      }
+    }
+
+    .agenda-content {
+      flex: 1;
+
+      .agenda-title {
+        font-size: $font-size-lg;
+        font-weight: 600;
+        color: $color-gray-900;
+        margin: 0 0 $spacing-xs 0;
+        display: block;
+      }
+
+      .agenda-description {
+        font-size: $font-size-md;
+        color: $color-gray-700;
+        line-height: 1.6;
+        margin: $spacing-xs 0;
+      }
+
+      .agenda-location,
+      .agenda-speaker {
+        display: inline-block;
+        font-size: $font-size-sm;
+        color: $color-gray-600;
+        margin-top: $spacing-xs;
+        padding: $spacing-xs $spacing-sm;
+        background: $color-gray-100;
+        border-radius: $radius-sm;
+        margin-right: $spacing-sm;
+
+        &::before {
+          content: '📍';
+          margin-right: 4px;
+        }
+      }
+
+      .agenda-speaker {
+        &::before {
+          content: '👤';
+        }
+      }
+    }
+  }
+
+  @media (max-width: $breakpoint-tablet) {
+    .agenda-item {
+      flex-direction: column;
+      gap: $spacing-md;
+
+      .agenda-time {
+        min-width: auto;
+      }
+    }
+  }
 }

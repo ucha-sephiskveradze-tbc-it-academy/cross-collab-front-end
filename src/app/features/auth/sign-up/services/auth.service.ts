@@ -8,7 +8,6 @@ export class AuthService {
   private http = inject(HttpClient);
 
   createAccount(dto: CreateAccountDto) {
-    console.log(dto);
     return this.http.post(`${environment.apiUrl}/users`, dto);
   }
 }

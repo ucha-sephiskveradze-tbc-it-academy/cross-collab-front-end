@@ -1,7 +1,6 @@
 <app-header></app-header>
 
 <section class="dashboard">
-
     <!-- Welcome -->
     <div class="welcome">
         <h1>Welcome back, {{ user.name }}</h1>
@@ -15,11 +14,25 @@
             <a routerLink="/events">View all</a>
         </div>
 
+        @if (events.isLoading()) {
+        <div class="loading-state">
+            <p>Loading events...</p>
+        </div>
+        } @else if (events.error()) {
+        <div class="error-state" role="alert">
+            <p>Failed to load events. Please try again later.</p>
+        </div>
+        } @else if (events.hasValue() && upcomingEvents().length === 0) {
+        <div class="empty-state">
+            <p>No upcoming events at this time.</p>
+        </div>
+        } @else if (events.hasValue()) {
         <div class="event-list">
             @for (event of upcomingEvents(); track event.eventId) {
             <app-event-card [event]="event" />
             }
         </div>
+        }
     </section>
 
     <app-categories></app-categories>
@@ -28,6 +41,19 @@
     <section class="section">
         <h2>Trending Events</h2>
 
+        @if (events.isLoading()) {
+        <div class="loading-state">
+            <p>Loading trending events...</p>
+        </div>
+        <!-- } @else if (events.isError()) {
+        <div class="error-state" role="alert">
+            <p>Failed to load trending events.</p>
+        </div> -->
+        } @else if (events.hasValue() && trendingEvents().length === 0) {
+        <div class="empty-state">
+            <p>No trending events at this time.</p>
+        </div>
+        } @else if (events.hasValue()) {
         <div class="trending">
             @for (event of trendingEvents(); track event.eventId) {
             <div class="trending-card">
@@ -35,18 +61,17 @@
 
                 <h4>{{ event.title }}</h4>
 
-                <!-- ✅ FIX -->
                 <p>{{ event.category.categoryName }}</p>
 
                 <app-button label="Register" [disabled]="event.currentUserStatus === 'REGISTERED'"></app-button>
             </div>
             }
         </div>
+        }
     </section>
 
     <!-- Calendar -->
     <app-calendar></app-calendar>
-
 </section>
 
 <app-footer></app-footer>

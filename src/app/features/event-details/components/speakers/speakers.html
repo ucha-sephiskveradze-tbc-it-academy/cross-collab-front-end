@@ -1,15 +1,32 @@
-<section class="card">
-    <h2>Speakers</h2>
+<section class="section-card">
+  <h2>Featured Speakers & Facilitators</h2>
 
-    <div class="grid">
-        @for (item of speakers; track $index) {
-        <div class="speaker">
-            <div class="avatar"></div>
-            <div>
-                <strong>{{ item.name }}</strong>
-                <p>{{ item.role }}</p>
-            </div>
-        </div>
+  <div class="speakers-grid">
+    @for (item of speakers; track $index) {
+    <div class="speaker-card">
+      <div class="speaker-avatar">
+        @if (item.avatar) {
+        <img [src]="item.avatar" [alt]="item.name" />
+        } @else {
+        <div class="avatar-placeholder">{{ getInitials(item.name) }}</div>
         }
+      </div>
+      <div class="speaker-info">
+        <strong class="speaker-name">{{ item.name }}</strong>
+        <p class="speaker-title">{{ item.title }}</p>
+        @if (item.description) {
+        <p class="speaker-description">{{ item.description }}</p>
+        }
+        <div class="speaker-links">
+          @if (item.linkedin) {
+          <a [href]="item.linkedin" target="_blank" class="speaker-link">LinkedIn</a>
+          }
+          @if (item.website) {
+          <a [href]="item.website" target="_blank" class="speaker-link">Website</a>
+          }
+        </div>
+      </div>
     </div>
+    }
+  </div>
 </section>

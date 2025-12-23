@@ -1,10 +1,10 @@
 import { Component, Input } from '@angular/core';
 import { IEventDetails } from '../../models/event-details.model';
-import { CommonModule } from '@angular/common';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-event-hero',
-  imports: [CommonModule],
+  imports: [DatePipe],
   templateUrl: './hero.html',
   styleUrl: './hero.scss',
 })

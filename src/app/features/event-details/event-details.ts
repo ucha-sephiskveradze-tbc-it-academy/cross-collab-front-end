@@ -18,11 +18,21 @@ import { Sidebar } from './components/sidebar/sidebar';
 })
 export class EventDetails implements OnInit {
   private route = inject(ActivatedRoute);
-  private detailsService = inject(EventDetailService);
+  protected detailsService = inject(EventDetailService);
 
   event = computed(() => {
     const list = this.detailsService.eventResource.value();
     return list?.[0] ?? null;
+  });
+
+  hasAgenda = computed(() => {
+    const evt = this.event();
+    return evt?.agenda && evt.agenda.length > 0;
+  });
+
+  hasSpeakers = computed(() => {
+    const evt = this.event();
+    return evt?.speakers && evt.speakers.length > 0;
   });
 
   ngOnInit() {

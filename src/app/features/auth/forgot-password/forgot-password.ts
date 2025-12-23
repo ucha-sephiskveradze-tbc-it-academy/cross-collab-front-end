@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, signal } from '@angular/core';
 import { form, required, email, Field, pattern } from '@angular/forms/signals';
 import { ButtonModule } from 'primeng/button';
@@ -9,7 +8,7 @@ import { EMAIL_REGEX, noEmojiRegex } from '../../../shared/validations/validator
 
 @Component({
   selector: 'app-forgot-password',
-  imports: [CommonModule, InputTextModule, ButtonModule, Field, Button, RouterLink],
+  imports: [InputTextModule, ButtonModule, Field, Button, RouterLink],
   templateUrl: './forgot-password.html',
   styleUrl: './forgot-password.scss',
 })
@@ -32,7 +31,6 @@ export class ForgotPassword {
     if (!this.form().valid()) return;
 
     this.isSubmitting.set(true);
-    console.log('Reset link sent to:', this.model().email);
 
     setTimeout(() => {
       this.isSubmitting.set(false);
