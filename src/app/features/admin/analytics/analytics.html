@@ -88,17 +88,19 @@
                         <button>Year</button>
                     </div>
                 </div>
-
-                <p-chart type="bar" [data]="registrationTrendData" [options]="registrationTrendOptions"
-                    style="height: 260px"></p-chart>
+                <div class="chart-container">
+                    <p-chart type="bar" [data]="registrationTrendData" [options]="registrationTrendOptions"></p-chart>
+                </div>
             </div>
 
             <div class="chart-card">
-                <h4>Category Distribution</h4>
-                <p>Events by category type</p>
-
-                <p-chart type="doughnut" [data]="categoryChartData" [options]="categoryChartOptions"
-                    style="height: 260px"></p-chart>
+                <div class="chart-header">
+                    <h4>Category Distribution</h4>
+                    <p>Events by category type</p>
+                </div>
+                <div class="chart-container">
+                    <p-chart type="doughnut" [data]="categoryChartData" [options]="categoryChartOptions"></p-chart>
+                </div>
             </div>
         </div>
 
