@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { SignIn } from './features/auth/sign-in/sign-in';
 import { authGuard } from './core/guards/auth.guard';
 import { adminGuard } from './core/guards/admin.guard';
+import { Form } from './features/admin/form/form';
 
 export const routes: Routes = [
   {
@@ -55,6 +56,14 @@ export const routes: Routes = [
     path: 'admin/main/:id',
     // canActivate: [authGuard, adminGuard],
     loadComponent: () => import('./features/admin/main/components/view/view').then((c) => c.View),
+  },
+  {
+    path: 'admin/new',
+    loadComponent: () => import('./features/admin/form/form').then((c) => c.Form),
+  },
+  {
+    path: 'admin/edit/:id',
+    loadComponent: () => import('./features/admin/form/form').then((c) => c.Form),
   },
 
   {
