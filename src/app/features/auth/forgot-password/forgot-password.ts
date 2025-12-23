@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, signal } from '@angular/core';
-import { form, required, email, Field } from '@angular/forms/signals';
+import { form, required, email, Field, pattern } from '@angular/forms/signals';
 import { ButtonModule } from 'primeng/button';
 import { Button } from '../../../shared/ui/button/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { RouterLink } from '@angular/router';
+import { noEmojiRegex } from '../../../shared/validations/validator';
 
 @Component({
   selector: 'app-forgot-password',
@@ -20,6 +21,7 @@ export class ForgotPassword {
   form = form(this.model, (schema) => {
     required(schema.email);
     email(schema.email);
+    pattern(schema.email, noEmojiRegex, { message: 'No Emojis Allowed!' });
   });
 
   onSubmit(event: Event) {
