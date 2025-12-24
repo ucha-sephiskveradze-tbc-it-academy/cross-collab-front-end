@@ -43,12 +43,18 @@ export interface RegisterResponse {
   };
 }
 
-export interface ResetPasswordRequest {
+export interface SendResetPasswordLinkRequest {
   email: string;
+  clientUri: string;
 }
 
 export interface ResetPasswordResponse {
   message: string;
+}
+
+export interface ResetPasswordRequest {
+  token: string;
+  newPassword: string;
 }
 
 /**
@@ -126,20 +132,27 @@ export class AuthService {
 
   /**
    * Sends a password reset link to the provided email address.
+   * @param email - User's email address
+   * @param clientUri - The URL where the user will be redirected after clicking the reset link (e.g., http://localhost:4200/reset-password)
    */
-  sendResetPasswordLink(email: string): Observable<ResetPasswordResponse> {
+  sendResetPasswordLink(email: string, clientUri: string): Observable<ResetPasswordResponse> {
     const url = `${environment.authApiUrl}/users-auth/send-reset-password-link`;
-    return this.http.post<ResetPasswordResponse>(url, { email });
+    return this.http.post<ResetPasswordResponse>(url, { email, clientUri });
   }
 
   /**
    * Resets user password using the reset token received via email.
+   * @param token - Reset token from the email link
+   * @param newPassword - New password to set
    */
   resetPassword(token: string, newPassword: string): Observable<ResetPasswordResponse> {
-    return this.http.put<ResetPasswordResponse>(
-      `${environment.authApiUrl}/users-auth/reset-password`,
-      { token, newPassword }
-    );
+    const url = `${environment.authApiUrl}/users-auth/reset-password`;
+    const payload: ResetPasswordRequest = { token, newPassword };
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'ngrok-skip-browser-warning': 'true',
+    });
+    return this.http.put<ResetPasswordResponse>(url, payload, { headers });
   }
 
   /**
