@@ -30,6 +30,22 @@ export class Header {
   isDropdownOpen = signal(false);
 
   /**
+   * Gets the user's name from stored user data.
+   */
+  getUserName(): string {
+    const user = this.authService.getUser();
+    return user?.name || user?.userName || 'User';
+  }
+
+  /**
+   * Gets the user's role for display.
+   */
+  getUserRole(): string {
+    const role = this.authTokenService.getRole();
+    return role || 'Employee';
+  }
+
+  /**
    * Listens for clicks outside the dropdown to close it.
    */
   @HostListener('document:click', ['$event'])

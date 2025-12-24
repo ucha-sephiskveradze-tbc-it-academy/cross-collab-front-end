@@ -72,9 +72,24 @@ export class SignIn {
 
         this.authService.setToken(token);
 
-        // Store user info if provided
+        // Store user info - backend returns name and id at root level
+        const userData: any = {};
+        if (res.name) {
+          userData.name = res.name;
+        }
+        if (res.id) {
+          userData.id = res.id;
+        }
+        if (res.roles) {
+          userData.roles = res.roles;
+        }
         if (res.user) {
-          this.authService.setUser(res.user);
+          // If user object exists, merge it
+          Object.assign(userData, res.user);
+        }
+        
+        if (Object.keys(userData).length > 0) {
+          this.authService.setUser(userData);
         }
 
         // Small delay to ensure token is stored before reading

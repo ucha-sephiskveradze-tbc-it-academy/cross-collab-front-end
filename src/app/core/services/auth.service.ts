@@ -12,11 +12,16 @@ export interface LoginRequest {
 }
 
 export interface LoginResponse {
+  id?: number;
+  name?: string;
+  roles?: string | null;
   token?: string;
-  accessToken?: string; // Backend may return either camelCase or snake_case format
+  accessToken?: string; // Backend may return either camelCase or snake_case format (for compatibility)
   user?: {
     email: string;
     role: string;
+    name?: string;
+    userName?: string;
   };
 }
 
