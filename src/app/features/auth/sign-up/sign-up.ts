@@ -3,7 +3,7 @@ import { Button } from '../../../shared/ui/button/button';
 import { form, required, email, minLength, pattern, Field, validate } from '@angular/forms/signals';
 import { SignupFormModel } from './models/signup-form.model';
 import { mapToDto } from './mapper/signup.mapper';
-import { AuthService } from './services/auth.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { CheckboxModule } from 'primeng/checkbox';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputOtpModule } from 'primeng/inputotp';
@@ -145,7 +145,14 @@ export class SignUp {
     });
 
     this.authService
-      .createAccount(dto)
+      .register({
+        userName: dto.userName,
+        email: dto.email,
+        password: dto.password,
+        department: dto.department,
+        phoneNumber: dto.phoneNumber,
+        oneTimePassword: dto.oneTimePassword,
+      })
       .pipe(
         takeUntil(this.destroyed$),
         finalize(() => this.isSubmitting.set(false))

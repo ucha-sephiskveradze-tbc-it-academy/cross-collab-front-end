@@ -1,5 +1,5 @@
 <app-header></app-header>
-<div class="event-page">
+<div class="event-page" [formGroup]="formService.form">
   <!-- LEFT COLUMN -->
   <div class="left">
     <!-- BASIC INFO -->
@@ -8,57 +8,30 @@
         <div class="icon"><img src="./assets/icons/admin/info.svg" alt="" /></div>
         <h1>Basic Information</h1>
       </div>
-      <div
-        class="field"
-        [class.field-error]="
-          formService.form.title().touched() && formService.form.title().invalid()
-        "
-      >
-        <label>Event Title <span class="required">*</span></label>
-        <input pInputText [field]="formService.form.title" placeholder="Enter event title" />
-        @if (formService.form.title().touched() && formService.form.title().invalid()) { @for (error
-        of formService.form.title().errors(); track error.message) {
-        <small class="error-message">{{ error.message || 'This field is required' }}</small>
-        } }
+      <div class="field">
+        <label>Event Title</label>
+        <input pInputText formControlName="title" placeholder="Enter event title" />
       </div>
 
-      <div
-        class="field"
-        [class.field-error]="
-          formService.form.category().touched() && formService.form.category().invalid()
-        "
-      >
-        <label>Category <span class="required">*</span></label>
+      <div class="field">
+        <label>Category</label>
         <p-select
-          [field]="formService.form.category"
+          formControlName="category"
           [options]="categoryOptions"
           optionLabel="label"
           optionValue="value"
           placeholder="Select a category"
         />
-        @if (formService.form.category().touched() && formService.form.category().invalid()) { @for
-        (error of formService.form.category().errors(); track error.message) {
-        <small class="error-message">{{ error.message || 'This field is required' }}</small>
-        } }
       </div>
 
-      <div
-        class="field"
-        [class.field-error]="
-          formService.form.description().touched() && formService.form.description().invalid()
-        "
-      >
-        <label>Description <span class="required">*</span></label>
+      <div class="field">
+        <label>Description</label>
         <textarea
           pInputTextarea
           rows="4"
-          [field]="formService.form.description"
+          formControlName="description"
           placeholder="Provide a detailed description"
         ></textarea>
-        @if (formService.form.description().touched() && formService.form.description().invalid()) {
-        @for (error of formService.form.description().errors(); track error.message) {
-        <small class="error-message">{{ error.message || 'This field is required' }}</small>
-        } }
       </div>
     </p-card>
 
@@ -70,85 +43,33 @@
       </div>
 
       <div class="grid-2">
-        <div
-          class="field"
-          [class.field-error]="
-            formService.form.date().touched() && formService.form.date().invalid()
-          "
-        >
-          <label>Event Date <span class="required">*</span></label>
-          <p-datePicker [field]="formService.form.date" showIcon />
-          @if (formService.form.date().touched() && formService.form.date().invalid()) { @for (error
-          of formService.form.date().errors(); track error.message) {
-          <small class="error-message">{{ error.message || 'This field is required' }}</small>
-          } }
+        <div class="field">
+          <label>Event Date</label>
+          <p-datePicker formControlName="date" showIcon />
         </div>
 
-        <div
-          class="field"
-          [class.field-error]="
-            formService.form.registrationStart().touched() &&
-            formService.form.registrationStart().invalid()
-          "
-        >
-          <label>Registration Start <span class="required">*</span></label>
-          <p-datePicker [field]="formService.form.registrationStart" showIcon />
-          @if (formService.form.registrationStart().touched() &&
-          formService.form.registrationStart().invalid()) { @for (error of
-          formService.form.registrationStart().errors(); track error.message) {
-          <small class="error-message">{{ error.message || 'This field is required' }}</small>
-          } }
+        <div class="field">
+          <label>Registration Start</label>
+          <p-datePicker formControlName="registrationStart" showIcon />
         </div>
       </div>
 
       <div class="grid-2">
-        <div
-          class="field"
-          [class.field-error]="
-            (formService.form.registrationEnd().touched() &&
-              formService.form.registrationEnd().invalid()) ||
-            formService.registrationDateError()
-          "
-        >
-          <label>Registration End <span class="required">*</span></label>
-          <p-datePicker [field]="formService.form.registrationEnd" showIcon />
-          @if (formService.registrationDateError()) {
-          <small class="error-message">{{ formService.registrationDateError() }}</small>
-          } @if (formService.form.registrationEnd().touched() &&
-          formService.form.registrationEnd().invalid() && !formService.registrationDateError()) {
-          @for (error of formService.form.registrationEnd().errors(); track error.message) {
-          <small class="error-message">{{ error.message || 'This field is required' }}</small>
-          } }
+        <div class="field">
+          <label>Registration End</label>
+          <p-datePicker formControlName="registrationEnd" showIcon />
         </div>
       </div>
 
       <div class="grid-2">
-        <div
-          class="field"
-          [class.field-error]="
-            formService.form.startTime().touched() && formService.form.startTime().invalid()
-          "
-        >
-          <label>Start Time <span class="required">*</span></label>
-          <p-datePicker timeOnly hourFormat="24" [field]="formService.form.startTime" />
-          @if (formService.form.startTime().touched() && formService.form.startTime().invalid()) {
-          @for (error of formService.form.startTime().errors(); track error.message) {
-          <small class="error-message">{{ error.message || 'This field is required' }}</small>
-          } }
+        <div class="field">
+          <label>Start Time</label>
+          <p-datePicker timeOnly hourFormat="24" formControlName="startTime" />
         </div>
 
-        <div
-          class="field"
-          [class.field-error]="
-            formService.form.endTime().touched() && formService.form.endTime().invalid()
-          "
-        >
-          <label>End Time <span class="required">*</span></label>
-          <p-datePicker timeOnly hourFormat="24" [field]="formService.form.endTime" />
-          @if (formService.form.endTime().touched() && formService.form.endTime().invalid()) { @for
-          (error of formService.form.endTime().errors(); track error.message) {
-          <small class="error-message">{{ error.message || 'This field is required' }}</small>
-          } }
+        <div class="field">
+          <label>End Time</label>
+          <p-datePicker timeOnly hourFormat="24" formControlName="endTime" />
         </div>
       </div>
     </p-card>
@@ -161,59 +82,39 @@
       </div>
 
       <div class="location-types">
-        @for (item of locationOptions; track item.value) {
+        @for (item of locationOptions; track item) {
         <button
           pButton
           type="button"
-          class="location-type-btn"
-          [class.active]="formService.form.locationType().value() === item.value"
-          (click)="formService.updateLocationType(item.value)"
+          class="p-button-outlined button"
+          [outlined]="formService.form.value.locationType !== item.value"
+          (click)="formService.form.patchValue({ locationType: item.value })"
         >
           {{ item.label }}
         </button>
+
         }
       </div>
 
       <div class="grid-2">
-        <div class="field">
-          <label>Venue Name</label>
-          <input
-            pInputText
-            placeholder="e.g., Conference Hall A"
-            [field]="formService.form.venue"
-          />
-        </div>
-        <div class="field">
-          <label>City</label>
-          <input pInputText placeholder="e.g., New York" [field]="formService.form.city" />
-        </div>
+        <input pInputText placeholder="Venue name" formControlName="venue" />
+        <input pInputText placeholder="City" formControlName="city" />
       </div>
 
       <div class="field">
-        <label>Street Address</label>
-        <input pInputText placeholder="e.g., 123 Main Street" [field]="formService.form.street" />
+        <input pInputText placeholder="Street address" formControlName="street" />
       </div>
 
       <div class="grid-2">
-        <div class="field">
-          <label>Room Number</label>
-          <p-inputNumber
-            [field]="formService.form.roomNumber"
-            placeholder="e.g., 101"
-            showButtons
-          />
-        </div>
-        <div class="field">
-          <label>Floor Number</label>
-          <p-inputNumber [field]="formService.form.floorNumber" placeholder="e.g., 2" showButtons />
-        </div>
+        <p-inputNumber formControlName="roomNumber" placeholder="Room number" showButtons />
+        <p-inputNumber formControlName="floorNumber" placeholder="Floor number" showButtons />
       </div>
 
       <div class="field">
         <textarea
           pInputTextarea
           rows="2"
-          [field]="formService.form.additionalInformation"
+          formControlName="additionalInformation"
           placeholder="Additional location information"
         ></textarea>
       </div>
@@ -227,48 +128,19 @@
       </div>
 
       <div class="grid-2">
-        <div
-          class="field"
-          [class.field-error]="
-            formService.form.capacity().touched() && formService.form.capacity().invalid()
-          "
-        >
-          <label>Max Capacity <span class="required">*</span></label>
-          <p-inputNumber
-            [field]="formService.form.capacity"
-            placeholder="Max capacity"
-            showButtons
-          />
-          @if (formService.form.capacity().touched() && formService.form.capacity().invalid()) {
-          @for (error of formService.form.capacity().errors(); track error.message) {
-          <small class="error-message">{{ error.message || 'Capacity must be at least 1' }}</small>
-          } }
+        <div class="field">
+          <label>Max Capacity</label>
+          <p-inputNumber formControlName="capacity" placeholder="Max capacity" showButtons />
         </div>
-        <div
-          class="field"
-          [class.field-error]="
-            formService.form.eventTypeId().touched() && formService.form.eventTypeId().invalid()
-          "
-        >
-          <label>Event Type ID <span class="required">*</span></label>
-          <p-inputNumber
-            [field]="formService.form.eventTypeId"
-            placeholder="Event Type ID"
-            showButtons
-          />
-          @if (formService.form.eventTypeId().touched() && formService.form.eventTypeId().invalid())
-          { @for (error of formService.form.eventTypeId().errors(); track error.message) {
-          <small class="error-message">{{ error.message || 'This field is required' }}</small>
-          } }
+        <div class="field">
+          <label>Event Type ID</label>
+          <p-inputNumber formControlName="eventTypeId" placeholder="Event Type ID" showButtons />
         </div>
       </div>
 
       <div class="checkbox-row">
-        <p-checkbox binary [field]="formService.form.waitlist" [binary]="true"></p-checkbox>
-        <div class="checkbox-content">
-          <h2>Enable Waitlist</h2>
-          <p>Allow users to join a waitlist when event is full</p>
-        </div>
+        <p-checkbox binary formControlName="waitlist" label="Enable waitlist"> </p-checkbox>
+        <h2>Enable Waitlist</h2>
       </div>
     </p-card>
 
@@ -280,22 +152,22 @@
       </div>
 
       <div class="checkbox-row">
-        <p-checkbox binary [binary]="true"></p-checkbox>
-        <div class="checkbox-content">
+        <p-checkbox binary label="Registration confirmation" />
+        <div>
           <h2>Registration Confirmation</h2>
           <p>Send confirmation email immediately after registration</p>
         </div>
       </div>
       <div class="checkbox-row">
-        <p-checkbox binary [binary]="true"></p-checkbox>
-        <div class="checkbox-content">
+        <p-checkbox binary label="24-hour reminder" />
+        <div>
           <h2>24-Hour Reminder</h2>
           <p>Remind participants 24 hours before the event</p>
         </div>
       </div>
       <div class="checkbox-row">
-        <p-checkbox binary [binary]="true"></p-checkbox>
-        <div class="checkbox-content">
+        <p-checkbox binary label="1-hour reminder" />
+        <div>
           <h2>1-Hour Reminder</h2>
           <p>Send final reminder 1 hour before event start</p>
         </div>
@@ -311,18 +183,9 @@
 
       <div class="upload-box">
         <i class="pi pi-image"></i>
-        <p>Drag and drop an image here or</p>
-        <p-fileupload
-          mode="basic"
-          accept="image/*"
-          maxFileSize="5000000"
-          chooseLabel="Browse"
-          chooseIcon="pi pi-upload"
-          [auto]="false"
-          [showUploadButton]="false"
-          [showCancelButton]="false"
-        />
-        <small class="upload-hint">Recommended: JPG, PNG or GIF (max 5MB)</small>
+        <div class="field">
+          <input pInputText formControlName="imageUrl" placeholder="Image URL" />
+        </div>
       </div>
     </p-card>
 
@@ -332,41 +195,41 @@
 
       <div class="preview-row">
         <span>Category</span>
-        <span>{{ formService.form.category().value() }}</span>
+        <span>{{ formService.form.value.category }}</span>
       </div>
 
       <div class="preview-row">
         <span>Date</span>
         <span>{{
-          formService.form.date().value()
-            ? (formService.form.date().value() | date : 'dd MMM yyyy')
+          formService.form.value.date
+            ? (formService.form.value.date | date : 'dd MMM yyyy')
             : 'Not set'
         }}</span>
       </div>
 
       <div class="preview-row">
         <span>Location</span>
-        <span>{{ formService.form.locationType().value() || 'Not Set' }}</span>
+        <span>{{ formService.form.value.locationType || 'Not Set' }}</span>
       </div>
 
       <div class="preview-row">
         <span>Status</span>
         <span class="status">Draft</span>
       </div>
-
-      <!-- ACTIONS -->
-      <div class="submit">
-        <button
-          pButton
-          label="Publish Event"
-          class="publish"
-          [disabled]="!formService.form().valid() || isSubmitting()"
-          (click)="submit()"
-        ></button>
-
-        <button pButton label="Cancel" severity="secondary" outlined (click)="cancel()"></button>
-      </div>
     </p-card>
+
+    <!-- ACTIONS -->
+    <div class="submit">
+      <button
+        pButton
+        label="Publish Event"
+        class="publish"
+        [disabled]="formService.form.invalid || isSubmitting()"
+        (click)="submit()"
+      ></button>
+
+      <button pButton label="Cancel" severity="secondary" outlined (click)="cancel()"></button>
+    </div>
   </div>
 </div>
 

@@ -1,12 +1,10 @@
-import { Component, inject, signal, effect, OnInit } from '@angular/core';
-import { Field } from '@angular/forms/signals';
-import { FormService } from './services/form.service';
-import { LocationOption, CategoryOption } from './model/form-options.model';
+import { Component, inject, signal, effect } from '@angular/core';
+import { AppEvent, FormService } from './services/form.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EventMockService } from './services/event.mock.service';
-import { EventService as BackendEventService } from './services/event.service';
-import { EventService as SharedEventService } from '../../../shared/services/events.service';
+import { EventService as BackendEventService } from '../../../shared/services/events.service';
 import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
 import { FileUploadModule } from 'primeng/fileupload';
 import { InputTextModule } from 'primeng/inputtext';
 import { Select } from 'primeng/select';
@@ -17,13 +15,13 @@ import { CardModule } from 'primeng/card';
 import { Header } from '../../../shared/ui/header/header';
 import { Footer } from '../../../shared/ui/footer/footer';
 import { Checkbox } from 'primeng/checkbox';
-import { finalize } from 'rxjs';
+type LocationType = 'in-person' | 'virtual' | 'hybrid';
 
 @Component({
   selector: 'app-form',
   imports: [
     CommonModule,
-    Field,
+    ReactiveFormsModule,
     InputTextModule,
     Select,
     DatePickerModule,
@@ -38,12 +36,11 @@ import { finalize } from 'rxjs';
   templateUrl: './form.html',
   styleUrl: './form.scss',
 })
-export class Form implements OnInit {
+export class Form {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private eventMockService = inject(EventMockService);
   private backendEventService = inject(BackendEventService);
-  private sharedEventService = inject(SharedEventService);
 
   // expose form service to template
   formService = inject(FormService);
@@ -51,22 +48,38 @@ export class Form implements OnInit {
   isSubmitting = signal(false);
 
   constructor() {
+    // Watch for create event completion
     effect(() => {
-      const eventResource = this.backendEventService.getEventById;
-      if (eventResource.hasValue()) {
-        const eventData = eventResource.value();
-        if (eventData) {
-          this.formService.initEditFromBackend(eventData);
+      const createResource = this.backendEventService.createEvent;
+      const isLoading = createResource.isLoading();
+      const createError = createResource.error();
+      const createValue = createResource.value();
+      
+      if (!isLoading && this.isSubmitting()) {
+        if (createValue && !createError) {
+          this.isSubmitting.set(false);
+          this.router.navigate(['/admin/main']);
+        } else if (createError) {
+          console.error('Error creating event:', createError);
+          this.isSubmitting.set(false);
         }
-      } else if (eventResource.error()) {
-        const idParam = this.route.snapshot.paramMap.get('id');
-        const id = idParam ? Number(idParam) : null;
-        if (id) {
-          this.eventMockService.getById(id).subscribe((event) => {
-            if (event) {
-              this.formService.initEdit(event);
-            }
-          });
+      }
+    });
+
+    // Watch for update event completion
+    effect(() => {
+      const updateResource = this.backendEventService.updateEvent;
+      const isLoading = updateResource.isLoading();
+      const updateError = updateResource.error();
+      const updateValue = updateResource.value();
+      
+      if (!isLoading && this.isSubmitting()) {
+        if (updateValue && !updateError) {
+          this.isSubmitting.set(false);
+          this.router.navigate(['/admin/main']);
+        } else if (updateError) {
+          console.error('Error updating event:', updateError);
+          this.isSubmitting.set(false);
         }
       }
     });
@@ -77,26 +90,32 @@ export class Form implements OnInit {
     const id = idParam ? Number(idParam) : null;
 
     if (id) {
-      this.backendEventService.fetchById(id);
+      // EDIT MODE
+      this.eventMockService.getById(id).subscribe((event) => {
+        if (event) {
+          this.formService.initEdit(event);
+        }
+      });
     } else {
+      // CREATE MODE
       this.formService.initCreate();
     }
   }
 
-  categoryOptions: CategoryOption[] = [
+  categoryOptions = [
     { label: 'Workshop', value: 'Workshop' },
     { label: 'Conference', value: 'Conference' },
     { label: 'Meetup', value: 'Meetup' },
   ];
 
-  locationOptions: LocationOption[] = [
+  locationOptions: { label: string; value: LocationType }[] = [
     { label: 'In person', value: 'in-person' },
     { label: 'Virtual', value: 'virtual' },
     { label: 'Hybrid', value: 'hybrid' },
   ];
 
   submit(): void {
-    if (!this.formService.form().valid() || this.isSubmitting() || this.formService.registrationDateError()) return;
+    if (this.formService.form.invalid || this.isSubmitting()) return;
 
     this.isSubmitting.set(true);
     const backendPayload = this.formService.getBackendPayload();
@@ -104,38 +123,14 @@ export class Form implements OnInit {
     if (this.formService.isEditMode()) {
       const eventId = this.formService.currentEvent()?.id;
       if (eventId) {
-        this.backendEventService
-          .update(eventId, backendPayload)
-          .pipe(finalize(() => this.isSubmitting.set(false)))
-          .subscribe({
-            next: () => {
-              this.sharedEventService.refresh();
-              this.router.navigate(['/admin/main']);
-            },
-            error: (err) => {
-              const errorMessage = err.error?.message || err.message || 'Unknown error';
-              alert(`Failed to update event: ${errorMessage}`);
-            },
-          });
+        this.backendEventService.update(eventId, backendPayload);
       }
     } else {
-      this.backendEventService
-        .create(backendPayload)
-        .pipe(finalize(() => this.isSubmitting.set(false)))
-        .subscribe({
-          next: () => {
-            this.sharedEventService.refresh();
-            this.router.navigate(['/admin/main']);
-          },
-          error: (err) => {
-            const errorMessage = err.error?.message || err.error?.error || err.message || 'Unknown error';
-            alert(`Failed to create event: ${errorMessage}`);
-          },
-        });
+      this.backendEventService.create(backendPayload);
     }
   }
 
   cancel(): void {
-    this.router.navigate(['/admin/main']);
+    this.router.navigate(['/events']);
   }
 }

@@ -21,3 +21,4 @@ export interface CreateEventRequest {
   tagIds: number[];
   eventTypeId: number;
 }
+
