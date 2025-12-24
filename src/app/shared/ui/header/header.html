@@ -15,13 +15,22 @@
     </nav>
   </div>
   <div class="right">
-    <div class="right__notification">
+    <div class="right__notification" routerLink="/notifications">
       <img src="./assets/icons/notification.svg" alt="Notification Icon" />
       <div></div>
     </div>
     <div class="right__profile" (click)="toggleDropdown()">
-      <h3>Sarah Johnson</h3>
-      <p>Employee</p>
+      <div class="profile-info">
+        <h3>{{ getUserName() }}</h3>
+        <p>{{ getUserRole() }}</p>
+      </div>
+
+      <img
+        src="./assets/icons/header/dropdown-arrow.svg"
+        alt="Dropdown Arrow"
+        class="dropdown-arrow"
+        [class.open]="isDropdownOpen()"
+      />
       @if (isDropdownOpen()) {
       <div class="dropdown-menu" (click)="$event.stopPropagation()">
         <button class="dropdown-item" (click)="logout()">Logout</button>
