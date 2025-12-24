@@ -1,22 +1,27 @@
 <header>
-    <div class="left">
-        <div class="left__logo">
-            <div></div>
-            <h1>EventHub</h1>
-        </div>
-        <nav>
-            <a routerLink="/dashboard" routerLinkActive="active-link">Home</a>
-            <a routerLink="/events" routerLinkActive="active-link">Browse Events</a>
-        </nav>
+  <div class="left">
+    <div class="left__logo">
+      <div></div>
+      <h1>EventHub</h1>
     </div>
-    <div class="right">
-        <div class="right__notification">
-            <img src="./assets/icons/notification.svg" alt="Notification Icon">
-            <div></div>
-        </div>
-        <div class="right__profile">
-            <h3>Sarah Johnson</h3>
-            <p>Employee</p>
-        </div>
+    <nav>
+      @if (isAdmin()) {
+      <a routerLink="/admin/main" routerLinkActive="active-link">Event Management</a>
+      <a routerLink="/admin/analytics" routerLinkActive="active-link">Analytics</a>
+      } @else {
+      <a routerLink="/dashboard" routerLinkActive="active-link">Home</a>
+      <a routerLink="/events" routerLinkActive="active-link">Browse Events</a>
+      }
+    </nav>
+  </div>
+  <div class="right">
+    <div class="right__notification">
+      <img src="./assets/icons/notification.svg" alt="Notification Icon" />
+      <div></div>
     </div>
+    <div class="right__profile">
+      <h3>Sarah Johnson</h3>
+      <p>Employee</p>
+    </div>
+  </div>
 </header>

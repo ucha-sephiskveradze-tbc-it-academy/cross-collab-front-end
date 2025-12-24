@@ -1,8 +1,8 @@
 import { Routes } from '@angular/router';
 import { SignIn } from './features/auth/sign-in/sign-in';
-import { authGuard } from './core/guards/auth.guard';
 import { adminGuard } from './core/guards/admin.guard';
 import { Form } from './features/admin/form/form';
+import { employeeGuard } from './core/guards/employee.guard';
 
 export const routes: Routes = [
   {
@@ -29,50 +29,53 @@ export const routes: Routes = [
 
   {
     path: 'dashboard',
-    // canActivate: [authGuard],
+    canActivate: [employeeGuard],
     loadComponent: () => import('./features/dashboard/dashboard').then((c) => c.Dashboard),
   },
   {
     path: 'notifications',
-    // canActivate: [authGuard],
+    canActivate: [employeeGuard],
     loadComponent: () =>
       import('./features/notifications/notifications').then((c) => c.Notifications),
   },
 
   {
     path: 'events',
-    // canActivate: [authGuard],
+
     loadComponent: () => import('./features/events/events').then((c) => c.Events),
   },
 
   {
     path: 'events/:id',
-    // canActivate: [authGuard],
+
     loadComponent: () =>
       import('./features/event-details/event-details').then((c) => c.EventDetails),
   },
 
   {
     path: 'admin/main',
-    // canActivate: [authGuard, adminGuard],
+    canActivate: [adminGuard],
     loadComponent: () => import('./features/admin/main/main').then((c) => c.Main),
   },
 
   {
     path: 'admin/main/:id',
-    // canActivate: [authGuard, adminGuard],
+    canActivate: [adminGuard],
     loadComponent: () => import('./features/admin/main/components/view/view').then((c) => c.View),
   },
   {
     path: 'admin/new',
+    canActivate: [adminGuard],
     loadComponent: () => import('./features/admin/form/form').then((c) => c.Form),
   },
   {
     path: 'admin/edit/:id',
+    canActivate: [adminGuard],
     loadComponent: () => import('./features/admin/form/form').then((c) => c.Form),
   },
   {
     path: 'admin/analytics',
+    canActivate: [adminGuard],
     loadComponent: () => import('./features/admin/analytics/analytics').then((c) => c.Analytics),
   },
   {

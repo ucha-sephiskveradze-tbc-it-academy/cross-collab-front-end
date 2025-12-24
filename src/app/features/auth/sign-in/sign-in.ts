@@ -6,10 +6,14 @@ import { Button } from '../../../shared/ui/button/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { Router, RouterLink } from '@angular/router';
 import { ILoginFormModel } from './models/login-form.model';
-import { HttpClient } from '@angular/common/http';
-import { take, finalize } from 'rxjs';
+import { AuthService } from '../../../core/services/auth.service';
 import { noEmojiRegex } from '../../../shared/validations/validator';
+import { AuthTokenService } from '../../../core/services/auth-token.service';
 
+/**
+ * Sign-in component handling user authentication.
+ * Validates credentials and redirects based on user role.
+ */
 @Component({
   selector: 'app-sign-in',
   imports: [InputTextModule, CheckboxModule, ButtonModule, Field, Button, RouterLink],
@@ -17,19 +21,18 @@ import { noEmojiRegex } from '../../../shared/validations/validator';
   styleUrl: './sign-in.scss',
 })
 export class SignIn {
-  private route = inject(Router);
-  private http = inject(HttpClient);
+  private router = inject(Router);
+  private authService = inject(AuthService);
+  private authTokenService = inject(AuthTokenService);
 
   isSubmitting = signal(false);
   errorMessage = signal<string | null>(null);
 
-  // Signal model for login
   model = signal<ILoginFormModel>({
     email: '',
     password: '',
   });
 
-  // Signal form schema
   loginForm = form(this.model, (schema) => {
     required(schema.email);
     email(schema.email);
@@ -40,36 +43,60 @@ export class SignIn {
     pattern(schema.password, noEmojiRegex, { message: 'No Emojis Allowed!' });
   });
 
-  onSubmit(event: Event) {
+  /**
+   * Handles form submission and user authentication.
+   * Stores token and redirects based on user role.
+   */
+  onSubmit(event: Event): void {
     event.preventDefault();
     if (!this.loginForm().valid() || this.isSubmitting()) return;
 
     this.isSubmitting.set(true);
     this.errorMessage.set(null);
 
-    const { email, password } = this.model();
+    const credentials = {
+      email: this.loginForm.email().value(),
+      password: this.loginForm.password().value(),
+    };
 
-    this.http
-      .get<ILoginFormModel[]>('http://localhost:3000/users', {
-        params: { email, password },
-      })
-      .pipe(
-        take(1), // auto-unsubscribe
-        finalize(() => this.isSubmitting.set(false))
-      )
-      .subscribe({
-        next: ([user]) => {
-          if (!user) {
-            this.errorMessage.set('Invalid email or password. Please check your credentials and try again.');
-            return;
+    this.authService.authenticate(credentials).subscribe({
+      next: (res) => {
+        // Handle both accessToken (camelCase) and access_token (snake_case) formats
+        const token = res?.accessToken || res?.access_token;
+
+        if (!token) {
+          this.errorMessage.set('Invalid response from server. Please try again.');
+          this.isSubmitting.set(false);
+          return;
+        }
+
+        this.authService.setToken(token);
+
+        // Store user info if provided
+        if (res.user) {
+          this.authService.setUser(res.user);
+        }
+
+        // Small delay to ensure token is stored before reading
+        setTimeout(() => {
+          const role = this.authTokenService.getRole();
+
+          // Navigate based on role
+          if (role === 'Admin') {
+            this.router.navigate(['/admin/main']);
+          } else {
+            this.router.navigate(['/dashboard']);
           }
 
-          localStorage.setItem('user', JSON.stringify(user));
-          this.route.navigate(['dashboard']);
-        },
-        error: () => {
-          this.errorMessage.set('Unable to connect to the server. Please check your connection and try again.');
-        },
-      });
+          this.isSubmitting.set(false);
+        }, 100);
+      },
+      error: (err) => {
+        this.errorMessage.set(
+          err.error?.message || err.message || 'Invalid email or password. Please try again.'
+        );
+        this.isSubmitting.set(false);
+      },
+    });
   }
 }

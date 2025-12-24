@@ -2,7 +2,7 @@ import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { AuthTokenService } from '../services/auth-token.service';
 
-export const adminGuard: CanActivateFn = () => {
+export const employeeGuard: CanActivateFn = () => {
   const auth = inject(AuthTokenService);
   const router = inject(Router);
 
@@ -11,10 +11,10 @@ export const adminGuard: CanActivateFn = () => {
     return false;
   }
 
-  if (auth.isAdmin()) {
+  if (auth.isEmployee()) {
     return true;
   }
 
-  router.navigate(['/dashboard']);
+  router.navigate(['/admin']);
   return false;
 };
