@@ -8,7 +8,7 @@ export interface IEventItem {
   category: Category;
   capacity: number;
   totalRegistered: number;
-  currentUserStatus: 'REGISTERED' | 'CANCELLED' | 'NONE';
+  currentUserStatus: 'REGISTERED' | 'CANCELLED' | 'NONE' | 'WAITLISTED';
 }
 
 export interface Category {

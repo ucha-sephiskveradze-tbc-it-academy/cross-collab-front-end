@@ -161,6 +161,9 @@ export class Events implements OnInit {
   /* ================= INIT FROM URL ================= */
 
   ngOnInit() {
+    // Ensure events are fetched from API
+    this.eventService.refresh();
+
     this.route.queryParamMap.subscribe((params) => {
       this.selectedCategories.set(params.getAll('categoryId').map(Number));
       this.selectedLocations.set(params.getAll('location'));
