@@ -22,6 +22,8 @@ export class Dashboard {
   };
 
   events = this.eventService.events;
+  eventsResource = this.eventService.eventsResource; // For loading/error states
+  
   upcomingEvents = computed(() => {
     const eventsList = this.events();
     return eventsList.length > 0
