@@ -1,36 +1,38 @@
 export interface EventResponse {
-  id?: number;
-  eventId?: number;
+  id: number;
   title: string;
-  description?: string;
-  startsAt?: string;
-  endsAt?: string;
+  description?: string | null;
+  startsAt: string;
+  endsAt: string;
+  imageUrl?: string | null;
+  location: string;
+  eventTypeId: number;
+  eventTypeName: string;
+  myStatus: 'CONFIRMED' | 'CANCELLED' | 'NOT_REGISTERED' | 'WAITLISTED';
+  totalRegistered: number;
+  spotsLeft: number;
+  capacity: number;
+  capacityAvailability: 'AVAILABLE' | 'LIMITED' | 'FULL';
+  // Optional fields for backward compatibility
+  eventId?: number;
   startDateTime?: string;
   endDateTime?: string;
-  location?: string | {
-    locationType?: string;
-    address?: {
-      venueName?: string;
-      street?: string;
-      city?: string;
-    };
-  };
+  registrationStart?: string;
+  registrationEnd?: string;
+  currentUserStatus?: 'REGISTERED' | 'CANCELLED' | 'NONE' | 'WAITLISTED';
   category?: {
     categoryId?: number;
     categoryName?: string;
   };
-  eventTypeId?: number;
-  eventTypeName?: string;
-  capacity?: number;
-  totalRegistered?: number;
-  myStatus?: 'REGISTERED' | 'CANCELLED' | 'NONE';
-  currentUserStatus?: 'REGISTERED' | 'CANCELLED' | 'NONE';
+  tagIds?: number[];
 }
 
 export interface PaginatedEventResponse {
   items: EventResponse[];
+  totalCount: number;
+  page: number;
+  pageSize: number;
+  // Optional for backward compatibility
   total?: number;
-  page?: number;
-  pageSize?: number;
 }
 

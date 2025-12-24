@@ -14,8 +14,8 @@
         <div class="title-row">
             <h3 class="title">{{ event.title }}</h3>
 
-            <span class="status registered">
-                {{event.currentUserStatus}}
+            <span [class]="'status ' + statusClass">
+                {{ statusLabel }}
             </span>
         </div>
 

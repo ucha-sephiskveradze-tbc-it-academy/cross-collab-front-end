@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, OnInit } from '@angular/core';
 import { Header } from '../../shared/ui/header/header';
 import { Footer } from '../../shared/ui/footer/footer';
 import { RouterLink } from '@angular/router';
@@ -14,7 +14,7 @@ import { EventCard } from '../../shared/ui/event-card/event-card';
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
 })
-export class Dashboard {
+export class Dashboard implements OnInit {
   private eventService = inject(EventService);
   user = {
     name: 'Sarah',
@@ -23,21 +23,45 @@ export class Dashboard {
 
   events = this.eventService.events;
   eventsResource = this.eventService.eventsResource; // For loading/error states
+
+  ngOnInit(): void {
+    // Ensure events are fetched from API
+    this.eventService.refresh();
+  }
   
   upcomingEvents = computed(() => {
     const eventsList = this.events();
-    return eventsList.length > 0
-      ? [...eventsList]
-          .sort((a, b) => new Date(a.startDateTime).getTime() - new Date(b.startDateTime).getTime())
-          .slice(0, 5)
-      : [];
+    const now = new Date();
+    
+    // Filter to only future events, sort by start date (API should already sort, but ensure it)
+    return eventsList
+      .filter(event => new Date(event.startDateTime) > now)
+      .sort((a, b) => new Date(a.startDateTime).getTime() - new Date(b.startDateTime).getTime())
+      .slice(0, 5);
   });
   trendingEvents = computed(() => {
     const eventsList = this.events();
     return eventsList.length > 0
       ? [...eventsList]
-          .sort((a, b) => new Date(a.startDateTime).getTime() - new Date(b.startDateTime).getTime())
+          .sort((a, b) => b.totalRegistered - a.totalRegistered)
           .slice(0, 3)
       : [];
   });
+
+  getCategoryIcon(categoryName: string): string {
+    const iconMap: Record<string, string> = {
+      'Workshop': 'assets/icons/categories/workshop.svg',
+      'Team Building': 'assets/icons/categories/team_building.svg',
+      'Happy Friday': 'assets/icons/categories/happy_friday.svg',
+      'Sports': 'assets/icons/categories/sports.svg',
+      'Cultural': 'assets/icons/categories/cultural.svg',
+      'Wellness': 'assets/icons/categories/wellness.svg',
+    };
+    return iconMap[categoryName] || 'assets/icons/categories/workshop.svg';
+  }
+
+  getCategoryGradient(categoryName: string): string {
+    // Gray gradient style - can be customized later
+    return 'linear-gradient(135deg, #6b7280 0%, #4b5563 100%)';
+  }
 }

@@ -19,6 +19,36 @@ export class EventCard {
     return this.event.capacity - this.event.totalRegistered;
   }
 
+  get statusLabel(): string {
+    switch (this.event.currentUserStatus) {
+      case 'REGISTERED':
+        return 'Registered';
+      case 'WAITLISTED':
+        return 'Waitlisted';
+      case 'CANCELLED':
+        return 'Cancelled';
+      case 'NONE':
+        return 'Not Registered';
+      default:
+        return 'Not Registered';
+    }
+  }
+
+  get statusClass(): string {
+    switch (this.event.currentUserStatus) {
+      case 'REGISTERED':
+        return 'registered';
+      case 'WAITLISTED':
+        return 'waitlisted';
+      case 'CANCELLED':
+        return 'cancelled';
+      case 'NONE':
+        return 'not-registered';
+      default:
+        return 'not-registered';
+    }
+  }
+
   goToDetails() {
     this.router.navigate(['/events', this.event.eventId]);
   }

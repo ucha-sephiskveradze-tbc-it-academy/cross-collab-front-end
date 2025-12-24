@@ -17,7 +17,7 @@ export interface IEventDetails {
   capacity: number;
   totalRegistered: number;
 
-  currentUserStatus: 'REGISTERED' | 'CANCELLED' | 'NONE';
+  currentUserStatus: 'REGISTERED' | 'CANCELLED' | 'NONE' | 'WAITLISTED';
 
   // optional (details-only)
   about?: string;

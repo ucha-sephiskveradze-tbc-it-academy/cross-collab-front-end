@@ -56,14 +56,31 @@
 .status {
     font-size: 11px;
     font-weight: 600;
-    padding: 3px 8px;
+    padding: 4px 10px;
     border-radius: 6px;
-    background: $color-gray-200;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    transition: all 0.2s ease;
 }
 
 .status.registered {
     background: #e6f4ea;
     color: #1e7f4f;
+}
+
+.status.waitlisted {
+    background: #fef3c7;
+    color: #d97706;
+}
+
+.status.not-registered {
+    background: #f3f4f6;
+    color: #6b7280;
+}
+
+.status.cancelled {
+    background: #fee2e2;
+    color: #dc2626;
 }
 
 /* META */
