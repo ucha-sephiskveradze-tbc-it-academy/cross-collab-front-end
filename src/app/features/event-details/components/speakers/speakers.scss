@@ -37,7 +37,6 @@
       background: $color-white;
 
       &:hover {
-        transform: translateY(-4px);
         box-shadow: $shadow-md;
         border-color: $color-primary;
       }
@@ -50,27 +49,16 @@
           height: 80px;
           border-radius: 50%;
           object-fit: cover;
-          border: 3px solid $color-gray-200;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        .avatar-placeholder {
-          width: 80px;
-          height: 80px;
-          border-radius: 50%;
-          background: linear-gradient(135deg, $color-primary 0%, color.adjust($color-primary, $lightness: 10%) 100%);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: $color-white;
-          font-weight: 700;
-          font-size: $font-size-xl;
-          border: 3px solid $color-gray-200;
-        }
       }
 
       .speaker-info {
         flex: 1;
         min-width: 0;
+        display: flex;
+        align-items: center;
 
         .speaker-name {
           font-size: $font-size-lg;

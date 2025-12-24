@@ -5,7 +5,9 @@
     <div class="status-info">
       <div class="info-row">
         <span class="label">Status:</span>
-        <span class="value status-open">Open</span>
+        <span class="value" [class]="getRegistrationStatusClass()">{{
+          getRegistrationStatus()
+        }}</span>
       </div>
       <div class="info-row">
         <span class="label">Available Spots:</span>
@@ -15,17 +17,15 @@
       </div>
       <div class="info-row">
         <span class="label">Current Waitlist:</span>
-        <span class="value">0 people</span>
+        <span class="value">{{ event.currentWaitlist || 0 }} people</span>
       </div>
       <div class="info-row">
         <span class="label">Registration Closes:</span>
-        <span class="value">{{ event.startDateTime | date : 'MMM d, h:mm a' }}</span>
+        <span class="value">{{ event.registrationEnd | date : 'MMM d, h:mm a' }}</span>
       </div>
       <div class="info-row">
         <span class="label">Your Status:</span>
-        <span class="value">{{
-          event.currentUserStatus === 'REGISTERED' ? 'Registered' : 'Not Registered'
-        }}</span>
+        <span class="value">{{ getStatusLabel() }}</span>
       </div>
     </div>
     <app-button
@@ -43,15 +43,19 @@
   </div>
 
   <!-- Event Organizer -->
+  @if (event.organizer) {
   <div class="sidebar-card">
     <h3>Event Organizer</h3>
     <div class="organizer-info">
-      <div class="organizer-name">Jennifer Adams</div>
-      <div class="organizer-title">HR Events Manager</div>
-      <div class="organizer-department">Human Resources Department</div>
+      <div class="organizer-avatar">
+        <img [src]="getFunkyAvatar(event.organizer.fullName)" [alt]="event.organizer.fullName" />
+      </div>
+      <div class="organizer-name">{{ event.organizer.fullName }}</div>
+      <div class="organizer-title">{{ event.organizer.department }}</div>
       <app-button label="Contact Organizer" variant="secondary" (clicked)="onContactOrganizer()" />
     </div>
   </div>
+  }
 
   <!-- Event Details -->
   <div class="sidebar-card">
@@ -61,14 +65,13 @@
         <span class="detail-label">Date & Time:</span>
         <span class="detail-value">
           {{ event.startDateTime | date : 'EEEE, MMMM d, y, h:mm a' }} -
-          {{ event.endDateTime | date : 'h:mm a' }} EST
+          {{ event.endDateTime | date : 'h:mm a' }}
         </span>
       </div>
       <div class="detail-item">
         <span class="detail-label">Location:</span>
         <span class="detail-value">
           {{ event.location }}
-          <a href="#" class="view-map-link">View Map</a>
         </span>
       </div>
       <div class="detail-item">
@@ -78,7 +81,7 @@
       <div class="detail-item">
         <span class="detail-label">Capacity:</span>
         <span class="detail-value">
-          {{ event.capacity }} attendees maximum, {{ event.totalRegistered }} currently registered
+          {{ event.capacity }}
         </span>
       </div>
       <div class="detail-item">
