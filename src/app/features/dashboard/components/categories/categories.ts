@@ -20,11 +20,12 @@ export class Categories {
   private eventService = inject(EventService);
   events = this.eventService.events;
   categories = computed<ICategoryUI[]>(() => {
-    if (!this.events.hasValue()) return [];
+    const eventsList = this.events();
+    if (eventsList.length === 0) return [];
 
     const map = new Map<string, number>();
 
-    for (const event of this.events.value()) {
+    for (const event of eventsList) {
       const label = event.category.categoryName;
 
       map.set(label, (map.get(label) ?? 0) + 1);

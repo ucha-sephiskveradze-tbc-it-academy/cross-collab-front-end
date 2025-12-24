@@ -22,18 +22,20 @@ export class Dashboard {
   };
 
   events = this.eventService.events;
-  upcomingEvents = computed(() =>
-    this.events.hasValue()
-      ? [...this.events.value()]
+  upcomingEvents = computed(() => {
+    const eventsList = this.events();
+    return eventsList.length > 0
+      ? [...eventsList]
           .sort((a, b) => new Date(a.startDateTime).getTime() - new Date(b.startDateTime).getTime())
           .slice(0, 5)
-      : []
-  );
-  trendingEvents = computed(() =>
-    this.events.hasValue()
-      ? [...this.events.value()]
+      : [];
+  });
+  trendingEvents = computed(() => {
+    const eventsList = this.events();
+    return eventsList.length > 0
+      ? [...eventsList]
           .sort((a, b) => new Date(a.startDateTime).getTime() - new Date(b.startDateTime).getTime())
           .slice(0, 3)
-      : []
-  );
+      : [];
+  });
 }

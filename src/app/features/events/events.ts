@@ -8,6 +8,7 @@ import { ListboxModule } from 'primeng/listbox';
 import { PaginatorModule } from 'primeng/paginator';
 import { EventCard } from '../../shared/ui/event-card/event-card';
 import { FormsModule } from '@angular/forms';
+import { IEventItem } from '../../shared/ui/event-card/model/event.model';
 
 @Component({
   selector: 'app-events',
@@ -31,6 +32,7 @@ export class Events implements OnInit {
   /* ================= DATA ================= */
 
   events = this.eventService.events; // backend data (future: filtered)
+  eventsResource = this.eventService.eventsResource; // For loading/error states
 
   /* ================= FILTER STATE ================= */
 
@@ -48,11 +50,12 @@ export class Events implements OnInit {
   /* ================= OPTIONS ================= */
 
   categoryOptions = computed(() => {
-    if (!this.events.hasValue()) return [];
+    const eventsList = this.events();
+    if (eventsList.length === 0) return [];
 
     const map = new Map<number, string>();
 
-    for (const e of this.events.value()) {
+    for (const e of eventsList) {
       map.set(e.category.categoryId, e.category.categoryName);
     }
 
@@ -63,8 +66,9 @@ export class Events implements OnInit {
   });
 
   locationOptions = computed(() => {
-    if (!this.events.hasValue()) return [];
-    return [...new Set(this.events.value().map((e) => e.location))].map((l) => ({ name: l }));
+    const eventsList = this.events();
+    if (eventsList.length === 0) return [];
+    return [...new Set(eventsList.map((e: IEventItem) => e.location))].map((l) => ({ name: l }));
   });
 
   capacityOptions = [
@@ -83,7 +87,8 @@ export class Events implements OnInit {
 
   pagedEvents = computed(() => {
     const start = this.first();
-    return this.events.hasValue() ? this.events.value().slice(start, start + this.rows()) : [];
+    const eventsList = this.events();
+    return eventsList.length > 0 ? eventsList.slice(start, start + this.rows()) : [];
   });
 
   onPageChange(e: any) {

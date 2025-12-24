@@ -7,6 +7,8 @@ header {
     padding: 1rem;
     border-bottom: 1px solid #e5e7eb;
     box-sizing: border-box;
+    position: relative;
+    position: relative;
 
     .left {
         display: flex;
@@ -30,7 +32,44 @@ header {
             }
         }
 
-        nav {
+        .burger-button {
+            display: none;
+            flex-direction: column;
+            justify-content: space-around;
+            width: 28px;
+            height: 24px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            z-index: 10;
+            margin-left: 12px;
+
+            span {
+                width: 100%;
+                height: 2px;
+                background-color: #171717;
+                border-radius: 2px;
+                transition: all 0.3s ease;
+                transform-origin: center;
+            }
+
+            &.active {
+                span:nth-child(1) {
+                    transform: rotate(45deg) translate(8px, 8px);
+                }
+
+                span:nth-child(2) {
+                    opacity: 0;
+                }
+
+                span:nth-child(3) {
+                    transform: rotate(-45deg) translate(8px, -8px);
+                }
+            }
+        }
+
+        nav.desktop-nav {
             display: flex;
             align-items: center;
             gap: 16px;
@@ -40,11 +79,53 @@ header {
                 white-space: nowrap;
                 color: #525252;
                 font-size: 0.95rem;
+                text-decoration: none;
+                transition: color 0.2s ease;
+
+                &:hover {
+                    color: #171717;
+                }
 
                 &.active-link {
                     border-bottom: 1px solid black;
                     color: #171717;
                 }
+            }
+        }
+    }
+
+    .mobile-menu {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        background-color: #ffffff;
+        border-top: 1px solid #e5e7eb;
+        padding: 1rem;
+        gap: 0.75rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+
+        a {
+            padding: 0.75rem 1rem;
+            color: #525252;
+            font-size: 0.95rem;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+
+            &:hover {
+                background-color: #f5f5f5;
+                color: #171717;
+            }
+
+            &.active-link {
+                background-color: #f5f5f5;
+                color: #171717;
+                font-weight: 500;
             }
         }
     }
@@ -161,44 +242,48 @@ header {
 
     /* 📱 Tablet */
     @media (max-width: 1024px) {
+        height: auto;
+        padding: 0.75rem 1rem;
+        gap: 0.75rem;
+
         .left {
             gap: 16px;
 
-            nav a {
-                font-size: 0.85rem;
-                padding: 6px;
+            &__logo {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            }
+
+            nav.desktop-nav {
+                display: none; // Hide desktop nav, show burger menu
+            }
+
+            .burger-button {
+                display: flex;
+                margin-left: 12px;
             }
         }
 
-        .right__profile {
-            h3 {
-                font-size: 13px;
-            }
-            p {
-                font-size: 11px;
+        .right {
+            &__profile {
+                h3 {
+                    font-size: 13px;
+                }
+                p {
+                    font-size: 11px;
+                }
             }
         }
     }
 
     /* 📱 Mobile */
     @media (max-width: 768px) {
-        flex-direction: column;
-        height: auto;
         padding: 0.5rem 1rem;
         gap: 0.5rem;
 
         .left {
-            width: 100%;
-            justify-content: space-between;
-
-            nav {
-                display: none; // hide nav on mobile, or replace with hamburger
-            }
-        }
-
-        .right {
-            width: 100%;
-            justify-content: flex-end;
+            gap: 12px;
         }
     }
 

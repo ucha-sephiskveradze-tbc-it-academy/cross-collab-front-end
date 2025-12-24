@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
-import { DialogModule } from 'primeng/dialog';
 import { ToolbarModule } from 'primeng/toolbar';
 import { TagModule } from 'primeng/tag';
 import { InputTextModule } from 'primeng/inputtext';
@@ -31,7 +30,6 @@ import { Router } from '@angular/router';
     // ✅ PrimeNG
     TableModule,
     ButtonModule,
-    DialogModule,
     ToolbarModule,
     TagModule,
     InputTextModule,
@@ -48,7 +46,7 @@ import { Router } from '@angular/router';
   styleUrl: './main.scss',
 })
 export class Main {
-  private eventService = inject(EventService);
+  eventService = inject(EventService);
   private router = inject(Router);
 
   statusOptions = [
@@ -62,18 +60,14 @@ export class Main {
     { label: 'Workshop', value: 'Workshop' },
     { label: 'Meetup', value: 'Meetup' },
   ];
-  // httpResource
-  eventsResource = this.eventService.events;
-
-  // table-safe signal
-  events = computed<IEventItem[]>(() => this.eventsResource.value() ?? []);
+  // Events signal (already transformed by service)
+  events = this.eventService.events;
+  
+  // Expose resource for loading/error states
+  eventsResource = this.eventService.eventsResource;
 
   // UI state
   selectedEvents: IEventItem[] = [];
-  eventDialog = false;
-
-  // ⚠️ NOT nullable anymore → avoids TS2531 errors
-  event: IEventItem = this.emptyEvent();
 
   getCapacityPercent(event: any): number {
     if (!event.capacity) return 0;
@@ -94,16 +88,14 @@ export class Main {
   viewPage(event: any) {
     this.router.navigate(['/admin/main', event.id]);
   }
-  // ---------- CRUD (mock only) ----------
+  // ---------- CRUD ----------
 
   openNew() {
-    this.event = this.emptyEvent();
-    this.eventDialog = true;
+    this.router.navigate(['/admin/new']);
   }
 
   editEvent(event: IEventItem) {
-    this.event = { ...event };
-    this.eventDialog = true;
+    this.router.navigate(['/admin/edit', event.eventId]);
   }
 
   deleteEvent(event: IEventItem) {
@@ -112,29 +104,5 @@ export class Main {
 
   deleteSelectedEvents() {
     this.selectedEvents = [];
-  }
-
-  saveEvent() {
-    this.eventDialog = false;
-  }
-
-  hideDialog() {
-    this.eventDialog = false;
-  }
-
-  // ---------- helpers ----------
-  private emptyEvent(): IEventItem {
-    return {
-      eventId: Date.now(),
-      title: '',
-      description: '',
-      startDateTime: '',
-      endDateTime: '',
-      location: '',
-      category: { categoryId: 0, categoryName: '' },
-      capacity: 0,
-      totalRegistered: 0,
-      currentUserStatus: 'NONE',
-    };
   }
 }

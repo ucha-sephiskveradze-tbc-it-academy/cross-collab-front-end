@@ -30,6 +30,11 @@ export class Header {
   isDropdownOpen = signal(false);
 
   /**
+   * Signal controlling the visibility of the mobile menu.
+   */
+  isMobileMenuOpen = signal(false);
+
+  /**
    * Gets the user's name from stored user data.
    */
   getUserName(): string {
@@ -52,8 +57,15 @@ export class Header {
   onDocumentClick(event: MouseEvent): void {
     const target = event.target as HTMLElement;
     const profileElement = target.closest('.right__profile');
+    const mobileMenuElement = target.closest('.mobile-menu');
+    const burgerButton = target.closest('.burger-button');
+    
     if (!profileElement && this.isDropdownOpen()) {
       this.closeDropdown();
+    }
+    
+    if (!mobileMenuElement && !burgerButton && this.isMobileMenuOpen()) {
+      this.closeMobileMenu();
     }
   }
 
@@ -69,6 +81,20 @@ export class Header {
    */
   closeDropdown(): void {
     this.isDropdownOpen.set(false);
+  }
+
+  /**
+   * Toggles the mobile menu visibility.
+   */
+  toggleMobileMenu(): void {
+    this.isMobileMenuOpen.update(value => !value);
+  }
+
+  /**
+   * Closes the mobile menu.
+   */
+  closeMobileMenu(): void {
+    this.isMobileMenuOpen.set(false);
   }
 
   /**
