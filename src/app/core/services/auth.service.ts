@@ -1,14 +1,11 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment.test';
 
-interface JwtPayload {
-  sub: string;
-  role: string;
-  exp: number;
-}
-
+/**
+ * Request/Response interfaces for authentication API endpoints
+ */
 export interface LoginRequest {
   email: string;
   password: string;
@@ -16,20 +13,16 @@ export interface LoginRequest {
 
 export interface LoginResponse {
   access_token?: string;
-  accessToken?: string; // Backend might return either format
+  accessToken?: string; // Backend may return either camelCase or snake_case format
   user?: {
     email: string;
     role: string;
   };
 }
 
-export interface PreregisterRequest {
-  phoneNumber: string;
-}
-
 export interface PreregisterResponse {
   message?: string;
-  oneTimePassword?: string; // might be returned for testing
+  oneTimePassword?: string; // May be returned for testing purposes
 }
 
 export interface RegisterRequest {
@@ -58,6 +51,10 @@ export interface ResetPasswordResponse {
   message: string;
 }
 
+/**
+ * Core authentication service handling API communication and token management.
+ * Provides methods for login, registration, password reset, and token operations.
+ */
 @Injectable({
   providedIn: 'root',
 })
@@ -66,101 +63,44 @@ export class AuthService {
   private readonly USER_KEY = 'user';
   private http = inject(HttpClient);
 
-  // ---- API Methods ----
-
+  /**
+   * Authenticates user with email and password.
+   * Returns JWT token and optional user information.
+   */
   authenticate(credentials: LoginRequest): Observable<LoginResponse> {
     const url = `${environment.authApiUrl}/users-auth/authenticate`;
-    console.log('📡 [AUTH SERVICE] Making POST request to:', url);
-    console.log('📤 [AUTH SERVICE] Request payload:', {
-      email: credentials.email,
-      password: '***hidden***',
-    });
-
-    return this.http.post<LoginResponse>(url, credentials).pipe(
-      tap({
-        next: (response) => {
-          const token = response.accessToken || response.access_token;
-          console.log('📥 [AUTH SERVICE] Response received:', {
-            hasToken: !!token,
-            tokenFormat: response.accessToken ? 'accessToken' : response.access_token ? 'access_token' : 'none',
-            hasUser: !!response.user,
-            user: response.user,
-            fullResponse: response,
-          });
-        },
-        error: (error) => {
-          console.error('📥 [AUTH SERVICE] Error response:', {
-            status: error.status,
-            statusText: error.statusText,
-            error: error.error,
-            fullError: error,
-          });
-        },
-      })
-    );
+    return this.http.post<LoginResponse>(url, credentials);
   }
 
+  /**
+   * Sends OTP code to the provided phone number for registration.
+   * Phone number must include country code (e.g., +995577966977).
+   */
   preregister(phoneNumber: string): Observable<PreregisterResponse> {
     const url = `${environment.authApiUrl}/users-auth/preregister`;
-
-    // Ensure phoneNumber is a valid string
     const trimmedPhone = phoneNumber?.trim() || '';
+
     if (!trimmedPhone) {
       throw new Error('Phone number is required');
     }
 
-    // Try sending as JSON object first (standard approach)
     const payload = { phoneNumber: trimmedPhone };
-    console.log(`[${new Date().toISOString()}] 📡 [AUTH SERVICE] Making POST request to:`, url);
-    console.log(`[${new Date().toISOString()}] 📤 [AUTH SERVICE] Request payload:`, {
-      phoneNumber: trimmedPhone,
-      payloadObject: payload,
-      payloadStringified: JSON.stringify(payload),
-    });
-
-    // Explicitly set headers to ensure Content-Type is correct
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'ngrok-skip-browser-warning': 'true',
     });
 
-    console.log(`[${new Date().toISOString()}] 📋 [AUTH SERVICE] Request headers:`, headers.keys());
-    console.log(`[${new Date().toISOString()}] 📋 [AUTH SERVICE] Full request details:`, {
-      url,
-      method: 'POST',
-      body: JSON.stringify(payload),
-      headers: Object.fromEntries(headers.keys().map((key) => [key, headers.get(key)])),
-    });
-
-    return this.http.post<PreregisterResponse>(url, payload, { headers }).pipe(
-      tap({
-        next: (response) => {
-          console.log('📥 [AUTH SERVICE] Preregister response received:', {
-            message: response.message,
-            hasOtp: !!response.oneTimePassword,
-            fullResponse: response,
-          });
-        },
-        error: (error) => {
-          console.error(
-            `[${new Date().toISOString()}] 📥 [AUTH SERVICE] Preregister error response:`,
-            {
-              status: error.status,
-              statusText: error.statusText,
-              error: error.error,
-              errorStringified: JSON.stringify(error.error),
-              fullError: error,
-            }
-          );
-        },
-      })
-    );
+    return this.http.post<PreregisterResponse>(url, payload, { headers });
   }
 
+  /**
+   * Registers a new user account.
+   * Phone number and OTP are optional but recommended for account verification.
+   */
   register(data: RegisterRequest): Observable<RegisterResponse> {
     const url = `${environment.authApiUrl}/users-auth/register`;
 
-    // Filter out undefined values to avoid sending them in the request
+    // Build payload, excluding undefined values
     const payload: any = {
       userName: data.userName,
       email: data.email,
@@ -176,109 +116,65 @@ export class AuthService {
       payload.oneTimePassword = data.oneTimePassword;
     }
 
-    console.log(`[${new Date().toISOString()}] 📡 [AUTH SERVICE] Making POST request to:`, url);
-    console.log(`[${new Date().toISOString()}] 📤 [AUTH SERVICE] Request payload:`, {
-      userName: payload.userName,
-      email: payload.email,
-      department: payload.department,
-      phoneNumber: payload.phoneNumber,
-      hasOtp: !!payload.oneTimePassword,
-      password: '***hidden***',
-      fullPayload: payload,
-      payloadStringified: JSON.stringify(payload),
-    });
-
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'ngrok-skip-browser-warning': 'true',
     });
 
-    return this.http.post<RegisterResponse>(url, payload, { headers }).pipe(
-      tap({
-        next: (response) => {
-          console.log(
-            `[${new Date().toISOString()}] 📥 [AUTH SERVICE] Registration response received:`,
-            {
-              message: response.message,
-              user: response.user,
-              fullResponse: response,
-            }
-          );
-        },
-        error: (error) => {
-          console.error(
-            `[${new Date().toISOString()}] 📥 [AUTH SERVICE] Registration error response:`,
-            {
-              status: error.status,
-              statusText: error.statusText,
-              error: error.error,
-              errorStringified: JSON.stringify(error.error),
-              errorText: error.error?.toString(),
-              headers: error.headers,
-              url: error.url,
-              fullError: error,
-            }
-          );
-        },
-      })
-    );
+    return this.http.post<RegisterResponse>(url, payload, { headers });
   }
 
+  /**
+   * Sends a password reset link to the provided email address.
+   */
   sendResetPasswordLink(email: string): Observable<ResetPasswordResponse> {
     const url = `${environment.authApiUrl}/users-auth/send-reset-password-link`;
-    const payload = { email };
-    console.log('📡 [AUTH SERVICE] Making POST request to:', url);
-    console.log('📤 [AUTH SERVICE] Request payload:', payload);
-
-    return this.http.post<ResetPasswordResponse>(url, payload).pipe(
-      tap({
-        next: (response) => {
-          console.log('📥 [AUTH SERVICE] Reset password link response received:', {
-            message: response.message,
-            fullResponse: response,
-          });
-        },
-        error: (error) => {
-          console.error('📥 [AUTH SERVICE] Reset password link error response:', {
-            status: error.status,
-            statusText: error.statusText,
-            error: error.error,
-            fullError: error,
-          });
-        },
-      })
-    );
+    return this.http.post<ResetPasswordResponse>(url, { email });
   }
 
+  /**
+   * Resets user password using the reset token received via email.
+   */
   resetPassword(token: string, newPassword: string): Observable<ResetPasswordResponse> {
     return this.http.put<ResetPasswordResponse>(
       `${environment.authApiUrl}/users-auth/reset-password`,
-      {
-        token,
-        newPassword,
-      }
+      { token, newPassword }
     );
   }
 
-  // ---- Token handling ----
-  setToken(token: string) {
+  /**
+   * Stores JWT token in localStorage.
+   */
+  setToken(token: string): void {
     localStorage.setItem(this.TOKEN_KEY, token);
   }
 
+  /**
+   * Retrieves JWT token from localStorage.
+   */
   getToken(): string | null {
     return localStorage.getItem(this.TOKEN_KEY);
   }
 
-  setUser(user: any) {
+  /**
+   * Stores user information in localStorage.
+   */
+  setUser(user: any): void {
     localStorage.setItem(this.USER_KEY, JSON.stringify(user));
   }
 
+  /**
+   * Retrieves user information from localStorage.
+   */
   getUser(): any {
     const userStr = localStorage.getItem(this.USER_KEY);
     return userStr ? JSON.parse(userStr) : null;
   }
 
-  logout() {
+  /**
+   * Clears authentication data from localStorage.
+   */
+  logout(): void {
     localStorage.removeItem(this.TOKEN_KEY);
     localStorage.removeItem(this.USER_KEY);
   }
