@@ -45,16 +45,13 @@ export const routes: Routes = [
   },
 
   {
-    path: 'events',
-
-    loadComponent: () => import('./features/events/events').then((c) => c.Events),
-  },
-
-  {
     path: 'events/:id',
-
     loadComponent: () =>
       import('./features/event-details/event-details').then((c) => c.EventDetails),
+  },
+  {
+    path: 'events',
+    loadComponent: () => import('./features/events/events').then((c) => c.Events),
   },
 
   {

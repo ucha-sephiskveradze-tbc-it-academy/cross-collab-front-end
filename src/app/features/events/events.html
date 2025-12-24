@@ -25,7 +25,7 @@
         <p-listbox
           [options]="locationOptions()"
           optionLabel="name"
-          optionValue="name"
+          optionValue="value"
           [multiple]="true"
           [checkbox]="true"
           (onChange)="onLocationChange($event.value)"
@@ -44,7 +44,7 @@
       <div class="filter-block">
         <label>Capacity</label>
         <p-listbox
-          [options]="capacityOptions"
+          [options]="capacityOptions()"
           optionLabel="name"
           optionValue="value"
           [multiple]="true"
@@ -56,7 +56,7 @@
       <div class="filter-block">
         <label>My Status</label>
         <p-listbox
-          [options]="statusOptions"
+          [options]="statusOptions()"
           optionLabel="name"
           optionValue="value"
           [multiple]="true"

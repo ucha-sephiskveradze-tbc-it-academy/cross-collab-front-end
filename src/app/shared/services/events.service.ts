@@ -9,12 +9,43 @@ export class EventService {
   private refreshTrigger = signal(0);
   private createTrigger = signal(0);
   private updateTrigger = signal(0);
+  private queryParams = signal<Record<string, string | string[]>>({});
 
   eventsResource = httpResource<PaginatedEventResponse>(() => {
     this.refreshTrigger();
+    const params = this.queryParams();
+    
+    // Build query string
+    const queryParams = new URLSearchParams();
+    queryParams.set('SortBy', 'START_DATE');
+    
+    // Exclude CANCELLED by default unless explicitly included
+    const myStatuses = params['MyStatuses'] as string[] | undefined;
+    if (myStatuses && myStatuses.length > 0) {
+      // If user explicitly selected statuses, use them
+      myStatuses.forEach(status => {
+        queryParams.append('MyStatuses', status);
+      });
+    } else {
+      // Default: exclude CANCELLED
+      queryParams.append('MyStatuses', 'NOT_REGISTERED');
+      queryParams.append('MyStatuses', 'CONFIRMED');
+      queryParams.append('MyStatuses', 'WAITLISTED');
+    }
+    
+    // Add other query parameters
+    Object.entries(params).forEach(([key, value]) => {
+      if (key !== 'MyStatuses' && value) {
+        if (Array.isArray(value)) {
+          value.forEach(v => queryParams.append(key, String(v)));
+        } else {
+          queryParams.append(key, String(value));
+        }
+      }
+    });
 
     return {
-      url: `${environment.apiUrl}/events?SortBy=START_DATE`,
+      url: `${environment.apiUrl}/events?${queryParams.toString()}`,
       method: 'GET',
     };
   });
@@ -91,6 +122,11 @@ export class EventService {
 
     return [];
   });
+
+  setQueryParams(params: Record<string, string | string[]>): void {
+    this.queryParams.set(params);
+    this.refreshTrigger.update((v) => v + 1);
+  }
 
   refresh(): void {
     this.refreshTrigger.update((v) => v + 1);
