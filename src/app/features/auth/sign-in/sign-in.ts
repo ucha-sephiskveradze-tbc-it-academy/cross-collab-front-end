@@ -61,8 +61,8 @@ export class SignIn {
 
     this.authService.authenticate(credentials).subscribe({
       next: (res) => {
-        // Handle both accessToken (camelCase) and access_token (snake_case) formats
-        const token = res?.accessToken || res?.access_token;
+        // Handle both accessToken (camelCase) and token formats
+        const token = res?.accessToken || res?.token;
 
         if (!token) {
           this.errorMessage.set('Invalid response from server. Please try again.');

@@ -12,7 +12,7 @@ export interface LoginRequest {
 }
 
 export interface LoginResponse {
-  access_token?: string;
+  token?: string;
   accessToken?: string; // Backend may return either camelCase or snake_case format
   user?: {
     email: string;
