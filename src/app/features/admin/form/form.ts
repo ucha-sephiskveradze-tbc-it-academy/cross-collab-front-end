@@ -2,6 +2,7 @@ import { Component, inject, signal, effect, computed, OnInit } from '@angular/co
 import { AppEvent, FormService } from './services/form.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EventService as BackendEventService } from '../../../shared/services/events.service';
+import { EventByIdService } from '../../../shared/services/event-by-id.service';
 import { EventResponse } from '../../../shared/models/events';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -40,6 +41,7 @@ export class Form implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private backendEventService = inject(BackendEventService);
+  private eventByIdService = inject(EventByIdService);
 
   // expose form service to template
   formService = inject(FormService);
@@ -47,7 +49,7 @@ export class Form implements OnInit {
   isSubmitting = signal(false);
 
   // Get event by ID from API
-  eventResource = this.backendEventService.getEventByIdResource;
+  eventResource = this.eventByIdService.eventResource;
   
   // Convert API response to AppEvent format
   eventData = computed<AppEvent | null>(() => {
@@ -100,7 +102,7 @@ export class Form implements OnInit {
 
     if (id) {
       // EDIT MODE - Load event from API
-      this.backendEventService.getEventById(id);
+      this.eventByIdService.getEventById(id);
       
       // Watch for event data and initialize form
       effect(() => {
