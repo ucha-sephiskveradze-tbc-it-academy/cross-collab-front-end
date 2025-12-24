@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit } from '@angular/core';
+import { Component, computed, inject, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EventDetailService } from './services/event-detail';
 import { Footer } from '../../shared/ui/footer/footer';
@@ -9,6 +9,7 @@ import { Speakers } from './components/speakers/speakers';
 import { Faq } from './components/faq/faq';
 import { Agenda } from './components/agenda/agenda';
 import { Sidebar } from './components/sidebar/sidebar';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-event-details',
@@ -16,14 +17,12 @@ import { Sidebar } from './components/sidebar/sidebar';
   templateUrl: './event-details.html',
   styleUrl: './event-details.scss',
 })
-export class EventDetails implements OnInit {
+export class EventDetails implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
   protected detailsService = inject(EventDetailService);
+  private routeSubscription?: Subscription;
 
-  event = computed(() => {
-    const list = this.detailsService.eventResource.value();
-    return list?.[0] ?? null;
-  });
+  event = this.detailsService.event;
 
   hasAgenda = computed(() => {
     const evt = this.event();
@@ -36,9 +35,16 @@ export class EventDetails implements OnInit {
   });
 
   ngOnInit() {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
-    if (!Number.isFinite(id)) return;
+    // Subscribe to route parameter changes to handle navigation between events
+    this.routeSubscription = this.route.paramMap.subscribe((params) => {
+      const id = Number(params.get('id'));
+      if (Number.isFinite(id)) {
+        this.detailsService.loadEvent(id);
+      }
+    });
+  }
 
-    this.detailsService.loadEvent(id);
+  ngOnDestroy() {
+    this.routeSubscription?.unsubscribe();
   }
 }

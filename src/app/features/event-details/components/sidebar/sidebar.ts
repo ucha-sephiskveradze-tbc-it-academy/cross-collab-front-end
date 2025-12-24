@@ -36,4 +36,47 @@ export class Sidebar {
       return `${diffHours} hour${diffHours > 1 ? 's' : ''} ${diffMinutes} minute${diffMinutes > 1 ? 's' : ''}`;
     }
   }
+
+  getStatusLabel(): string {
+    switch (this.event.currentUserStatus) {
+      case 'REGISTERED':
+        return 'Registered';
+      case 'WAITLISTED':
+        return 'Waitlisted';
+      case 'CANCELLED':
+        return 'Cancelled';
+      case 'NONE':
+      default:
+        return 'Not Registered';
+    }
+  }
+
+  getRegistrationStatus(): string {
+    const now = new Date();
+    const registrationEnd = new Date(this.event.registrationEnd);
+    return registrationEnd > now ? 'Open' : 'Closed';
+  }
+
+  getRegistrationStatusClass(): string {
+    const now = new Date();
+    const registrationEnd = new Date(this.event.registrationEnd);
+    return registrationEnd > now ? 'status-open' : 'status-closed';
+  }
+
+  getOrganizerInitials(): string {
+    if (!this.event.organizer) return '';
+    return this.event.organizer.fullName
+      .split(' ')
+      .map((n) => n[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
+  }
+
+  getFunkyAvatar(name: string): string {
+    // Human-like profile picture
+    const seed = name.toLowerCase().replace(/\s+/g, '');
+    // Using "personas" style for human avatar
+    return `https://api.dicebear.com/7.x/personas/svg?seed=${seed}&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf`;
+  }
 }

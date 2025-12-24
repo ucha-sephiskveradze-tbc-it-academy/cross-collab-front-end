@@ -80,7 +80,7 @@ export const routes: Routes = [
   },
   {
     path: 'admin/analytics',
-    canActivate: [adminGuard],
+    // canActivate: [adminGuard],
     loadComponent: () => import('./features/admin/analytics/analytics').then((c) => c.Analytics),
   },
   {
