@@ -32,7 +32,11 @@ export class ForgotPassword {
     });
   });
 
-  onSubmit(event: Event) {
+  /**
+   * Handles form submission and sends password reset link.
+   * Includes clientUri to specify where the user will be redirected after clicking the link.
+   */
+  onSubmit(event: Event): void {
     event.preventDefault();
     if (!this.form().valid() || this.isSubmitting()) return;
 
@@ -41,38 +45,23 @@ export class ForgotPassword {
     this.successMessage.set(null);
 
     const email = this.model().email;
-    console.log('🔑 [FORGOT PASSWORD] Sending reset password link request:', {
-      email,
-      timestamp: new Date().toISOString(),
-    });
+    // Construct the client URI where user will be redirected after clicking reset link
+    const clientUri = `${window.location.origin}/reset-password`;
 
     this.authService
-      .sendResetPasswordLink(email)
+      .sendResetPasswordLink(email, clientUri)
       .pipe(
         take(1),
         finalize(() => this.isSubmitting.set(false))
       )
       .subscribe({
         next: (response) => {
-          console.log('✅ [FORGOT PASSWORD] Reset link sent successfully:', {
-            response,
-            message: response.message,
-            timestamp: new Date().toISOString(),
-          });
           this.successMessage.set(
             response.message || 'Password reset link has been sent to your email. Please check your inbox.'
           );
           this.model.set({ email: '' });
         },
         error: (err) => {
-          console.error('❌ [FORGOT PASSWORD] Failed to send reset link:', {
-            error: err,
-            errorMessage: err.error?.message || err.message,
-            status: err.status,
-            statusText: err.statusText,
-            fullError: err,
-            timestamp: new Date().toISOString(),
-          });
           const errorMessage =
             err.error?.message || err.message || 'Failed to send reset password link. Please try again later.';
           this.errorMessage.set(errorMessage);
