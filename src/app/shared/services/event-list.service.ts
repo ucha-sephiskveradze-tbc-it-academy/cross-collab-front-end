@@ -4,44 +4,17 @@ import { IEventItem } from '../ui/event-card/model/event.model';
 import { environment } from '../../../environments/environment.test';
 import { PaginatedEventResponse, EventResponse } from '../models/events';
 import { mapEventResponseToItem } from './utils/event-mapper.util';
+import { buildEventsQueryParams } from './utils/query-builder.util';
 
 @Injectable({ providedIn: 'root' })
 export class EventListService {
   private refreshTrigger = signal(0);
-  private queryParams = signal<Record<string, string | string[]>>({});
+  private queryParams = signal<Record<string, string | string[] | number | number[] | boolean>>({});
 
   eventsResource = httpResource<PaginatedEventResponse>(() => {
     this.refreshTrigger();
     const params = this.queryParams();
-    
-    // Build query string
-    const queryParams = new URLSearchParams();
-    queryParams.set('SortBy', 'START_DATE');
-    
-    // Exclude CANCELLED by default unless explicitly included
-    const myStatuses = params['MyStatuses'] as string[] | undefined;
-    if (myStatuses && myStatuses.length > 0) {
-      // If user explicitly selected statuses, use them
-      myStatuses.forEach(status => {
-        queryParams.append('MyStatuses', status);
-      });
-    } else {
-      // Default: exclude CANCELLED
-      queryParams.append('MyStatuses', 'NOT_REGISTERED');
-      queryParams.append('MyStatuses', 'CONFIRMED');
-      queryParams.append('MyStatuses', 'WAITLISTED');
-    }
-    
-    // Add other query parameters
-    Object.entries(params).forEach(([key, value]) => {
-      if (key !== 'MyStatuses' && value) {
-        if (Array.isArray(value)) {
-          value.forEach(v => queryParams.append(key, String(v)));
-        } else {
-          queryParams.append(key, String(value));
-        }
-      }
-    });
+    const queryParams = buildEventsQueryParams(params);
     
     return {
       url: `${environment.apiUrl}/events?${queryParams.toString()}`,
@@ -64,8 +37,13 @@ export class EventListService {
     return [];
   });
 
-  setQueryParams(params: Record<string, string | string[]>): void {
+  setQueryParams(params: Record<string, string | string[] | number | number[] | boolean>): void {
     this.queryParams.set(params);
+    this.refreshTrigger.update((v) => v + 1);
+  }
+
+  resetQueryParams(): void {
+    this.queryParams.set({});
     this.refreshTrigger.update((v) => v + 1);
   }
 

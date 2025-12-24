@@ -22,24 +22,21 @@ export class Dashboard implements OnInit {
   };
 
   events = this.eventService.events;
-  eventsResource = this.eventService.eventsResource; // For loading/error states
+  eventsResource = this.eventService.eventsResource;
 
   ngOnInit(): void {
-    // Reset pagination to page 1 and fetch all events from the beginning
-    // This ensures we don't carry over pagination state from browse events page
     this.eventService.resetQueryParams();
   }
   
   upcomingEvents = computed(() => {
     const eventsList = this.events();
     const now = new Date();
-    
-    // Filter to only future events, sort by start date (API should already sort, but ensure it)
     return eventsList
       .filter(event => new Date(event.startDateTime) > now)
       .sort((a, b) => new Date(a.startDateTime).getTime() - new Date(b.startDateTime).getTime())
       .slice(0, 5);
   });
+
   trendingEvents = computed(() => {
     const eventsList = this.events();
     return eventsList.length > 0
@@ -62,7 +59,6 @@ export class Dashboard implements OnInit {
   }
 
   getCategoryGradient(categoryName: string): string {
-    // Gray gradient style - can be customized later
     return 'linear-gradient(135deg, #6b7280 0%, #4b5563 100%)';
   }
 }
