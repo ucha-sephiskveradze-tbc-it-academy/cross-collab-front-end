@@ -10,9 +10,7 @@ export class EventUpdateService {
 
   updateEvent = httpResource<EventResponse>(() => {
     const trigger = this.updatePayload();
-    if (!trigger) {
-      return undefined;
-    }
+    if (!trigger) return undefined;
 
     return {
       url: `${environment.apiUrl}/events/${trigger.id}`,
@@ -26,4 +24,3 @@ export class EventUpdateService {
     this.updateTrigger.update((v) => v + 1);
   }
 }
-

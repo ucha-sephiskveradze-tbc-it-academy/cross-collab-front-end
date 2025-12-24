@@ -11,10 +11,7 @@ export class EventCreateService {
   createEvent = httpResource<EventResponse>(() => {
     this.createTrigger();
     const payload = this.createPayload();
-
-    if (!payload) {
-      return undefined;
-    }
+    if (!payload) return undefined;
 
     return {
       url: `${environment.apiUrl}/events`,
@@ -28,4 +25,3 @@ export class EventCreateService {
     this.createTrigger.update((v) => v + 1);
   }
 }
-

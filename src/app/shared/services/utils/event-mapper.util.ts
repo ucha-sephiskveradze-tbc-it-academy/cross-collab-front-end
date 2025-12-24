@@ -2,32 +2,21 @@ import { IEventItem } from '../../ui/event-card/model/event.model';
 import { EventResponse } from '../../models/events';
 
 export function mapEventResponseToItem(response: EventResponse | any): IEventItem {
-  // Map API status values to component status values
   const mapStatus = (status: string): 'REGISTERED' | 'CANCELLED' | 'NONE' | 'WAITLISTED' => {
     if (!status) return 'NONE';
-    
     const normalizedStatus = status.toUpperCase().trim();
-    
-    // Registered statuses
     if (normalizedStatus === 'CONFIRMED' || normalizedStatus === 'REGISTERED') {
       return 'REGISTERED';
     }
-    
-    // Cancelled statuses
     if (normalizedStatus === 'CANCELLED' || normalizedStatus === 'CANCELED') {
       return 'CANCELLED';
     }
-    
-    // Waitlisted status
     if (normalizedStatus === 'WAITLISTED') {
       return 'WAITLISTED';
     }
-    
-    // Any other status (NOT_REGISTERED, etc.) maps to NONE
     return 'NONE';
   };
 
-  // Handle API response format with startsAt/endsAt (primary format)
   if ('startsAt' in response && 'endsAt' in response) {
     return {
       eventId: response.id || response.eventId || 0,
@@ -42,11 +31,12 @@ export function mapEventResponseToItem(response: EventResponse | any): IEventIte
       },
       capacity: response.capacity || 0,
       totalRegistered: response.totalRegistered || 0,
-      currentUserStatus: mapStatus(response.myStatus || response.currentUserStatus || 'NOT_REGISTERED'),
+      currentUserStatus: mapStatus(
+        response.myStatus || response.currentUserStatus || 'NOT_REGISTERED'
+      ),
     };
   }
 
-  // Handle alternative format with startDateTime/endDateTime
   if ('startDateTime' in response && 'endDateTime' in response) {
     let locationStr = '';
     if (typeof response.location === 'string') {
@@ -66,7 +56,6 @@ export function mapEventResponseToItem(response: EventResponse | any): IEventIte
 
     let categoryId = 0;
     let categoryName = 'Unknown';
-
     if (response.category && typeof response.category === 'object') {
       categoryId = response.category.categoryId || 0;
       categoryName = response.category.categoryName || 'Unknown';
@@ -85,17 +74,15 @@ export function mapEventResponseToItem(response: EventResponse | any): IEventIte
       startDateTime: response.startDateTime,
       endDateTime: response.endDateTime,
       location: locationStr,
-      category: {
-        categoryId,
-        categoryName,
-      },
+      category: { categoryId, categoryName },
       capacity: response.capacity || 0,
       totalRegistered: response.totalRegistered || 0,
-      currentUserStatus: mapStatus(response.myStatus || response.currentUserStatus || 'NOT_REGISTERED'),
+      currentUserStatus: mapStatus(
+        response.myStatus || response.currentUserStatus || 'NOT_REGISTERED'
+      ),
     };
   }
 
-  // Fallback for any other format
   return {
     eventId: response.id || response.eventId || 0,
     title: response.title || '',
@@ -109,7 +96,8 @@ export function mapEventResponseToItem(response: EventResponse | any): IEventIte
     },
     capacity: response.capacity || 0,
     totalRegistered: response.totalRegistered || 0,
-    currentUserStatus: mapStatus(response.myStatus || response.currentUserStatus || 'NOT_REGISTERED'),
+    currentUserStatus: mapStatus(
+      response.myStatus || response.currentUserStatus || 'NOT_REGISTERED'
+    ),
   };
 }
-

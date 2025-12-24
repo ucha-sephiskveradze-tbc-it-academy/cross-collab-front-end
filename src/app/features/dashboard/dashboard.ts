@@ -25,8 +25,9 @@ export class Dashboard implements OnInit {
   eventsResource = this.eventService.eventsResource; // For loading/error states
 
   ngOnInit(): void {
-    // Ensure events are fetched from API
-    this.eventService.refresh();
+    // Reset pagination to page 1 and fetch all events from the beginning
+    // This ensures we don't carry over pagination state from browse events page
+    this.eventService.resetQueryParams();
   }
   
   upcomingEvents = computed(() => {
