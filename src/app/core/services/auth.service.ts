@@ -15,11 +15,10 @@ export interface LoginRequest {
 }
 
 export interface LoginResponse {
-  access_token: string;
+  access_token?: string;
+  accessToken?: string; // Backend might return either format
   user?: {
-    id: string;
     email: string;
-    name: string;
     role: string;
   };
 }
@@ -80,8 +79,10 @@ export class AuthService {
     return this.http.post<LoginResponse>(url, credentials).pipe(
       tap({
         next: (response) => {
+          const token = response.accessToken || response.access_token;
           console.log('📥 [AUTH SERVICE] Response received:', {
-            hasToken: !!response.access_token,
+            hasToken: !!token,
+            tokenFormat: response.accessToken ? 'accessToken' : response.access_token ? 'access_token' : 'none',
             hasUser: !!response.user,
             user: response.user,
             fullResponse: response,
@@ -158,7 +159,7 @@ export class AuthService {
 
   register(data: RegisterRequest): Observable<RegisterResponse> {
     const url = `${environment.authApiUrl}/users-auth/register`;
-    
+
     // Filter out undefined values to avoid sending them in the request
     const payload: any = {
       userName: data.userName,
@@ -166,15 +167,15 @@ export class AuthService {
       department: data.department,
       password: data.password,
     };
-    
+
     if (data.phoneNumber) {
       payload.phoneNumber = data.phoneNumber;
     }
-    
+
     if (data.oneTimePassword) {
       payload.oneTimePassword = data.oneTimePassword;
     }
-    
+
     console.log(`[${new Date().toISOString()}] 📡 [AUTH SERVICE] Making POST request to:`, url);
     console.log(`[${new Date().toISOString()}] 📤 [AUTH SERVICE] Request payload:`, {
       userName: payload.userName,
@@ -195,23 +196,29 @@ export class AuthService {
     return this.http.post<RegisterResponse>(url, payload, { headers }).pipe(
       tap({
         next: (response) => {
-          console.log(`[${new Date().toISOString()}] 📥 [AUTH SERVICE] Registration response received:`, {
-            message: response.message,
-            user: response.user,
-            fullResponse: response,
-          });
+          console.log(
+            `[${new Date().toISOString()}] 📥 [AUTH SERVICE] Registration response received:`,
+            {
+              message: response.message,
+              user: response.user,
+              fullResponse: response,
+            }
+          );
         },
         error: (error) => {
-          console.error(`[${new Date().toISOString()}] 📥 [AUTH SERVICE] Registration error response:`, {
-            status: error.status,
-            statusText: error.statusText,
-            error: error.error,
-            errorStringified: JSON.stringify(error.error),
-            errorText: error.error?.toString(),
-            headers: error.headers,
-            url: error.url,
-            fullError: error,
-          });
+          console.error(
+            `[${new Date().toISOString()}] 📥 [AUTH SERVICE] Registration error response:`,
+            {
+              status: error.status,
+              statusText: error.statusText,
+              error: error.error,
+              errorStringified: JSON.stringify(error.error),
+              errorText: error.error?.toString(),
+              headers: error.headers,
+              url: error.url,
+              fullError: error,
+            }
+          );
         },
       })
     );
@@ -274,29 +281,5 @@ export class AuthService {
   logout() {
     localStorage.removeItem(this.TOKEN_KEY);
     localStorage.removeItem(this.USER_KEY);
-  }
-
-  // ---- JWT helpers ----
-  private decodeToken(): JwtPayload | null {
-    const token = this.getToken();
-    if (!token) return null;
-
-    try {
-      return JSON.parse(atob(token.split('.')[1]));
-    } catch {
-      return null;
-    }
-  }
-
-  isAuthenticated(): boolean {
-    const payload = this.decodeToken();
-    if (!payload) return false;
-
-    return payload.exp * 1000 > Date.now();
-  }
-
-  hasRole(role: string): boolean {
-    const payload = this.decodeToken();
-    return !!payload && payload.role === role;
   }
 }

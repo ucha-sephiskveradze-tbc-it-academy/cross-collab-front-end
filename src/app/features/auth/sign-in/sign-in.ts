@@ -9,6 +9,7 @@ import { ILoginFormModel } from './models/login-form.model';
 import { AuthService } from '../../../core/services/auth.service';
 import { take, finalize } from 'rxjs';
 import { noEmojiRegex } from '../../../shared/validations/validator';
+import { AuthTokenService } from '../../../core/services/auth-token.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -17,8 +18,9 @@ import { noEmojiRegex } from '../../../shared/validations/validator';
   styleUrl: './sign-in.scss',
 })
 export class SignIn {
-  private route = inject(Router);
+  private router = inject(Router);
   private authService = inject(AuthService);
+  private authTokenService = inject(AuthTokenService);
 
   isSubmitting = signal(false);
   errorMessage = signal<string | null>(null);
@@ -56,48 +58,48 @@ export class SignIn {
       timestamp: new Date().toISOString(),
     });
 
-    this.authService
-      .authenticate(loginPayload)
-      .pipe(
-        take(1), // auto-unsubscribe
-        finalize(() => this.isSubmitting.set(false))
-      )
-      .subscribe({
-        next: (response) => {
-          console.log('✅ [LOGIN] Authentication successful:', {
-            hasToken: !!response.access_token,
-            hasUser: !!response.user,
-            user: response.user,
-            timestamp: new Date().toISOString(),
-          });
+    const credentials = {
+      email: this.loginForm.email().value(),
+      password: this.loginForm.password().value(),
+    };
 
-          if (response.access_token) {
-            console.log('💾 [LOGIN] Storing token and user data');
-            this.authService.setToken(response.access_token);
-            if (response.user) {
-              this.authService.setUser(response.user);
-              console.log('👤 [LOGIN] User stored:', response.user);
-            }
-            console.log('🚀 [LOGIN] Navigating to dashboard');
-            this.route.navigate(['dashboard']);
+    this.authService.authenticate(credentials).subscribe({
+      next: (res) => {
+        // Handle both accessToken and access_token formats
+        const token = res?.accessToken || res?.access_token;
+        
+        if (!token) {
+          console.error('❌ No access token in response', res);
+          this.errorMessage.set('Invalid response from server. Please try again.');
+          this.isSubmitting.set(false);
+          return;
+        }
+
+        console.log('✅ [LOGIN] Token received, storing...');
+        this.authService.setToken(token);
+        console.log('💾 [LOGIN] Token stored');
+
+        // Wait a moment for token to be stored, then get role
+        setTimeout(() => {
+          const role = this.authTokenService.getRole();
+          console.log('🔓 [LOGIN] Decoded role:', role);
+
+          if (role === 'Admin') {
+            console.log('🚀 [LOGIN] Admin detected, navigating to /admin/main');
+            this.router.navigate(['/admin/main']);
           } else {
-            console.warn('⚠️ [LOGIN] No access token in response:', response);
-            this.errorMessage.set('Invalid response from server. Please try again.');
+            console.log('🚀 [LOGIN] Navigating to /dashboard');
+            this.router.navigate(['/dashboard']);
           }
-        },
-        error: (err) => {
-          console.error('❌ [LOGIN] Authentication failed:', {
-            error: err,
-            errorMessage: err.error?.message || err.message,
-            status: err.status,
-            statusText: err.statusText,
-            fullError: err,
-            timestamp: new Date().toISOString(),
-          });
-          const errorMessage =
-            err.error?.message || err.message || 'Unable to connect to the server. Please check your connection and try again.';
-          this.errorMessage.set(errorMessage);
-        },
-      });
+          
+          this.isSubmitting.set(false);
+        }, 100);
+      },
+      error: (err) => {
+        console.error('❌ [LOGIN] Authentication failed:', err);
+        this.errorMessage.set(err.error?.message || err.message || 'Invalid email or password. Please try again.');
+        this.isSubmitting.set(false);
+      },
+    });
   }
 }
