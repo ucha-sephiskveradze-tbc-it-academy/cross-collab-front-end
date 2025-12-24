@@ -9,7 +9,7 @@ export class EventService {
   private refreshTrigger = signal(0);
   private createTrigger = signal(0);
   private updateTrigger = signal(0);
-  private queryParams = signal<Record<string, string | string[]>>({});
+  private queryParams = signal<Record<string, string | string[] | number | number[] | boolean>>({});
 
   eventsResource = httpResource<PaginatedEventResponse>(() => {
     this.refreshTrigger();
@@ -17,14 +17,62 @@ export class EventService {
     
     // Build query string
     const queryParams = new URLSearchParams();
-    queryParams.set('SortBy', 'START_DATE');
     
-    // Exclude CANCELLED by default unless explicitly included
-    const myStatuses = params['MyStatuses'] as string[] | undefined;
-    if (myStatuses && myStatuses.length > 0) {
-      // If user explicitly selected statuses, use them
-      myStatuses.forEach(status => {
-        queryParams.append('MyStatuses', status);
+    // SortBy - default to START_DATE
+    const sortBy = params['SortBy'] as string | undefined;
+    queryParams.set('SortBy', sortBy || 'START_DATE');
+    
+    // SortDirection
+    if (params['SortDirection']) {
+      queryParams.set('SortDirection', String(params['SortDirection']));
+    }
+    
+    // Search
+    if (params['Search']) {
+      queryParams.set('Search', String(params['Search']));
+    }
+    
+    // EventTypeIds (categories)
+    const eventTypeIds = params['EventTypeIds'];
+    if (eventTypeIds) {
+      const ids = Array.isArray(eventTypeIds) ? eventTypeIds : [eventTypeIds];
+      ids.forEach(id => {
+        queryParams.append('EventTypeIds', String(id));
+      });
+    }
+    
+    // Locations
+    const locations = params['Locations'] as string[] | undefined;
+    if (locations && locations.length > 0) {
+      locations.forEach(loc => {
+        queryParams.append('Locations', loc);
+      });
+    }
+    
+    // From (date-time)
+    if (params['From']) {
+      queryParams.set('From', String(params['From']));
+    }
+    
+    // To (date-time)
+    if (params['To']) {
+      queryParams.set('To', String(params['To']));
+    }
+    
+    // CapacityAvailability
+    const capacityAvailability = params['CapacityAvailability'] as string[] | undefined;
+    if (capacityAvailability && capacityAvailability.length > 0) {
+      capacityAvailability.forEach(cap => {
+        queryParams.append('CapacityAvailability', cap);
+      });
+    }
+    
+    // MyStatuses - exclude CANCELLED by default unless explicitly included
+    const myStatuses = params['MyStatuses'];
+    if (myStatuses) {
+      const statuses = Array.isArray(myStatuses) ? myStatuses : [myStatuses];
+      statuses.forEach(status => {
+        queryParams.append('MyStatuses', String(status));
       });
     } else {
       // Default: exclude CANCELLED
@@ -33,16 +81,18 @@ export class EventService {
       queryParams.append('MyStatuses', 'WAITLISTED');
     }
     
-    // Add other query parameters
-    Object.entries(params).forEach(([key, value]) => {
-      if (key !== 'MyStatuses' && value) {
-        if (Array.isArray(value)) {
-          value.forEach(v => queryParams.append(key, String(v)));
-        } else {
-          queryParams.append(key, String(value));
-        }
-      }
-    });
+    // IsActive
+    if (params['IsActive'] !== undefined) {
+      queryParams.set('IsActive', String(params['IsActive']));
+    }
+    
+    // Page (default to 1 if not specified, API requires minimum 1)
+    const page = params['Page'] !== undefined ? Number(params['Page']) : 1;
+    queryParams.set('Page', String(Math.max(1, page))); // Ensure at least page 1
+    
+    // PageSize (default to 6 if not specified)
+    const pageSize = params['PageSize'] !== undefined ? Number(params['PageSize']) : 6;
+    queryParams.set('PageSize', String(pageSize));
 
     return {
       url: `${environment.apiUrl}/events?${queryParams.toString()}`,
@@ -123,7 +173,7 @@ export class EventService {
     return [];
   });
 
-  setQueryParams(params: Record<string, string | string[]>): void {
+  setQueryParams(params: Record<string, string | string[] | number | number[] | boolean>): void {
     this.queryParams.set(params);
     this.refreshTrigger.update((v) => v + 1);
   }

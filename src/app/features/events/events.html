@@ -37,7 +37,8 @@
         <p-datepicker
           selectionMode="range"
           [readonlyInput]="true"
-          (onChange)="onDateChange($event)"
+          [(ngModel)]="dateRangeValue"
+          (ngModelChange)="onDateChange($event)"
         />
       </div>
 
@@ -81,6 +82,13 @@
         <p>No events found matching your filters.</p>
       </div>
       } @else {
+      <div class="results-header">
+        <span class="total-count">Showing {{ totalCount() }} events</span>
+        <button type="button" class="sort-button" (click)="toggleSort()">
+          Sort by Date {{ sortDirection() === 'ASC' ? '↓' : '↑' }}
+        </button>
+      </div>
+
       <div class="event-list">
         @for (event of pagedEvents(); track event.eventId) {
         <app-event-card [event]="event" />
@@ -90,8 +98,7 @@
       <p-paginator
         [first]="first()"
         [rows]="rows()"
-        [totalRecords]="events().length"
-        [rowsPerPageOptions]="[6, 12, 24]"
+        [totalRecords]="eventsResource.value()?.totalCount || events().length"
         (onPageChange)="onPageChange($event)"
       />
       }
