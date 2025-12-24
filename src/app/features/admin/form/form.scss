@@ -4,20 +4,19 @@
     gap: 2rem;
     max-width: 1400px;
     margin: auto;
-    padding-top: 2rem;
+    padding: 2rem 2.5rem;
+    position: relative;
+    overflow: visible;
 
-    /* Tablet breakpoint */
-    @media (max-width: 1024px) {
-        grid-template-columns: 1.5fr 1fr; // narrower left/right ratio
-        gap: 1.5rem;
-        padding: 1.5rem;
+    .right {
+        position: relative;
     }
 
-    /* Mobile breakpoint */
-    @media (max-width: 768px) {
-        grid-template-columns: 1fr; // stack columns
+    /* Tablet breakpoint - moved from 768px */
+    @media (max-width: 1024px) {
+        grid-template-columns: 1fr;
         gap: 1.5rem;
-        padding: 1rem;
+        padding: 1.5rem 2rem;
 
         .left,
         .right {
@@ -33,18 +32,52 @@
             }
         }
     }
+
+    /* Small mobile breakpoint */
+    @media (max-width: 480px) {
+        padding: 1rem;
+    }
 }
 
 .location-types {
     display: flex;
-    flex-wrap: wrap; // allow wrapping on small screens
+    flex-wrap: wrap;
     gap: 0.75rem;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
 
-    @media (max-width: 480px) {
-        flex-direction: column;
-        button {
+    .location-type-btn {
+        padding: 0.625rem 1.25rem;
+        border: 2px solid #e5e7eb;
+        border-radius: 8px;
+        background-color: #ffffff;
+        color: #374151;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        cursor: pointer;
+        flex: 1;
+        min-width: 120px;
+
+        &:hover {
+            border-color: #9ca3af;
+            background-color: #f9fafb;
+        }
+
+        &.active {
+            border-color: #111827;
+            background-color: #111827;
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        @media (max-width: 1024px) {
+            flex: 1 1 calc(50% - 0.375rem);
+            min-width: 0;
+        }
+
+        @media (max-width: 480px) {
+            flex: 1 1 100%;
             width: 100%;
+            padding: 0.75rem 1rem;
         }
     }
 }
@@ -52,7 +85,7 @@
 .table__header h1 {
     font-size: 1.25rem;
 
-    @media (max-width: 768px) {
+    @media (max-width: 1024px) {
         font-size: 1.1rem;
     }
 
@@ -62,23 +95,244 @@
 }
 
 .section {
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
+    border-radius: 12px;
+    overflow: visible;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 1; // Lower than datepicker but ensures stacking context
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+
+    // Override PrimeNG card overflow
+    ::ng-deep .p-card {
+        overflow: visible !important;
+    }
+
+    ::ng-deep .p-card-body {
+        padding: 1.5rem;
+        overflow: visible !important;
+    }
+
+    ::ng-deep .p-card-content {
+        padding: 0;
+        overflow: visible !important;
+    }
+
+    // Ensure date picker calendar appears above other elements and is visible
+    // Higher z-index than other PrimeNG components (select dropdowns use ~1000)
+    ::ng-deep .p-datepicker {
+        z-index: 1300 !important;
+    }
+
+    ::ng-deep .p-datepicker-panel {
+        z-index: 1300 !important;
+        // Force calendar to always open upward (above the input)
+        position: absolute !important;
+        bottom: 100% !important;
+        top: auto !important;
+        margin-bottom: 4px !important;
+        margin-top: 0 !important;
+        transform: none !important;
+    }
+
+    ::ng-deep .p-datepicker-overlay .p-datepicker-panel {
+        position: absolute !important;
+        bottom: 100% !important;
+        top: auto !important;
+        margin-bottom: 4px !important;
+        margin-top: 0 !important;
+        transform: none !important;
+    }
+
+    ::ng-deep .p-datepicker-overlay {
+        z-index: 1300 !important;
+    }
+
+    ::ng-deep .p-datepicker-calendar {
+        z-index: 1300 !important;
+    }
+
+    // Ensure date picker input wrapper doesn't clip
+    ::ng-deep .p-datepicker-trigger {
+        position: relative;
+        z-index: 1;
+    }
+
+    // Ensure the datepicker overlay can escape overflow boundaries
+    ::ng-deep .p-datepicker-calendar-container {
+        overflow: visible !important;
+    }
+}
+
+// Global styles to ensure datepicker always has highest z-index
+// This ensures it appears above select dropdowns, sections, and other PrimeNG overlays
+::ng-deep .p-datepicker {
+    z-index: 9999 !important;
+}
+
+// Force calendar to always open upward (above the input)
+// This prevents it from being cut off by sections below
+// PrimeNG uses a wrapper div, so we need to target multiple elements
+::ng-deep .p-datepicker {
+    z-index: 9999 !important;
+}
+
+::ng-deep .p-datepicker-panel {
+    z-index: 9999 !important;
+    position: absolute !important;
+    bottom: 100% !important;
+    top: auto !important;
+    margin-bottom: 4px !important;
+    margin-top: 0 !important;
+    transform: none !important;
+}
+
+// Target the overlay wrapper that PrimeNG uses
+::ng-deep .p-datepicker-overlay {
+    z-index: 9999 !important;
+    
+    .p-datepicker-panel {
+        position: absolute !important;
+        bottom: 100% !important;
+        top: auto !important;
+        margin-bottom: 4px !important;
+        margin-top: 0 !important;
+        transform: none !important;
+    }
+}
+
+// Override any inline styles PrimeNG might add via JavaScript
+::ng-deep .p-datepicker-panel[style] {
+    bottom: 100% !important;
+    top: auto !important;
+    margin-bottom: 4px !important;
+    margin-top: 0 !important;
+    transform: none !important;
+}
+
+// Target the input wrapper to ensure proper positioning context
+::ng-deep .p-datepicker-trigger {
+    position: relative !important;
+}
+
+::ng-deep .p-datepicker-overlay {
+    z-index: 9999 !important;
+}
+
+::ng-deep .p-datepicker-calendar {
+    z-index: 9999 !important;
+}
+
+::ng-deep .p-datepicker-calendar-container {
+    z-index: 9999 !important;
+}
+
+// Ensure the datepicker panel wrapper positions correctly
+::ng-deep .p-datepicker-panel-visible {
+    bottom: 100% !important;
+    top: auto !important;
 }
 
 .field {
     display: flex;
     flex-direction: column;
-    gap: 0.4rem;
-    margin-bottom: 1rem;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+
+    label {
+        font-weight: 500;
+        font-size: 0.875rem;
+        color: #374151;
+        margin-bottom: 0.25rem;
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+
+        .required {
+            color: #dc2626;
+            font-weight: 600;
+        }
+    }
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+
+    input,
+    textarea {
+        @media (max-width: 480px) {
+            font-size: 16px; // Prevents zoom on iOS
+        }
+    }
+
+    // Error message styling
+    .error-message {
+        color: #dc2626;
+        font-size: 0.75rem;
+        margin-top: 0.25rem;
+        display: block;
+    }
+
+    // Error state styling when field has error class
+    &.field-error {
+        // Standard inputs and textareas
+        input,
+        textarea {
+            border-color: #dc2626 !important;
+            box-shadow: 0 0 0 1px #dc2626 !important;
+        }
+
+        // PrimeNG components
+        ::ng-deep {
+            .p-inputtext,
+            .p-inputtextarea {
+                border-color: #dc2626 !important;
+                box-shadow: 0 0 0 1px #dc2626 !important;
+            }
+
+            // DatePicker
+            .p-datepicker {
+                .p-inputtext {
+                    border-color: #dc2626 !important;
+                    box-shadow: 0 0 0 1px #dc2626 !important;
+                }
+            }
+
+            // InputNumber
+            .p-inputnumber {
+                .p-inputtext {
+                    border-color: #dc2626 !important;
+                    box-shadow: 0 0 0 1px #dc2626 !important;
+                }
+            }
+
+            // Select dropdown
+            .p-select {
+                .p-select-label {
+                    border-color: #dc2626 !important;
+                    box-shadow: 0 0 0 1px #dc2626 !important;
+                }
+            }
+        }
+    }
 }
 
 .grid-2 {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
+    margin-bottom: 1.25rem;
 
-    @media (max-width: 768px) {
-        grid-template-columns: 1fr; // stack inputs vertically
+    @media (max-width: 1024px) {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+    }
+
+    @media (max-width: 480px) {
+        gap: 1rem;
     }
 }
 
@@ -93,19 +347,65 @@
     }
 }
 
-.checkbox {
-    padding: 1rem;
-    border: 1px solid rgb(180, 180, 180);
+.checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    padding: 1rem 1.25rem;
+    border: 1px solid #e5e7eb;
     border-radius: 8px;
+    margin-bottom: 0.75rem;
+    background-color: #ffffff;
+    transition: all 0.2s ease;
 
-    p-checkbox {
-        margin-right: 0.5rem;
+    &:hover {
+        border-color: #d1d5db;
+        background-color: #f9fafb;
     }
 
-    p {
-        font-size: 12px;
-        margin-top: 8px;
-        padding-left: 0.25rem;
+    &:last-child {
+        margin-bottom: 0;
+    }
+
+    p-checkbox {
+        flex-shrink: 0;
+        margin: 0;
+    }
+
+    .checkbox-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+
+        h2 {
+            font-size: 0.9375rem;
+            font-weight: 600;
+            color: #111827;
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        p {
+            font-size: 0.8125rem;
+            color: #6b7280;
+            margin: 0;
+            line-height: 1.4;
+        }
+    }
+
+    // For checkboxes without checkbox-content wrapper
+    h2 {
+        font-size: 0.9375rem;
+        font-weight: 600;
+        color: #111827;
+        margin: 0;
+        flex: 1;
+    }
+
+    @media (max-width: 480px) {
+        padding: 0.875rem 1rem;
+        gap: 0.75rem;
     }
 }
 
@@ -117,14 +417,56 @@
     display: flex;
     align-items: center;
     gap: 16px;
-    padding-bottom: 1rem;
+    padding-bottom: 1.25rem;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid #e5e7eb;
+
+    h1 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #111827;
+        margin: 0;
+    }
+
     .icon {
         width: 40px;
         height: 40px;
-        background-color: black;
+        background-color: #111827;
+        border-radius: 8px;
         display: flex;
         align-items: center;
         justify-content: center;
+        flex-shrink: 0;
+
+        img {
+            width: 20px;
+            height: 20px;
+            filter: brightness(0) invert(1);
+        }
+    }
+
+    @media (max-width: 1024px) {
+        padding-bottom: 1rem;
+
+        h1 {
+            font-size: 1.1rem;
+        }
+
+        .icon {
+            width: 36px;
+            height: 36px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        h1 {
+            font-size: 1rem;
+        }
+
+        .icon {
+            width: 32px;
+            height: 32px;
+        }
     }
 }
 
@@ -161,8 +503,31 @@ textarea {
     }
 }
 
+.right {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
 .preview {
     font-size: 0.9rem;
+}
+
+// Sticky container for preview card (now includes submit buttons)
+.right > .preview {
+    position: sticky;
+    top: 100px; // Offset from top (header height + some padding)
+    z-index: 10;
+    background-color: transparent;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto; // Allow scrolling if content is too tall
+}
+
+// Submit buttons are now inside preview card
+.preview .submit {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e5e7eb;
 }
 
 .submit {
@@ -178,6 +543,20 @@ textarea {
 
             background-color: #dfdfdf;
         }
+    }
+}
+
+@media (max-width: 1024px) {
+    .right > .preview {
+        position: relative;
+        top: 0;
+        max-height: none;
+        overflow-y: visible;
+    }
+
+    .preview .submit {
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
     }
 }
 

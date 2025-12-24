@@ -16,9 +16,10 @@ export class Calendar {
   currentDate = signal(new Date()); // make currentDate reactive
   events = this.calendarService.events;
 
-  calendarEvents = computed<ICalendarEvent[]>(() =>
-    this.events.hasValue() ? this.events.value().map(mapEventItemToCalendarEvent) : []
-  );
+  calendarEvents = computed<ICalendarEvent[]>(() => {
+    const eventsList = this.events();
+    return eventsList.length > 0 ? eventsList.map(mapEventItemToCalendarEvent) : [];
+  });
 
   days = computed<ICalendarDay[]>(() => {
     const year = this.currentDate().getFullYear();

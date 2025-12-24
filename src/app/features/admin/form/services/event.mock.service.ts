@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { AppEvent } from './form.service';
+import { AppEvent } from '../model/app-event.model';
 
 @Injectable({ providedIn: 'root' })
 export class EventMockService {
@@ -16,6 +16,19 @@ export class EventMockService {
       endTime: '20:00',
       locationType: 'in-person',
       capacity: 100,
+      registrationStart: '2025-02-01',
+      registrationEnd: '2025-02-19',
+      venue: 'Tech Hub',
+      street: '123 Main St',
+      city: 'New York',
+      roomNumber: 101,
+      floorNumber: 2,
+      additionalInformation: '',
+      imageUrl: '',
+      tagIds: [],
+      eventTypeId: 1,
+      minCapacity: 10,
+      waitlist: false,
     },
     {
       id: 2,
@@ -27,6 +40,19 @@ export class EventMockService {
       endTime: '17:00',
       locationType: 'hybrid',
       capacity: 300,
+      registrationStart: '2025-02-15',
+      registrationEnd: '2025-02-28',
+      venue: 'Convention Center',
+      street: '456 Tech Ave',
+      city: 'San Francisco',
+      roomNumber: 201,
+      floorNumber: 3,
+      additionalInformation: '',
+      imageUrl: '',
+      tagIds: [],
+      eventTypeId: 2,
+      minCapacity: 50,
+      waitlist: true,
     },
   ];
 

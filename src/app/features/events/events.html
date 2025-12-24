@@ -68,19 +68,19 @@
 
     <!-- RESULTS -->
     <section class="results">
-      @if (events.isLoading()) {
+      @if (eventsResource.isLoading()) {
       <div class="loading-state">
         <p>Loading events...</p>
       </div>
-      } @else if (events.error()) {
+      } @else if (eventsResource.error()) {
       <div class="error-state" role="alert">
         <p>Failed to load events. Please try again later.</p>
       </div>
-      } @else if (events.hasValue() && pagedEvents().length === 0) {
+      } @else if (events().length === 0 || pagedEvents().length === 0) {
       <div class="empty-state">
         <p>No events found matching your filters.</p>
       </div>
-      } @else if (events.hasValue()) {
+      } @else {
       <div class="event-list">
         @for (event of pagedEvents(); track event.eventId) {
         <app-event-card [event]="event" />
@@ -90,7 +90,7 @@
       <p-paginator
         [first]="first()"
         [rows]="rows()"
-        [totalRecords]="events.value().length"
+        [totalRecords]="events().length"
         [rowsPerPageOptions]="[6, 12, 24]"
         (onPageChange)="onPageChange($event)"
       />
