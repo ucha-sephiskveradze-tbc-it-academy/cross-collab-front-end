@@ -19,9 +19,14 @@
       <img src="./assets/icons/notification.svg" alt="Notification Icon" />
       <div></div>
     </div>
-    <div class="right__profile">
+    <div class="right__profile" (click)="toggleDropdown()">
       <h3>Sarah Johnson</h3>
       <p>Employee</p>
+      @if (isDropdownOpen()) {
+      <div class="dropdown-menu" (click)="$event.stopPropagation()">
+        <button class="dropdown-item" (click)="logout()">Logout</button>
+      </div>
+      }
     </div>
   </div>
 </header>
