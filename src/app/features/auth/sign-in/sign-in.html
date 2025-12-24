@@ -5,7 +5,8 @@
   <label>
     <span>Email</span>
     <input type="email" pInputText placeholder="Enter your email" [field]="loginForm.email" />
-    @if (loginForm.email().invalid()) { @for (error of loginForm.email().errors(); track error) {
+    @if (loginForm.email().invalid()) { @for (error of loginForm.email().errors(); track
+    error.message) {
     <li>{{ error.message }}</li>
     } }
   </label>
@@ -18,8 +19,8 @@
       placeholder="Enter your password"
       [field]="loginForm.password"
     />
-    @if (loginForm.password().invalid()) { @for (error of loginForm.password ().errors(); track
-    error) {
+    @if (loginForm.password().invalid()) { @for (error of loginForm.password().errors(); track
+    error.message) {
     <li>{{ error.message }}</li>
     } }
   </label>
@@ -33,7 +34,7 @@
 
   @if (errorMessage()) {
   <div class="error-message" role="alert">
-    {{ errorMessage() }}
+    <p>There was an error logging in. Please try again.</p>
   </div>
   }
 
