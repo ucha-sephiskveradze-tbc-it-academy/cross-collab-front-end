@@ -14,19 +14,19 @@
             <a routerLink="/events">View all</a>
         </div>
 
-        @if (events.isLoading()) {
+        @if (eventsResource.isLoading()) {
         <div class="loading-state">
             <p>Loading events...</p>
         </div>
-        } @else if (events.error()) {
+        } @else if (eventsResource.error()) {
         <div class="error-state" role="alert">
             <p>Failed to load events. Please try again later.</p>
         </div>
-        } @else if (events.hasValue() && upcomingEvents().length === 0) {
+        } @else if (events().length === 0 || upcomingEvents().length === 0) {
         <div class="empty-state">
             <p>No upcoming events at this time.</p>
         </div>
-        } @else if (events.hasValue()) {
+        } @else {
         <div class="event-list">
             @for (event of upcomingEvents(); track event.eventId) {
             <app-event-card [event]="event" />
@@ -41,19 +41,19 @@
     <section class="section">
         <h2>Trending Events</h2>
 
-        @if (events.isLoading()) {
+        @if (eventsResource.isLoading()) {
         <div class="loading-state">
             <p>Loading trending events...</p>
         </div>
-        <!-- } @else if (events.isError()) {
+        } @else if (eventsResource.error()) {
         <div class="error-state" role="alert">
             <p>Failed to load trending events.</p>
-        </div> -->
-        } @else if (events.hasValue() && trendingEvents().length === 0) {
+        </div>
+        } @else if (events().length === 0 || trendingEvents().length === 0) {
         <div class="empty-state">
             <p>No trending events at this time.</p>
         </div>
-        } @else if (events.hasValue()) {
+        } @else {
         <div class="trending">
             @for (event of trendingEvents(); track event.eventId) {
             <div class="trending-card">

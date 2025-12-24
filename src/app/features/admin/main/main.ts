@@ -14,7 +14,6 @@ import { Footer } from '../../../shared/ui/footer/footer';
 
 import { EventService } from '../../../shared/services/events.service';
 import { IEventItem } from '../../../shared/ui/event-card/model/event.model';
-import { computed } from '@angular/core';
 import { InputIconModule } from 'primeng/inputicon';
 import { IconFieldModule } from 'primeng/iconfield';
 import { Select } from 'primeng/select';
@@ -23,11 +22,9 @@ import { Router } from '@angular/router';
   selector: 'app-main',
   standalone: true,
   imports: [
-    // ✅ Angular
     CommonModule,
     FormsModule,
     DatePipe,
-    // ✅ PrimeNG
     TableModule,
     ButtonModule,
     ToolbarModule,
@@ -37,8 +34,6 @@ import { Router } from '@angular/router';
     InputIconModule,
     IconFieldModule,
     Select,
-
-    // ✅ Shared UI
     Header,
     Footer,
   ],
@@ -60,13 +55,9 @@ export class Main {
     { label: 'Workshop', value: 'Workshop' },
     { label: 'Meetup', value: 'Meetup' },
   ];
-  // Events signal (already transformed by service)
-  events = this.eventService.events;
-  
-  // Expose resource for loading/error states
-  eventsResource = this.eventService.eventsResource;
 
-  // UI state
+  events = this.eventService.events;
+  eventsResource = this.eventService.eventsResource;
   selectedEvents: IEventItem[] = [];
 
   getCapacityPercent(event: any): number {
@@ -88,7 +79,6 @@ export class Main {
   viewPage(event: any) {
     this.router.navigate(['/admin/main', event.id]);
   }
-  // ---------- CRUD ----------
 
   openNew() {
     this.router.navigate(['/admin/new']);

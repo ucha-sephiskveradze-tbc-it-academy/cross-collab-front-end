@@ -51,7 +51,6 @@ export class Form implements OnInit {
   isSubmitting = signal(false);
 
   constructor() {
-    // Watch for event fetch completion (for edit mode) - GET uses signals
     effect(() => {
       const eventResource = this.backendEventService.getEventById;
       if (eventResource.hasValue()) {
@@ -60,8 +59,6 @@ export class Form implements OnInit {
           this.formService.initEditFromBackend(eventData);
         }
       } else if (eventResource.error()) {
-        console.error('Error fetching event:', eventResource.error());
-        // Fallback to mock service if backend fails
         const idParam = this.route.snapshot.paramMap.get('id');
         const id = idParam ? Number(idParam) : null;
         if (id) {
@@ -80,10 +77,8 @@ export class Form implements OnInit {
     const id = idParam ? Number(idParam) : null;
 
     if (id) {
-      // EDIT MODE - Try backend first, fallback to mock
       this.backendEventService.fetchById(id);
     } else {
-      // CREATE MODE
       this.formService.initCreate();
     }
   }
@@ -105,56 +100,34 @@ export class Form implements OnInit {
 
     this.isSubmitting.set(true);
     const backendPayload = this.formService.getBackendPayload();
-    
-    console.log('📤 Submitting event payload:', JSON.stringify(backendPayload, null, 2));
 
     if (this.formService.isEditMode()) {
       const eventId = this.formService.currentEvent()?.id;
       if (eventId) {
-        console.log(`📤 PUT /events/${eventId}`);
         this.backendEventService
           .update(eventId, backendPayload)
           .pipe(finalize(() => this.isSubmitting.set(false)))
           .subscribe({
-            next: (response) => {
-              console.log('✅ Event updated successfully:', response);
-              // Refresh the events list
+            next: () => {
               this.sharedEventService.refresh();
               this.router.navigate(['/admin/main']);
             },
             error: (err) => {
-              console.error('❌ Error updating event:', err);
-              console.error('❌ Error details:', {
-                status: err.status,
-                statusText: err.statusText,
-                error: err.error,
-                message: err.message,
-              });
-              alert(`Failed to update event: ${err.error?.message || err.message || 'Unknown error'}`);
+              const errorMessage = err.error?.message || err.message || 'Unknown error';
+              alert(`Failed to update event: ${errorMessage}`);
             },
           });
       }
     } else {
-      console.log('📤 POST /events');
       this.backendEventService
         .create(backendPayload)
         .pipe(finalize(() => this.isSubmitting.set(false)))
         .subscribe({
-          next: (response) => {
-            console.log('✅ Event created successfully:', response);
-            // Refresh the events list
+          next: () => {
             this.sharedEventService.refresh();
             this.router.navigate(['/admin/main']);
           },
           error: (err) => {
-            console.error('❌ Error creating event:', err);
-            console.error('❌ Error details:', {
-              status: err.status,
-              statusText: err.statusText,
-              error: err.error,
-              message: err.message,
-              url: err.url,
-            });
             const errorMessage = err.error?.message || err.error?.error || err.message || 'Unknown error';
             alert(`Failed to create event: ${errorMessage}`);
           },
