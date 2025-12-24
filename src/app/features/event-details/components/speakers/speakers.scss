@@ -1,3 +1,4 @@
+@use "sass:color";
 @use "../../../../../styles/variables" as *;
 
 .section-card {
@@ -56,7 +57,7 @@
           width: 80px;
           height: 80px;
           border-radius: 50%;
-          background: linear-gradient(135deg, $color-primary 0%, lighten($color-primary, 10%) 100%);
+          background: linear-gradient(135deg, $color-primary 0%, color.adjust($color-primary, $lightness: 10%) 100%);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -107,7 +108,7 @@
             transition: color 0.2s ease;
 
             &:hover {
-              color: darken($color-primary, 10%);
+              color: color.adjust($color-primary, $lightness: -10%);
               text-decoration: underline;
             }
           }
