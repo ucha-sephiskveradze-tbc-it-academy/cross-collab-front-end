@@ -8,15 +8,18 @@
         @if (item.avatar) {
         <img [src]="item.avatar" [alt]="item.name" />
         } @else {
-        <div class="avatar-placeholder">{{ getInitials(item.name) }}</div>
+        <img [src]="getFunkyAvatar(item.name, $index)" [alt]="item.name" />
         }
       </div>
       <div class="speaker-info">
         <strong class="speaker-name">{{ item.name }}</strong>
+        @if (item.title) {
         <p class="speaker-title">{{ item.title }}</p>
+        }
         @if (item.description) {
         <p class="speaker-description">{{ item.description }}</p>
         }
+        @if (item.linkedin || item.website) {
         <div class="speaker-links">
           @if (item.linkedin) {
           <a [href]="item.linkedin" target="_blank" class="speaker-link">LinkedIn</a>
@@ -25,6 +28,7 @@
           <a [href]="item.website" target="_blank" class="speaker-link">Website</a>
           }
         </div>
+        }
       </div>
     </div>
     }

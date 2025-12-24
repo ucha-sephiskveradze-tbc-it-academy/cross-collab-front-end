@@ -6,8 +6,19 @@ export interface IEventDetails {
 
   startDateTime: string;
   endDateTime: string;
+  registrationStart: string;
+  registrationEnd: string;
 
   location: string;
+  locationDetails?: {
+    locationType: string;
+    venueName: string;
+    street: string;
+    city: string;
+    roomNumber: number;
+    floorNumber: number;
+    additionalInformation: string;
+  };
 
   category: {
     categoryId: number;
@@ -16,8 +27,23 @@ export interface IEventDetails {
 
   capacity: number;
   totalRegistered: number;
+  currentWaitlist: number;
+  isActive: boolean;
 
   currentUserStatus: 'REGISTERED' | 'CANCELLED' | 'NONE' | 'WAITLISTED';
+
+  organizer?: {
+    id: number;
+    fullName: string;
+    email: string;
+    department: string;
+  };
+
+  tags?: Array<{
+    id: number;
+    name: string;
+    category: string;
+  }>;
 
   // optional (details-only)
   about?: string;
@@ -26,12 +52,16 @@ export interface IEventDetails {
 }
 
 export interface AgendaItem {
-  time: string;
+  id?: number;
+  startTime: string;
+  time?: string; // For backward compatibility
   duration?: string;
   title: string;
-  description?: string;
+  description?: string | null;
+  type?: string;
   location?: string;
   speaker?: string;
+  tracks?: any[];
 }
 
 export interface SpeakerItem {

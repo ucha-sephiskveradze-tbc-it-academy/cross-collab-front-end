@@ -1,10 +1,10 @@
 <section class="section-card">
   <h2>Event Agenda</h2>
 
-  @for (item of agenda; track $index) {
+  @for (item of agenda; track item.id || $index) {
   <div class="agenda-item">
     <div class="agenda-time">
-      <span class="time">{{ item.time }}</span>
+      <span class="time">{{ item.startTime || item.time }}</span>
       @if (item.duration) {
       <span class="duration">({{ item.duration }})</span>
       }
