@@ -1,4 +1,4 @@
-import { Component, effect, signal } from '@angular/core';
+import { Component, computed, effect, inject, OnInit, signal } from '@angular/core';
 import { Header } from '../../../shared/ui/header/header';
 import { Footer } from '../../../shared/ui/footer/footer';
 import { Button } from 'primeng/button';
@@ -9,7 +9,6 @@ import { ChartModule } from 'primeng/chart';
 import {
   CATEGORY_CHART_DATA,
   CATEGORY_CHART_OPTIONS,
-  CATEGORY_OPTIONS,
   DATE_RANGE_OPTIONS,
   DEPARTMENT_PARTICIPATION,
   LOCATION_OPTIONS,
@@ -21,6 +20,7 @@ import {
   TOP_EVENTS,
 } from './mock/analytics.data';
 import { TableModule } from 'primeng/table';
+import { EventCategoryService } from '../../../shared/services/event-category.service';
 
 @Component({
   selector: 'app-analytics',
@@ -28,9 +28,17 @@ import { TableModule } from 'primeng/table';
   templateUrl: './analytics.html',
   styleUrl: './analytics.scss',
 })
-export class Analytics {
+export class Analytics implements OnInit {
+  private categoryService = inject(EventCategoryService);
+
   readonly dateRangeOptions = DATE_RANGE_OPTIONS;
-  readonly categoryOptions = CATEGORY_OPTIONS;
+  readonly categoryOptions = computed(() => [
+    { label: 'All Categories', value: 'all' },
+    ...this.categoryService.categoriesWithCount().map((cat) => ({
+      label: cat.name,
+      value: cat.name,
+    })),
+  ]);
   readonly locationOptions = LOCATION_OPTIONS;
   readonly statusOptions = STATUS_OPTIONS;
 
@@ -62,6 +70,10 @@ export class Analytics {
     required(schema.location);
     required(schema.status);
   });
+
+  ngOnInit() {
+    this.categoryService.getCategoriesWithCount();
+  }
 
   applyFilters() {
     const filters = this.filterModel();

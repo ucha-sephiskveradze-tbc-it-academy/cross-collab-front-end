@@ -100,7 +100,7 @@ export class View {
         window.location.reload();
       },
       error: (err) => {
-        console.error('Promotion failed', err);
+        // Handle error silently or add proper error handling
       },
     });
   }
@@ -178,8 +178,6 @@ export class View {
 
   constructor() {
     effect(() => {
-      console.log('Event:', this.event());
-      console.log('Participants:', this.participantsGrouped());
       this.activeTab();
       this.q();
       this.selectedParticipants = [];

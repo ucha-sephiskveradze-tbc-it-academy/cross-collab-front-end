@@ -130,7 +130,7 @@ export class Notifications {
   }
 
   handleAction(event: { notificationId: number; action: string }) {
-    // TODO: Implement action handling (route / API / dialog)
+    // Placeholder for action handling (route / API / dialog)
   }
   /* ---------- EXAMPLE: derived signal ---------- */
 

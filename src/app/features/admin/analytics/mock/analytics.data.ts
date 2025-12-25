@@ -124,12 +124,11 @@ export const REGISTRATION_TREND_DATA = {
       label: 'Registrations',
       data: [120, 150, 180, 210, 170, 260, 200, 180, 230, 210, 195, 180],
 
-      // 🔥 THIS is the trick
       backgroundColor: (ctx: any) => {
         const currentMonthIndex = new Date().getMonth();
         return ctx.dataIndex === currentMonthIndex
-          ? 'var(--text)' // current month
-          : 'var(--muted)'; // other months
+          ? '#000000ff' // current month
+          : '#c2c2c2ff'; // other months
       },
 
       borderRadius: 4,
@@ -159,12 +158,12 @@ export const CATEGORY_CHART_DATA = {
     {
       data: [30, 20, 15, 12.5, 10, 12.5],
       backgroundColor: [
-        'var(--text)',
-        'var(--muted)',
-        'var(--muted)',
-        'var(--muted)',
-        'var(--border)',
-        'var(--border)',
+        '#FF6384', // Red for Team Building
+        '#36A2EB', // Blue for Workshops
+        '#FFCE56', // Yellow for Sports
+        '#4BC0C0', // Teal for Happy Friday
+        '#9966FF', // Purple for Cultural
+        '#FF9F40', // Orange for Wellness
       ],
       borderWidth: 0,
     },

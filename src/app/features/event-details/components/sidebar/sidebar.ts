@@ -52,7 +52,7 @@ export class Sidebar {
   }
 
   onContactOrganizer() {
-    // TODO: Implement contact organizer functionality
+    // Placeholder for contact organizer functionality
   }
 
   getDuration(): string {
