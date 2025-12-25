@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -18,6 +18,9 @@ import { InputIconModule } from 'primeng/inputicon';
 import { IconFieldModule } from 'primeng/iconfield';
 import { Select } from 'primeng/select';
 import { Router } from '@angular/router';
+import { DeleteEventService } from './services/delete-event.service.ts';
+import { EventResponse } from '../../../shared/models/events';
+import { mapEventResponseToItem } from '../../../shared/services/utils/event-mapper.util';
 @Component({
   selector: 'app-main',
   standalone: true,
@@ -42,7 +45,19 @@ import { Router } from '@angular/router';
 })
 export class Main {
   eventService = inject(EventService);
+  private deleteEventService = inject(DeleteEventService);
   private router = inject(Router);
+
+  deleteEvent(eventId: number): void {
+    if (!eventId) return;
+
+    this.deleteEventService.deleteEvent(eventId).subscribe({
+      next: () => {
+        this.events.update((list) => list.filter((e) => e.eventId !== eventId));
+      },
+      error: (err) => console.error(err),
+    });
+  }
 
   statusOptions = [
     { label: 'Registered', value: 'CONFIRMED' },
@@ -56,7 +71,28 @@ export class Main {
     { label: 'Meetup', value: 'Meetup' },
   ];
 
-  events = this.eventService.events;
+  events = signal<IEventItem[]>([]);
+  constructor() {
+    effect(() => {
+      const response = this.eventsResource.value();
+      if (!response) return;
+
+      let items: IEventItem[] = [];
+
+      if (
+        typeof response === 'object' &&
+        'items' in response &&
+        Array.isArray((response as any).items)
+      ) {
+        items = (response as any).items.map((item: EventResponse) => mapEventResponseToItem(item));
+      } else if (Array.isArray(response)) {
+        items = response.map((item: EventResponse) => mapEventResponseToItem(item));
+      }
+
+      this.events.set(items);
+    });
+  }
+
   eventsResource = this.eventService.eventsResource;
   selectedEvents: IEventItem[] = [];
 
@@ -86,10 +122,6 @@ export class Main {
 
   editEvent(event: IEventItem) {
     this.router.navigate(['/admin/edit', event.eventId]);
-  }
-
-  deleteEvent(event: IEventItem) {
-    this.selectedEvents = this.selectedEvents.filter((e) => e !== event);
   }
 
   deleteSelectedEvents() {

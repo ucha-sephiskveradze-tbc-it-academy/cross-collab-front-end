@@ -123,7 +123,7 @@
         <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true" class="mr-2"
           (click)="editEvent(event)" />
         <p-button icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true"
-          (click)="deleteEvent(event)" />
+          (onClick)="deleteEvent(event.eventId)" />
       </td>
     </tr>
   </ng-template>
