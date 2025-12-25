@@ -16,12 +16,13 @@
       <div class="title-wrap">
         <h1 class="title">{{ event()?.title }}</h1>
 
-        <span class="status-pill" [class.upcoming]="getEventStatus() === 'Upcoming'">
-          {{ getEventStatus() }}
+        <span class="status-pill" [class.upcoming]="eventStatus() === 'Upcoming'">
+          {{ eventStatus() }}
         </span>
+
       </div>
 
-      <button class="btn-outline" type="button">
+      <button class="btn-outline" type="button" [routerLink]="['/admin/edit', eventId()]">
         <i class="pi pi-pencil"></i>
         Edit Event
       </button>
@@ -37,14 +38,16 @@
       <div class="meta">
         <i class="pi pi-clock"></i>
         <span>
-          {{ event()?.startDateTime | date : 'h:mm a' }} –
-          {{ event()?.endDateTime | date : 'h:mm a' }}
+          {{ event()?.startDateTime | date : 'h:mm a' }}
+          @if (event()?.endDateTime) {
+          – {{ event()?.endDateTime | date : 'h:mm a' }}
+          }
         </span>
       </div>
 
       <div class="meta">
         <i class="pi pi-map-marker"></i>
-        <span>{{ event()?.location }}</span>
+        <span>{{ event()?.location?.venueName }}, {{ event()?.location?.city }}</span>
       </div>
 
       <div class="meta">
@@ -57,30 +60,22 @@
     <div class="stats-row">
       <div class="stat">
         <i class="pi pi-users"></i>
-        <span
-          ><b>{{ event()?.capacity ?? 0 }}</b> Capacity</span
-        >
+        <span><b>{{ event()?.capacity ?? 0 }}</b> Capacity</span>
       </div>
 
       <div class="stat">
         <i class="pi pi-user-plus"></i>
-        <span
-          ><b>{{ event()?.totalRegistered ?? 0 }}</b> Registered</span
-        >
+        <span><b>{{ event()?.totalRegistered ?? 0 }}</b> Registered</span>
       </div>
 
       <div class="stat">
         <i class="pi pi-clock"></i>
-        <span
-          ><b>{{ waitlistCount() }}</b> Waitlisted</span
-        >
+        <span><b>{{ waitlistCount() }}</b> Waitlisted</span>
       </div>
 
       <div class="stat">
         <i class="pi pi-check-square"></i>
-        <span
-          ><b>{{ getSpotsLeft() }}</b> Available</span
-        >
+        <span><b>{{ getSpotsLeft() }}</b> Available</span>
       </div>
     </div>
   </div>
@@ -94,23 +89,14 @@
 
     <div class="search-wrap">
       <i class="pi pi-search"></i>
-      <input
-        type="text"
-        class="search"
-        placeholder="Search participants..."
-        (input)="globalFilter($event)"
-      />
+      <input type="text" class="search" placeholder="Search participants..." (input)="globalFilter($event)" />
     </div>
   </div>
 
   <!-- Tabs + participants table -->
   <div class="card">
     <div class="tabs">
-      <button
-        class="tab"
-        [class.active]="activeTab() === 'registered'"
-        (click)="setTab('registered')"
-      >
+      <button class="tab" [class.active]="activeTab() === 'registered'" (click)="setTab('registered')">
         Registered Participants ({{ registeredCount() }})
       </button>
 
@@ -118,11 +104,7 @@
         Waitlist ({{ waitlistCount() }})
       </button>
 
-      <button
-        class="tab"
-        [class.active]="activeTab() === 'cancelled'"
-        (click)="setTab('cancelled')"
-      >
+      <button class="tab" [class.active]="activeTab() === 'cancelled'" (click)="setTab('cancelled')">
         Cancelled ({{ cancelledCount() }})
       </button>
 
@@ -131,17 +113,8 @@
       </button>
     </div>
 
-    <p-table
-      #dt
-      [value]="filteredParticipants()"
-      [paginator]="true"
-      [rows]="10"
-      [rowHover]="true"
-      dataKey="id"
-      [(selection)]="selectedParticipants"
-      [tableStyle]="{ width: '100%' }"
-      class="thin-table"
-    >
+    <p-table #dt [value]="filteredParticipants()" [paginator]="true" [rows]="10" [rowHover]="true" dataKey="id"
+      [(selection)]="selectedParticipants" [tableStyle]="{ width: '100%' }" class="thin-table">
       <ng-template pTemplate="header">
         <tr>
           <th style="width: 42px">
@@ -233,14 +206,8 @@
   <div class="waitlist-title">Waitlist Overview</div>
 
   <div class="card">
-    <p-table
-      [value]="waitlist()"
-      [rows]="5"
-      [paginator]="false"
-      dataKey="id"
-      [tableStyle]="{ width: '100%' }"
-      class="thin-table"
-    >
+    <p-table [value]="waitlist()" [rows]="5" [paginator]="false" dataKey="id" [tableStyle]="{ width: '100%' }"
+      class="thin-table">
       <ng-template pTemplate="header">
         <tr>
           <th style="width: 90px">Position</th>

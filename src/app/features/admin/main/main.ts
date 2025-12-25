@@ -101,8 +101,8 @@ export class Main {
     return now < start ? 'Upcoming' : 'Past';
   }
 
-  viewPage(event: any) {
-    this.router.navigate(['/admin/main', event.id]);
+  viewPage(eventId: number) {
+    this.router.navigate(['/admin/main', eventId]);
   }
 
   openNew() {

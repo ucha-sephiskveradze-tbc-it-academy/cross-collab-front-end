@@ -56,13 +56,13 @@ export const routes: Routes = [
 
   {
     path: 'admin/main',
-    // canActivate: [adminGuard],
+    canActivate: [adminGuard],
     loadComponent: () => import('./features/admin/main/main').then((c) => c.Main),
   },
 
   {
     path: 'admin/main/:id',
-    // canActivate: [adminGuard],
+    canActivate: [adminGuard],
     loadComponent: () => import('./features/admin/main/components/view/view').then((c) => c.View),
   },
   {
@@ -77,7 +77,7 @@ export const routes: Routes = [
   },
   {
     path: 'admin/analytics',
-    // canActivate: [adminGuard],
+    canActivate: [adminGuard],
     loadComponent: () => import('./features/admin/analytics/analytics').then((c) => c.Analytics),
   },
   {

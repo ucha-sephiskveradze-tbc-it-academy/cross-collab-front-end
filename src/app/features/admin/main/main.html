@@ -119,7 +119,8 @@
       </td>
 
       <td style="min-width: 8rem">
-        <p-button icon="pi pi-search" [rounded]="true" severity="success" [outlined]="true" (click)="viewPage(event)" />
+        <p-button icon="pi pi-search" [rounded]="true" severity="success" [outlined]="true"
+          (onClick)="viewPage(event.eventId)" />
         <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true" class="mr-2"
           (onClick)="editEvent(event.eventId)" />
         <p-button icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true"
