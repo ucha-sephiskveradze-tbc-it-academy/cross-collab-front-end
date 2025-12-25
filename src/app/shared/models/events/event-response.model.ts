@@ -19,7 +19,7 @@ export interface EventResponse {
   endDateTime?: string;
   registrationStart?: string;
   registrationEnd?: string;
-  currentUserStatus?: 'REGISTERED' | 'CANCELLED' | 'NONE' | 'WAITLISTED';
+  currentUserStatus?: 'CONFIRMED' | 'CANCELLED' | 'NONE' | 'WAITLISTED';
   category?: {
     categoryId?: number;
     categoryName?: string;
@@ -35,4 +35,3 @@ export interface PaginatedEventResponse {
   // Optional for backward compatibility
   total?: number;
 }
-

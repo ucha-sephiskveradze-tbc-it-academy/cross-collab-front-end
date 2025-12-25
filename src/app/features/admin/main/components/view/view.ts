@@ -16,7 +16,7 @@ type ParticipantRow = {
   initials: string;
   department: string;
   registrationDate: string; // ISO
-  status: 'REGISTERED' | 'WAITLISTED' | 'CANCELLED';
+  status: 'CONFIRMED' | 'WAITLISTED' | 'CANCELLED';
   statusLabel: string; // e.g. "Confirmed"
 };
 
@@ -60,9 +60,10 @@ export class View {
       initials: 'SJ',
       department: 'Marketing',
       registrationDate: '2025-01-10T10:00:00Z',
-      status: 'REGISTERED',
+      status: 'CONFIRMED',
       statusLabel: 'Confirmed',
     },
+
     {
       id: 2,
       name: 'David Martinez',
@@ -70,7 +71,7 @@ export class View {
       initials: 'DM',
       department: 'Engineering',
       registrationDate: '2025-01-10T10:00:00Z',
-      status: 'REGISTERED',
+      status: 'CONFIRMED',
       statusLabel: 'Confirmed',
     },
     {
@@ -80,9 +81,10 @@ export class View {
       initials: 'EC',
       department: 'Product',
       registrationDate: '2025-01-11T10:00:00Z',
-      status: 'REGISTERED',
+      status: 'CONFIRMED',
       statusLabel: 'Confirmed',
     },
+
     {
       id: 4,
       name: 'Thomas Moore',
@@ -146,7 +148,7 @@ export class View {
 
   // counts
   registeredCount = computed(
-    () => this.participantsAll().filter((p) => p.status === 'REGISTERED').length
+    () => this.participantsAll().filter((p) => p.status === 'CONFIRMED').length
   );
   cancelledCount = computed(
     () => this.participantsAll().filter((p) => p.status === 'CANCELLED').length
@@ -164,10 +166,10 @@ export class View {
 
     if (tab !== 'all') {
       const map: Record<TabKey, ParticipantRow['status']> = {
-        registered: 'REGISTERED',
+        registered: 'CONFIRMED',
         waitlist: 'WAITLISTED',
         cancelled: 'CANCELLED',
-        all: 'REGISTERED', // unused
+        all: 'CONFIRMED', // unused
       };
       list = list.filter((p) => p.status === map[tab]);
     }

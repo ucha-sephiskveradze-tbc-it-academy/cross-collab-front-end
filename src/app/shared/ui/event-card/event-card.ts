@@ -21,13 +21,13 @@ export class EventCard {
 
   get statusLabel(): string {
     switch (this.event.currentUserStatus) {
-      case 'REGISTERED':
+      case 'CONFIRMED':
         return 'Registered';
       case 'WAITLISTED':
         return 'Waitlisted';
-      case 'CANCELLED':
+      case 'CANCELED':
         return 'Cancelled';
-      case 'NONE':
+      case 'NOT_REGISTERED':
         return 'Not Registered';
       default:
         return 'Not Registered';
@@ -36,13 +36,13 @@ export class EventCard {
 
   get statusClass(): string {
     switch (this.event.currentUserStatus) {
-      case 'REGISTERED':
+      case 'CONFIRMED':
         return 'registered';
       case 'WAITLISTED':
         return 'waitlisted';
-      case 'CANCELLED':
+      case 'CANCELED':
         return 'cancelled';
-      case 'NONE':
+      case 'NOT_REGISTERED':
         return 'not-registered';
       default:
         return 'not-registered';

@@ -45,7 +45,7 @@ export class Main {
   private router = inject(Router);
 
   statusOptions = [
-    { label: 'Registered', value: 'REGISTERED' },
+    { label: 'Registered', value: 'CONFIRMED' },
     { label: 'Pending', value: 'PENDING' },
     { label: 'Cancelled', value: 'CANCELLED' },
   ];

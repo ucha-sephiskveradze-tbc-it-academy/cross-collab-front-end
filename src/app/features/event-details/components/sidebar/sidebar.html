@@ -7,13 +7,11 @@
         <span class="label">Status:</span>
         <span class="value" [class]="getRegistrationStatusClass()">{{
           getRegistrationStatus()
-        }}</span>
+          }}</span>
       </div>
       <div class="info-row">
         <span class="label">Available Spots:</span>
-        <span class="value"
-          >{{ event.capacity - event.totalRegistered }} / {{ event.capacity }}</span
-        >
+        <span class="value">{{ event.capacity - event.totalRegistered }} / {{ event.capacity }}</span>
       </div>
       <div class="info-row">
         <span class="label">Current Waitlist:</span>
@@ -28,14 +26,9 @@
         <span class="value">{{ getStatusLabel() }}</span>
       </div>
     </div>
-    <app-button
-      [label]="
-        event.currentUserStatus === 'REGISTERED' ? 'Already Registered' : 'Register for This Event'
-      "
-      variant="primary"
-      [disabled]="event.currentUserStatus === 'REGISTERED'"
-      (clicked)="onRegister()"
-    />
+    <app-button [label]="
+        event.currentUserStatus === 'CONFIRMED' ? 'Already Registered' : 'Register for This Event'
+      " variant="primary" [disabled]="event.currentUserStatus === 'CONFIRMED'" (clicked)="onRegister()" />
     <p class="registration-note">
       By registering, you agree to attend the full event. Cancellations must be made 48 hours in
       advance.

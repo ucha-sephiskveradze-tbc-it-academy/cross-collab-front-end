@@ -33,18 +33,20 @@ export class Sidebar {
     } else if (diffMinutes === 0) {
       return `${diffHours} hour${diffHours > 1 ? 's' : ''}`;
     } else {
-      return `${diffHours} hour${diffHours > 1 ? 's' : ''} ${diffMinutes} minute${diffMinutes > 1 ? 's' : ''}`;
+      return `${diffHours} hour${diffHours > 1 ? 's' : ''} ${diffMinutes} minute${
+        diffMinutes > 1 ? 's' : ''
+      }`;
     }
   }
 
   getStatusLabel(): string {
     switch (this.event.currentUserStatus) {
-      case 'REGISTERED':
+      case 'CONFIRMED':
         return 'Registered';
       case 'WAITLISTED':
         return 'Waitlisted';
-      case 'CANCELLED':
-        return 'Cancelled';
+      case 'NOT_REGISTERED':
+        return 'Not Registered';
       case 'NONE':
       default:
         return 'Not Registered';
