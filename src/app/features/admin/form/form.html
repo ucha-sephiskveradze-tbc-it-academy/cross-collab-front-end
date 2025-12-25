@@ -9,18 +9,18 @@
         <h1>Basic Information</h1>
       </div>
       <div class="field">
-        <label>Event Title</label>
+        <label>Event Title *</label>
         <input pInputText formControlName="title" placeholder="Enter event title" />
       </div>
 
       <div class="field">
-        <label>Category</label>
+        <label>Category *</label>
         <p-select formControlName="category" [options]="categoryOptions()" optionLabel="label" optionValue="value"
           placeholder="Select a category">
         </p-select>
-        <small class="p-error"
-          *ngIf="formService.form.get('category')?.invalid && formService.form.get('category')?.touched">Category is
-          mandatory</small>
+        @if (formService.form.get('category')?.invalid && formService.form.get('category')?.touched) {
+        <small class="p-error">Category is mandatory</small>
+        }
       </div>
 
       <div class="field">
@@ -39,31 +39,31 @@
 
       <div class="grid-2">
         <div class="field">
-          <label>Event Date</label>
+          <label>Event Date *</label>
           <p-datePicker formControlName="date" showIcon />
         </div>
 
         <div class="field">
-          <label>Registration Start</label>
+          <label>Registration Start *</label>
           <p-datePicker formControlName="registrationStart" showIcon />
         </div>
       </div>
 
       <div class="grid-2">
         <div class="field">
-          <label>Registration End</label>
+          <label>Registration End *</label>
           <p-datePicker formControlName="registrationEnd" showIcon />
         </div>
       </div>
 
       <div class="grid-2">
         <div class="field">
-          <label>Start Time</label>
+          <label>Start Time *</label>
           <p-datePicker timeOnly hourFormat="24" formControlName="startTime" />
         </div>
 
         <div class="field">
-          <label>End Time</label>
+          <label>End Time *</label>
           <p-datePicker timeOnly hourFormat="24" formControlName="endTime" />
         </div>
       </div>
@@ -89,12 +89,16 @@
 
       <div class="grid-2">
         <div class="field">
+          <label>Venue Name *</label>
           <input pInputText placeholder="Venue name" formControlName="venue" />
-          <small class="p-error"
-            *ngIf="formService.form.get('venue')?.invalid && formService.form.get('venue')?.touched">Venue name is
-            mandatory</small>
+          @if (formService.form.get('venue')?.invalid && formService.form.get('venue')?.touched) {
+          <small class="p-error">Venue name is mandatory</small>
+          }
         </div>
-        <input pInputText placeholder="City" formControlName="city" />
+        <div class="field">
+          <label>City</label>
+          <input pInputText placeholder="City" formControlName="city" />
+        </div>
       </div>
 
       <div class="field">
@@ -135,7 +139,8 @@
       </div>
 
       <div class="agenda-list">
-        <div class="agenda-item" *ngFor="let item of formService.agenda(); let i = index">
+        @for (item of formService.agenda(); track i; let i = $index) {
+        <div class="agenda-item">
           <div class="agenda-header">
             <h2>Item {{ i + 1 }}</h2>
             <button pButton type="button" icon="pi pi-trash" class="p-button-text"
@@ -194,6 +199,7 @@
             <button pButton type="button" label="Add Track" (click)="formService.addTrack(i)"></button>
           </div>
         </div>
+        }
 
         <div class="add-agenda">
           <button pButton type="button" label="Add Agenda Item" (click)="formService.addAgendaItem()"></button>
@@ -249,8 +255,9 @@
           <p-fileUpload mode="basic" accept="image/*" (onSelect)="onImageSelected($event.files[0])">
           </p-fileUpload>
 
-          <img *ngIf="formService.form.value.imageUrl" [src]="formService.form.value.imageUrl"
-            style="max-width: 100%; border-radius: 8px;" />
+          @if (formService.form.value.imageUrl) {
+          <img [src]="formService.form.value.imageUrl" style="max-width: 100%; border-radius: 8px;" />
+          }
         </div>
       </div>
     </p-card>
