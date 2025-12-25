@@ -16,14 +16,7 @@ import { noEmojiRegex } from '../../../shared/validations/validator';
 @Component({
   selector: 'app-sign-up',
   standalone: true,
-  imports: [
-    Button,
-    Field,
-    CheckboxModule,
-    FloatLabelModule,
-    InputOtpModule,
-    RouterLink,
-  ],
+  imports: [Button, Field, CheckboxModule, FloatLabelModule, InputOtpModule, RouterLink],
   templateUrl: './sign-up.html',
   styleUrls: ['./sign-up.scss'],
 })
@@ -178,7 +171,7 @@ export class SignUp {
             fullError: err,
             timestamp: new Date().toISOString(),
           });
-          
+
           // Extract error message from various possible formats
           let errorMessage = 'Failed to create account. Please try again later.';
           if (err.error) {
@@ -187,7 +180,7 @@ export class SignUp {
             } else if (err.error.errors) {
               // Handle validation errors object
               const errors = err.error.errors;
-              const errorMessages = Object.keys(errors).map(key => 
+              const errorMessages = Object.keys(errors).map((key) =>
                 Array.isArray(errors[key]) ? errors[key].join(', ') : errors[key]
               );
               errorMessage = errorMessages.join('; ') || errorMessage;
@@ -197,7 +190,7 @@ export class SignUp {
           } else if (err.message) {
             errorMessage = err.message;
           }
-          
+
           this.errorMessage.set(errorMessage);
         },
       });
@@ -246,7 +239,7 @@ export class SignUp {
           errorStringified: JSON.stringify(err.error),
           headers: err.headers,
         });
-        
+
         // Check for CORS errors (status 0 typically indicates CORS/network issues)
         if (err.status === 0 || err.statusText === 'Unknown Error') {
           this.errorMessage.set(
@@ -254,7 +247,7 @@ export class SignUp {
           );
           return;
         }
-        
+
         // Handle backend validation errors
         const errorMessage =
           err.error?.errors?.phoneNumber?.[0] ||
