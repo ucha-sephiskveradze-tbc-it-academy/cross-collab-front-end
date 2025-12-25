@@ -16,6 +16,30 @@
     border-color: var(--surface);
 }
 
+/* Ensure checked state is visible across themes */
+/* Target the accessible checkbox box element when aria-checked is true */
+.p-checkbox .p-checkbox-box[aria-checked="true"],
+.p-checkbox .p-checkbox-box.p-highlight,
+.p-checkbox.p-highlight .p-checkbox-box {
+    background-color: var(--primary) !important;
+    border-color: var(--primary) !important;
+}
+
+.p-checkbox .p-checkbox-box[aria-checked="true"] .p-checkbox-icon,
+.p-checkbox .p-checkbox-box.p-highlight .p-checkbox-icon,
+.p-checkbox.p-highlight .p-checkbox-box .p-checkbox-icon {
+    color: var(--surface) !important;
+}
+
+/* Also style PrimeNG listbox checkbox box when selected */
+::ng-deep .p-listbox .p-listbox-item.p-highlight .p-checkbox-box {
+    background: var(--primary) !important;
+    border-color: var(--primary) !important;
+}
+::ng-deep .p-listbox .p-listbox-item.p-highlight .p-checkbox-icon {
+    color: var(--surface) !important;
+}
+
 /* ✅ Custom Button Variant */
 .p-button.add-event {
     background: var(--primary) !important;
@@ -32,7 +56,9 @@
 }
 
 /* ✅ Prevent horizontal scrollbars */
-html, body, app-root {
+html,
+body,
+app-root {
     height: 100%;
 }
 
@@ -45,7 +71,7 @@ body {
 :root {
     --p-button-primary-color: var(--primary) !important;
     --p-button-primary-hover-color: var(--accent) !important;
-} 
+}
 
 canvas {
     max-width: 100% !important;

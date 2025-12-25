@@ -15,7 +15,7 @@ export class EventListService {
     this.refreshTrigger();
     const params = this.queryParams();
     const queryParams = buildEventsQueryParams(params);
-    
+
     return {
       url: `${environment.apiUrl}/events?${queryParams.toString()}`,
       method: 'GET',
@@ -24,14 +24,24 @@ export class EventListService {
 
   events = computed<IEventItem[]>(() => {
     const response = this.eventsResource.value();
+    console.log('[EventListService] eventsResource response:', response);
     if (!response) return [];
 
-    if (response && typeof response === 'object' && 'items' in response && Array.isArray(response.items)) {
-      return response.items.map((item: EventResponse) => mapEventResponseToItem(item));
+    if (
+      response &&
+      typeof response === 'object' &&
+      'items' in response &&
+      Array.isArray(response.items)
+    ) {
+      const items = response.items.map((item: EventResponse) => mapEventResponseToItem(item));
+      console.log('[EventListService] mapped items:', items);
+      return items;
     }
 
     if (Array.isArray(response)) {
-      return response.map((item: EventResponse) => mapEventResponseToItem(item));
+      const items = response.map((item: EventResponse) => mapEventResponseToItem(item));
+      console.log('[EventListService] mapped items (array):', items);
+      return items;
     }
 
     return [];
