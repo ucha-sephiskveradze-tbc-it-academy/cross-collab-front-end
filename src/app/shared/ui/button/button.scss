@@ -1,25 +1,56 @@
+@use "../../../../styles/variables" as *;
+
 button {
-    padding: 8px 0;
-    font-size: 1rem;
+    padding: $spacing-sm;
+    font-size: $font-size-lg;
     border: none;
-    border-radius: 6px;
+    border-radius: $radius-sm;
     cursor: pointer;
     align-items: center;
-    gap: 0.5rem;
+    gap: $spacing-sm;
     width: 100%;
+    display: flex;
+    justify-content: center;
+    min-height: 44px;
 
     &.primary {
-        background-color: #171717;
-        color: white;
+        background-color: $color-gray-900;
+        color: $color-white;
     }
 
     &.secondary {
-        background-color: #f5f5f5;
-        color: #404040;
+        background-color: $color-gray-100;
+        color: $color-gray-700;
+    }
+
+    &.danger {
+        background-color: $color-danger;
+        color: $color-white;
     }
 
     &:disabled {
         opacity: 0.6;
         cursor: not-allowed;
+    }
+
+    .spinner {
+        width: 20px;
+        height: 20px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-top-color: $color-white;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+        display: inline-block;
+    }
+
+    &.secondary .spinner {
+        border: 2px solid rgba(0, 0, 0, 0.1);
+        border-top-color: $color-gray-700;
+    }
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
     }
 }

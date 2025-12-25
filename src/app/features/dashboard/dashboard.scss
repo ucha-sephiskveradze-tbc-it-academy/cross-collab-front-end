@@ -1,0 +1,133 @@
+.dashboard {
+    margin: 0 auto;
+    padding: 32px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+    background: var(--bg);
+}
+
+.welcome {
+    h1 {
+        font-size: 28px;
+        margin-bottom: 4px;
+    }
+
+    p {
+        color: var(--muted);
+    }
+}
+
+.section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    a {
+        font-size: 14px;
+        color: var(--primary);
+        text-decoration: none;
+    }
+}
+
+.event-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.trending {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.trending-card {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: var(--surface);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .category-icon-wrapper {
+        width: 100%;
+        height: 120px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 4px;
+        position: relative;
+        overflow: hidden;
+
+        &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 50%, rgba(255, 255, 255, 0.2) 0%, transparent 50%);
+        }
+
+        .category-icon {
+            width: 64px;
+            height: 64px;
+            filter: brightness(0) invert(1);
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+        }
+    }
+
+    h4 {
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--text);
+        margin: 0;
+        line-height: 1.4;
+    }
+
+    .category-name {
+        font-size: 13px;
+        color: var(--muted);
+        margin: 0;
+        font-weight: 500;
+    }
+
+    .registered-count {
+        font-size: 12px;
+        color: var(--muted);
+        margin: 0;
+    }
+
+    button {
+        margin-top: auto;
+        background: var(--surface);
+        color: white;
+    }
+}
+
+@media (max-width: 900px) {
+    .trending {
+        grid-template-columns: 1fr;
+    }
+
+    .event-card {
+        grid-template-columns: 1fr;
+    }
+}

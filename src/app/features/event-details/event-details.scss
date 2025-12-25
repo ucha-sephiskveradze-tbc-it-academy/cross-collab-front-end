@@ -1,0 +1,59 @@
+@use "../../../styles/variables" as *;
+
+.event-details {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: $spacing-xxl $spacing-lg;
+  background: $color-gray-50;
+  min-height: 100vh;
+
+  .loading-state,
+  .error-state,
+  .empty-state {
+    text-align: center;
+    padding: $spacing-xxxl;
+    background: $color-white;
+    border-radius: $radius-xl;
+    box-shadow: $shadow-sm;
+
+    p {
+      font-size: $font-size-lg;
+      color: $color-gray-700;
+    }
+  }
+
+  .error-state {
+    background: rgba(255, 99, 132, 0.06);
+    border: 1px solid var(--accent);
+
+    p {
+      color: var(--accent);
+    }
+  }
+
+  .content-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 400px;
+    gap: $spacing-xxxl;
+    margin-top: $spacing-xxl;
+
+    @media (max-width: $breakpoint-tablet) {
+      grid-template-columns: 1fr;
+      gap: $spacing-xxl;
+    }
+  }
+
+  section.main {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xxxl;
+  }
+
+  @media (max-width: $breakpoint-mobile) {
+    padding: $spacing-lg $spacing-md;
+
+    .content-grid {
+      gap: $spacing-xl;
+    }
+  }
+}

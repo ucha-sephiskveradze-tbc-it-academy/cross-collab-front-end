@@ -1,0 +1,22 @@
+<section class="section-card">
+  <h2>Event Agenda</h2>
+
+  @for (item of agenda; track $index) {
+  <div class="agenda-item">
+    <div class="agenda-time">
+      <span class="time">{{ item.startTime }}</span>
+      @if (item.duration) {
+      <span class="duration">({{ item.duration }})</span>
+      }
+    </div>
+    <div class="agenda-content">
+      <strong class="agenda-title">{{ item.title }}</strong>
+      @if (item.description) {
+      <p class="agenda-description">{{ item.description }}</p>
+      } @if (item.location) {
+      <span class="agenda-location">Location: {{ item.location }}</span>
+      }
+    </div>
+  </div>
+  }
+</section>

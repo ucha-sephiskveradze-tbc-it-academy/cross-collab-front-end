@@ -1,0 +1,48 @@
+<article class="event-card horizontal">
+    <!-- DATE -->
+    <div class="date-box">
+        <span class="month">
+            {{ event.startDateTime | date: 'MMM' }}
+        </span>
+        <span class="day">
+            {{ event.startDateTime | date: 'dd' }}
+        </span>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="content">
+        <div class="title-row">
+            <h3 class="title">{{ event.title }}</h3>
+
+            <span [class]="'status ' + statusClass">
+                {{ statusLabel }}
+            </span>
+        </div>
+
+        <div class="meta">
+            <img src="assets/icons/clock.svg" alt="Time" />
+            {{ event.startDateTime | date: 'HH:mm' }} –
+            {{ event.endDateTime | date: 'HH:mm' }}
+
+            <img src="assets/icons/location.svg" alt="Location" />
+            {{ event.location }}
+
+            <img src="assets/icons/tag.svg" alt="Category" />
+            {{ event.category.categoryName }}
+        </div>
+
+        <p class="description line-clamp">
+            {{ event.description }}
+        </p>
+
+        <div class="stats">
+            <span>👥 {{ event.totalRegistered }} registered</span>
+            <span>{{ spotsLeft }} spots left</span>
+        </div>
+    </div>
+
+    <!-- ACTION -->
+    <div class="actions">
+        <app-button label="View Details" size="sm" (clicked)="goToDetails()"></app-button>
+    </div>
+</article>

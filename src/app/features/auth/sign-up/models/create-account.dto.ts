@@ -1,6 +1,8 @@
 export interface CreateAccountDto {
-  fullName: string;
-  email: string;
-  department: string;
-  password: string;
+  userName: string;
+  email: string; // Email address
+  password: string; // Account password
+  phoneNumber: string; // Phone number with country code
+  oneTimePassword: string; // OTP for verification
+  department: string; // Department ID (numeric)
 }

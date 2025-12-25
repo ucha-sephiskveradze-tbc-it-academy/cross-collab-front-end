@@ -57,3 +57,21 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+---
+
+## Theme system (added)
+
+You can switch color themes using the selector in the header (Light / Dark / Blue). Themes are implemented via CSS custom properties and class-scoped themes on the `<body>` element.
+
+- Files added/updated:
+  - `src/styles/themes/_themes.scss` — theme variables and `.theme-<name>` classes
+  - `src/app/core/services/theme.service.ts` — service to change and persist the theme
+  - `src/app/shared/ui/header/header.html` — small selector UI to change themes
+
+To add a new theme:
+1. Add a new `.theme-yourname { --primary: #...; --text: #...; ... }` block in `_themes.scss`.
+2. Add an `<option value="theme-yourname">Your Name</option>` in `header.html` (or build a small picker component).
+3. Optionally include the new class in TypeScript types or handle it dynamically.
+
+The service stores the selection in `localStorage` (key `app:theme`) and applies the class on the `document.body` so the whole app picks up the variables.

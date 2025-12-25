@@ -1,0 +1,364 @@
+@use "../../../../styles/variables" as *;
+
+.analytics {
+    margin: 2.5rem 5rem;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-lg;
+
+    &__header {
+        display: flex;
+        flex-direction: column;
+        gap: $spacing-lg;
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+
+            h1 {
+                font-size: 30px;
+                margin-bottom: 0.5rem;
+            }
+            p {
+                color: $color-gray-700;
+            }
+
+            button {
+                padding: $spacing-lg;
+                border: 1px solid var(--border);
+                border-radius: $radius-xl;
+                background: white;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: $spacing-sm;
+
+                &:hover {
+                    background-color: var(--border);
+                }
+            }
+        }
+    }
+
+    &__filter {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr) auto;
+        gap: $spacing-lg;
+        padding: $spacing-lg;
+        background: $color-white;
+        border: 1px solid $color-gray-200;
+        border-radius: $radius-md;
+        align-items: end;
+        .filter-item {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            label {
+                font-size: $font-size-xs;
+                color: $footer-muted;
+                font-weight: 500;
+            }
+            ::ng-deep .p-select {
+                width: 100%;
+            }
+        }
+        .apply-btn {
+            height: 40px;
+            padding: 0 $spacing-xl;
+            background: $color-gray-900 !important;
+            border: none !important;
+            color: $color-white !important;
+            border-radius: $radius-sm;
+            &:hover {
+                background: $color-black !important;
+            }
+        }
+        @media (max-width: 1024px) {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        @media (max-width: 768px) {
+            grid-template-columns: 1fr;
+            .apply-btn {
+                width: 100%;
+            }
+        }
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin: 1rem 0;
+    }
+
+    .kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: $spacing-xl;
+
+        .kpi-card {
+            background: $color-white;
+            border: 1px solid $color-gray-200;
+            border-radius: $radius-md;
+            padding: 20px;
+
+            .kpi-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: $spacing-lg;
+
+                .icon-box {
+                    width: 40px;
+                    height: 40px;
+                    background: $color-gray-900;
+                    color: $color-white;
+                    border-radius: $radius-sm;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    i {
+                        font-size: 18px;
+                    }
+                }
+
+                .change {
+                    font-size: $font-size-xs;
+                    padding: $spacing-xs $spacing-sm;
+                    border-radius: $spacing-xs;
+                    background: $footer-icon-bg;
+
+                    &.up {
+                        color: $color-success;
+                    }
+
+                    &.down {
+                        color: $color-danger;
+                    }
+                }
+            }
+
+            .kpi-value {
+                font-size: 28px;
+                font-weight: 700;
+                margin-bottom: $spacing-xs;
+            }
+
+            .kpi-label {
+                font-size: $font-size-sm;
+                color: $footer-muted;
+                margin-bottom: $spacing-md;
+            }
+
+            .kpi-footer {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                font-size: $font-size-xs;
+                color: $footer-muted;
+
+                i {
+                    font-size: $font-size-xs;
+                }
+            }
+        }
+
+        @media (max-width: 480px) {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    &__charts {
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: $spacing-xl;
+
+            .chart-container {
+                position: relative;
+                height: 260px;
+                width: 100%;
+            }
+
+            .chart-card {
+                background: $color-white;
+                border: 1px solid $color-gray-200;
+                border-radius: $radius-md;
+                padding: $spacing-lg;
+
+                .chart-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: $spacing-md;
+
+                    h4 {
+                        font-size: $font-size-md;
+                        font-weight: 600;
+                        margin: 0;
+                    }
+
+                    p {
+                        font-size: $font-size-xs;
+                        color: $footer-muted;
+                        margin: 0;
+                    }
+
+                    .range-toggle {
+                        display: flex;
+                        border: 1px solid $color-gray-200;
+                        border-radius: $radius-sm;
+                        overflow: hidden;
+
+                        button {
+                            padding: $spacing-xs 10px;
+                            font-size: $font-size-xs;
+                            background: $color-white;
+                            border: none;
+                            cursor: pointer;
+
+                            &.active {
+                                background: $color-gray-900;
+                                color: $color-white;
+                            }
+                        }
+                    }
+                }
+
+                p-chart {
+                    display: block;
+                    height: 260px;
+                }
+            }
+
+            @media (max-width: 1024px) {
+                grid-template-columns: 1fr 1fr;
+            }
+            @media (max-width: 768px) {
+                grid-template-columns: 1fr;
+            }
+        }
+    }
+
+    .table-card {
+        background: $color-white;
+        border: 1px solid $color-gray-200;
+        border-radius: $radius-md;
+        padding: $spacing-lg;
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: $spacing-md;
+
+            h4 {
+                font-size: $font-size-md;
+                font-weight: 600;
+                margin: 0;
+            }
+
+            p {
+                font-size: $font-size-xs;
+                color: $footer-muted;
+                margin: 2px 0 0;
+            }
+        }
+
+        .view-link {
+            font-size: $font-size-xs;
+            color: $footer-muted;
+            cursor: pointer;
+        }
+
+        .rank-box {
+            display: inline-flex;
+            width: 24px;
+            height: 24px;
+            background: $color-gray-900;
+            color: $color-white;
+            align-items: center;
+            justify-content: center;
+            border-radius: $spacing-xs;
+            font-size: $font-size-xs;
+        }
+
+        .event-name,
+        .dept-name {
+            font-weight: 500;
+        }
+
+        .category-pill,
+        .trend-pill {
+            font-size: 11px;
+            padding: $spacing-xs $spacing-sm;
+            background: $footer-icon-bg;
+            border-radius: $spacing-xs;
+            border: 1px solid $color-gray-200;
+        }
+
+        .trend-pill {
+            &.up {
+                color: $color-success;
+            }
+
+            &.down {
+                color: $color-danger;
+            }
+        }
+
+        .utilization,
+        .rate-cell {
+            display: flex;
+            align-items: center;
+            gap: $spacing-sm;
+
+            span {
+                font-size: 11px;
+                color: $color-gray-800;
+            }
+        }
+
+        .utilization .bar,
+        .rate-cell .rate-bar {
+            height: 6px;
+            background: $color-gray-200;
+            border-radius: $spacing-xs;
+            overflow: hidden;
+
+            .fill,
+            .rate-fill {
+                height: 100%;
+                background: $color-gray-900;
+            }
+        }
+
+        .utilization .bar {
+            width: 60px;
+        }
+
+        .rate-cell .rate-bar {
+            width: 70px;
+        }
+    }
+
+    :host ::ng-deep {
+        .p-datatable {
+            font-size: $font-size-xs;
+
+            th {
+                color: $footer-muted;
+                font-weight: 500;
+            }
+
+            td {
+                padding: $spacing-md $spacing-sm;
+            }
+        }
+    }
+
+    @media (max-width: 768px) {
+        margin: 2.5rem 1rem;
+    }
+}

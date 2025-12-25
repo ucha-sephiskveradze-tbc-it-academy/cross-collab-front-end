@@ -1,0 +1,78 @@
+<app-header />
+
+<main class="events-page">
+  <h1>Browse Events</h1>
+
+  <div class="layout">
+    <!-- FILTERS -->
+    <aside class="filters">
+      <h3>Filters</h3>
+
+      <div class="filter-block">
+        <label>Category</label>
+        <p-listbox [options]="categoryOptions()" optionLabel="name" optionValue="id" [multiple]="true" [checkbox]="true"
+          (onChange)="onCategoryChange($event.value)" />
+      </div>
+
+      <div class="filter-block">
+        <label>Location</label>
+        <p-listbox [options]="locationOptions()" optionLabel="name" optionValue="value" [multiple]="true"
+          [checkbox]="true" (onChange)="onLocationChange($event.value)" />
+      </div>
+
+      <div class="filter-block">
+        <label>Date Range</label>
+        <p-datepicker selectionMode="range" [readonlyInput]="true" [(ngModel)]="dateRangeValue"
+          (ngModelChange)="onDateChange($event)" />
+      </div>
+
+      <div class="filter-block">
+        <label>Capacity</label>
+        <p-listbox [options]="capacityOptions()" optionLabel="name" optionValue="value" [multiple]="true"
+          [checkbox]="true" (onChange)="onCapacityChange($event.value)" />
+      </div>
+
+      <div class="filter-block">
+        <label>My Status</label>
+        <p-listbox [options]="statusOptions()" optionLabel="name" optionValue="value" [multiple]="true"
+          [checkbox]="true" (onChange)="onStatusChange($event.value)" />
+      </div>
+
+    </aside>
+
+    <!-- RESULTS -->
+    <section class="results">
+      @if (eventsResource.isLoading()) {
+      <div class="loading-state">
+        <p>Loading events...</p>
+      </div>
+      } @else if (eventsResource.error()) {
+      <div class="error-state" role="alert">
+        <p>Failed to load events. Please try again later.</p>
+      </div>
+      } @else if (events().length === 0 || pagedEvents().length === 0) {
+      <div class="empty-state">
+        <p>No events found matching your filters.</p>
+      </div>
+      } @else {
+      <div class="results-header">
+        <span class="total-count">Showing {{ totalCount() }} events</span>
+        <button type="button" class="sort-button" (click)="toggleSort()">
+          Sort by Date {{ sortDirection() === 'ASC' ? '↓' : '↑' }}
+        </button>
+      </div>
+
+      <div class="event-list">
+        @for (event of pagedEvents(); track event.eventId) {
+        <app-event-card [event]="event" />
+        }
+      </div>
+
+      <p-paginator [first]="first()" [rows]="rows()"
+        [totalRecords]="eventsResource.value()?.totalCount || events().length" (onPageChange)="onPageChange($event)" />
+      }
+    </section>
+  </div>
+</main>
+
+<app-footer />

@@ -1,88 +1,177 @@
 <form class="auth-card" (submit)="onSubmit($event)">
-    <h1>Create Account</h1>
+  <h1>Create Account</h1>
 
-    <!-- Names -->
-    <div class="row">
-        <label>
-            <span>First Name</span>
-            <input type="text" placeholder="First name" [field]="createAccountForm.firstName" />
-        </label>
-        <label>
-            <span>Last Name</span>
-            <input type="text" placeholder="Last name" [field]="createAccountForm.lastName" />
-        </label>
+  <!-- Names -->
+  <div class="row">
+    <label>
+      <span>First Name</span>
+      <input type="text" placeholder="First name" [field]="createAccountForm.firstName" />
+      @if (createAccountForm.firstName().touched() && createAccountForm.firstName().invalid()) {
+      <ul class="error-list">
+        @for (error of createAccountForm.firstName().errors(); track error) {
+        <li>{{ error.message }}</li>
+        }
+      </ul>
+      }
+    </label>
+
+    <label>
+      <span>Last Name</span>
+      <input type="text" placeholder="Last name" [field]="createAccountForm.lastName" />
+      @if (createAccountForm.lastName().touched() && createAccountForm.lastName().invalid()) {
+      <ul class="error-list">
+        @for (error of createAccountForm.lastName().errors(); track error) {
+        <li>{{ error.message }}</li>
+        }
+      </ul>
+      }
+    </label>
+  </div>
+
+  <!-- Email -->
+  <label>
+    <span>Email</span>
+    <input type="email" placeholder="Enter your email" [field]="createAccountForm.email" />
+    @if (createAccountForm.email().touched() && createAccountForm.email().invalid()) {
+    <ul class="error-list">
+      @for (error of createAccountForm.email().errors(); track error) {
+      <li>{{ error.message }}</li>
+      }
+    </ul>
+    }
+  </label>
+
+  <!-- Phone -->
+  <label class="phone-row">
+    <span>Phone Number</span>
+    <div class="phone-input">
+      <input type="tel" placeholder="+995123456789" [field]="createAccountForm.phone" />
+      <button
+        type="button"
+        class="otp-btn"
+        [disabled]="createAccountForm.phone().invalid()"
+        (click)="sendOtp()"
+      >
+        Send OTP
+      </button>
+    </div>
+    @if (createAccountForm.phone().touched() && createAccountForm.phone().invalid()) {
+    <ul class="error-list">
+      @for (error of createAccountForm.phone().errors(); track error) {
+      <li>{{ error.message }}</li>
+      }
+    </ul>
+    } @if (errorMessage()) {
+    <div class="error-message" role="alert">
+      <p>Please, try again later.</p>
+    </div>
+    }
+  </label>
+
+  <!-- OTP -->
+  <div class="otp-section">
+    <div class="otp-header">
+      <img src="./assets/icons/security.svg" alt="" />
+      <span>Enter OTP Code</span>
     </div>
 
-    <!-- Email -->
-    <label>
-        <span>Email</span>
-        <input type="email" placeholder="Enter your email" [field]="createAccountForm.email" />
-    </label>
-
-    <!-- Phone -->
-    <label class="phone-row">
-        <span>Phone Number</span>
-        <div class="phone-input">
-            <input type="text" placeholder="+1 (555) 000-0000" [field]="createAccountForm.phone" />
-            <button type="button" class="otp-btn">Send OTP</button>
-        </div>
-    </label>
-
-    <!-- OTP -->
-    <div class="otp-section">
-        <div class="otp-header">
-            <img src="./assets/icons/security.svg" alt="">
-            <span>Enter OTP Code</span>
-        </div>
-
-        <div class="otp-boxes">
-            <p-inputotp [integerOnly]="true" [length]="6" />
-        </div>
-
-        <div class="otp-footer">
-            <span>Code expires in 05:00</span>
-            <a href="#">Resend Code</a>
-        </div>
+    <div class="otp-boxes">
+      <p-inputotp [integerOnly]="true" [length]="6" [field]="createAccountForm.otp" />
     </div>
 
-    <!-- Department -->
-    <label>
-        <span>Department</span>
-        <select [field]="createAccountForm.department">
-            <option value="" disabled>Select Department</option>
-            <option value="engineering">Engineering</option>
-            <option value="marketing">Marketing</option>
-        </select>
-    </label>
+    <div class="otp-footer">
+      <span
+        >Code expires in @if (timerText()) {
+        <span>{{ timerText() }}</span>
+        } @else {
+        <span>05:00</span>
+        }
+      </span>
+      <a
+        (click)="startTimer()"
+        [class.disabled]="isResendDisabled()"
+        [attr.disabled]="isResendDisabled() ? true : null"
+      >
+        Resend Code
+      </a>
+    </div>
+    @if (createAccountForm.otp().touched() && createAccountForm.otp().invalid()) {
+    <ul class="error-list">
+      @for (error of createAccountForm.otp().errors(); track error) {
+      <li>{{ error.message }}</li>
+      }
+    </ul>
+    }
+  </div>
 
-    <!-- Password -->
-    <label>
-        <span>Password</span>
-        <input type="password" placeholder="Create password" [field]="createAccountForm.password" />
-        <small>
-            Password must be at least 8 characters with uppercase, lowercase, and number
-        </small>
-    </label>
+  <!-- Department -->
+  <label>
+    <span>Department</span>
+    <select [field]="createAccountForm.department">
+      <option value="" disabled>Select Department</option>
+      @for (item of departments; track item) {
+      <option [value]="item.toLowerCase()">{{ item }}</option>
+      }
+    </select>
+    @if (createAccountForm.department().touched() && createAccountForm.department().invalid()) {
+    <ul class="error-list">
+      @for (error of createAccountForm.department().errors(); track error) {
+      <li>{{ error.message }}</li>
+      }
+    </ul>
+    }
+  </label>
 
-    <!-- Confirm -->
-    <label>
-        <span>Confirm Password</span>
-        <input type="password" placeholder="Confirm password" [field]="createAccountForm.confirmPassword" />
-    </label>
+  <!-- Password -->
+  <label>
+    <span>Password</span>
+    <input type="password" placeholder="Create password" [field]="createAccountForm.password" />
+    <small>Password must be at least 8 characters with uppercase, lowercase, and number</small>
+    @if (createAccountForm.password().touched() && createAccountForm.password().invalid()) {
+    <ul class="error-list">
+      @for (error of createAccountForm.password().errors(); track error.message) {
+      <li>{{ error.message }}</li>
+      }
+    </ul>
+    }
+  </label>
 
-    <!-- Terms -->
-    <label class="terms">
-        <p-checkbox [binary]="true" [field]="createAccountForm.termsAccepted" />
-        <span>I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></span>
-    </label>
+  <!-- Confirm Password -->
+  <label>
+    <span>Confirm Password</span>
+    <input
+      type="password"
+      placeholder="Confirm password"
+      [field]="createAccountForm.confirmPassword"
+    />
+    @if (createAccountForm.confirmPassword().touched() &&
+    createAccountForm.confirmPassword().invalid()) {
+    <ul class="error-list">
+      @for (error of createAccountForm.confirmPassword().errors(); track error.message) {
+      <li>{{ error.message }}</li>
+      }
+    </ul>
+    }
+  </label>
 
-    <!-- Submit -->
-    <app-button label="Create Account" type="submit" variant="primary"
-        [disabled]="!createAccountForm().valid() || isSubmitting()" [loading]="isSubmitting()">
-    </app-button>
+  <!-- Terms -->
+  <label class="terms">
+    <p-checkbox [binary]="true" [field]="createAccountForm.termsAccepted" />
+    <span>I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></span>
+  </label>
 
-    <p class="footer">
-        Already have an account?
-        <a routerLink="/login">Sign in</a>
-    </p>
+  <!-- Submit -->
+  <app-button
+    label="Create Account"
+    type="submit"
+    variant="primary"
+    [disabled]="!createAccountForm().valid() || isSubmitting()"
+    [loading]="isSubmitting()"
+  >
+  </app-button>
+
+  <p class="footer">
+    Already have an account?
+    <a routerLink="/login">Sign in</a>
+  </p>
 </form>

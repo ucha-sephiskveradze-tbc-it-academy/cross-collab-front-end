@@ -1,0 +1,123 @@
+.notifications-page {
+    margin: 2rem 5rem;
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 2rem;
+
+    /* 📱 Tablet */
+    @media (max-width: 1024px) {
+        grid-template-columns: 1fr;
+        margin: 2rem 1rem;
+    }
+
+    .notifications-section {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+
+        .day-header {
+            h3 {
+                font-size: 1.5rem;
+                padding-bottom: 0.5rem;
+            }
+
+            span {
+                color: var(--muted);
+            }
+        }
+    }
+
+    .quick-filters {
+        border: 1px solid var(--border);
+        padding: 1rem;
+        background: var(--surface);
+        height: fit-content;
+
+        h4 {
+            margin-bottom: 0.75rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .filter-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 0.5rem;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 0.75rem;
+            border-radius: 6px;
+
+            &:hover {
+                background: rgba(0,0,0,0.04);
+            }
+
+            &.active {
+                font-weight: 600;
+                background: rgba(0,0,0,0.04);
+            }
+
+            .count {
+                background: rgba(0,0,0,0.04);
+                padding: 0 0.5rem;
+                border-radius: 999px;
+                font-size: 0.7rem;
+            }
+        }
+    }
+}
+
+.notification-bar {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+
+    .tabs {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+
+        .tab {
+            font-size: 12px;
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--muted);
+            cursor: pointer;
+            transition: all 0.2s ease;
+
+            &:hover {
+                background: rgba(0,0,0,0.04);
+            }
+
+            &.active {
+                background: var(--text);
+                color: var(--surface);
+                border-color: var(--text);
+            }
+        }
+    }
+
+    .sort {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+        color: var(--muted);
+
+        :host ::ng-deep .sort-select {
+            min-width: 140px;
+        }
+    }
+}

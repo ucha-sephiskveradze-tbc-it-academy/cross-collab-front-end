@@ -1,0 +1,34 @@
+@use "../../../../../styles/variables" as *;
+
+.section-card {
+  background: $color-white;
+  border: 1px solid $color-border-light;
+  border-radius: $radius-xl;
+  padding: $spacing-xxl;
+  box-shadow: $shadow-sm;
+  transition: box-shadow 0.3s ease;
+
+  &:hover {
+    box-shadow: $shadow-md;
+  }
+
+  h2 {
+    font-size: $font-size-xxl;
+    font-weight: 700;
+    color: $color-gray-900;
+    margin: 0 0 $spacing-lg 0;
+    padding-bottom: $spacing-md;
+    border-bottom: 2px solid $color-gray-200;
+  }
+
+  p {
+    font-size: $font-size-lg;
+    color: $color-gray-700;
+    line-height: 1.8;
+    margin: 0 0 $spacing-md 0;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}

@@ -1,0 +1,396 @@
+// =========================
+// Event Page Layout
+// =========================
+.event-page {
+    display: grid;
+    grid-template-columns: 2.2fr 1fr;
+    gap: 2rem;
+    max-width: 1400px;
+    margin: auto;
+    padding: 2rem 2.5rem;
+
+    .right {
+        position: relative;
+    }
+
+    // Tablet
+    @media (max-width: 1024px) {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        padding: 1.5rem 2rem;
+
+        .left,
+        .right {
+            width: 100%;
+        }
+
+        .submit {
+            flex-direction: column;
+            gap: 12px;
+
+            button {
+                width: 100%;
+            }
+        }
+    }
+
+    // Mobile
+    @media (max-width: 480px) {
+        padding: 1rem;
+    }
+}
+
+// =========================
+// Section Cards
+// =========================
+.section {
+    margin-bottom: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+
+    // PrimeNG overrides
+    ::ng-deep {
+        .p-card {
+            overflow: visible !important;
+        }
+        .p-card-body {
+            padding: 1.5rem;
+        }
+        .p-card-content {
+            padding: 0;
+        }
+    }
+}
+
+// =========================
+// Table Header
+// =========================
+.table__header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding-bottom: 1.25rem;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+
+    h1 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--text);
+        margin: 0;
+    }
+
+    .icon {
+        width: 40px;
+        height: 40px;
+        background-color: var(--text);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        img {
+            width: 20px;
+            height: 20px;
+            filter: brightness(0) invert(1);
+        }
+    }
+
+    @media (max-width: 1024px) {
+        h1 {
+            font-size: 1.1rem;
+        }
+        .icon {
+            width: 36px;
+            height: 36px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        h1 {
+            font-size: 1rem;
+        }
+        .icon {
+            width: 32px;
+            height: 32px;
+        }
+    }
+}
+
+// =========================
+// Form Fields
+// =========================
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+
+    label {
+        font-weight: 500;
+        font-size: 0.875rem;
+        color: var(--muted);
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+
+        .required {
+            color: var(--danger);
+            font-weight: 600;
+        }
+    }
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+
+    input,
+    textarea {
+        @media (max-width: 480px) {
+            font-size: 16px; // Prevent iOS zoom
+        }
+    }
+
+    .error-message {
+        color: var(--accent);
+        font-size: 0.75rem;
+        margin-top: 0.25rem;
+    }
+
+    &.field-error {
+        input,
+        textarea,
+        ::ng-deep .p-inputtext,
+        ::ng-deep .p-inputtextarea {
+            border-color: var(--accent) !important;
+            box-shadow: 0 0 0 1px var(--accent) !important;
+        }
+    }
+}
+
+// =========================
+// Grid Helpers
+// =========================
+.grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+
+    @media (max-width: 1024px) {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+    }
+
+    @media (max-width: 480px) {
+        gap: 1rem;
+    }
+}
+
+// =========================
+// Location Types
+// =========================
+.location-types {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+
+    .button {
+        flex: 1;
+        min-width: 120px;
+        padding: 0.625rem 1.25rem;
+        border: 2px solid var(--border);
+        border-radius: 8px;
+        background-color: var(--surface);
+        color: var(--muted);
+        font-weight: 500;
+        transition: all 0.2s ease;
+
+        &:hover {
+            background-color: rgba(0, 0, 0, 0.04);
+        }
+
+        &.active {
+            border-color: var(--text);
+            background-color: var(--text);
+            color: var(--surface);
+        }
+
+        @media (max-width: 480px) {
+            flex: 1 1 100%;
+            width: 100%;
+            padding: 0.75rem 1rem;
+        }
+    }
+}
+
+// =========================
+// Upload Box
+// =========================
+.upload-box {
+    border: 1px dashed var(--border);
+    border-radius: 6px;
+    padding: 1.5rem;
+    text-align: center;
+    color: var(--muted);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+
+    @media (max-width: 480px) {
+        padding: 1rem;
+        font-size: 0.85rem;
+    }
+}
+
+// =========================
+// Preview Card
+// =========================
+.preview {
+    font-size: 0.9rem;
+
+    .preview-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.4rem 0;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .status {
+        font-weight: 600;
+    }
+
+    .submit {
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--border);
+    }
+
+    @media (min-width: 1025px) {
+        top: 100px;
+        max-height: calc(100vh - 120px);
+        overflow-y: auto;
+    }
+}
+
+// =========================
+// Submit Actions
+// =========================
+.submit {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+
+    button {
+        border: 1px solid gray;
+
+        &:hover {
+            background-color: rgba(0, 0, 0, 0.04);
+        }
+    }
+}
+
+// =========================
+// Checkbox Row
+// =========================
+.checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 0.75rem;
+    background-color: var(--surface);
+    transition: all 0.2s ease;
+
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.04);
+    }
+
+    h2 {
+        font-size: 0.9375rem;
+        font-weight: 600;
+        color: var(--text);
+        margin: 0;
+    }
+
+    p {
+        font-size: 0.8125rem;
+        color: var(--muted);
+        margin: 0;
+    }
+
+    @media (max-width: 480px) {
+        padding: 0.875rem 1rem;
+        gap: 0.75rem;
+    }
+}
+
+// =========================
+// Agenda Styles
+// =========================
+.agenda-list {
+    .agenda-item {
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        background: var(--surface);
+
+        .agenda-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+
+            h2 {
+                margin: 0;
+                font-size: 1rem;
+                font-weight: 600;
+            }
+
+            button {
+                background: none;
+                border: none;
+            }
+        }
+
+        .tracks {
+            margin-top: 0.75rem;
+
+            h3 {
+                margin: 0 0 0.5rem 0;
+                font-size: 0.95rem;
+            }
+
+            .track {
+                display: grid;
+                grid-template-columns: 1fr 1fr auto;
+                gap: 0.5rem;
+                align-items: center;
+                margin-bottom: 0.5rem;
+
+                input {
+                    width: 100%;
+                }
+
+                button {
+                    margin-left: 0.5rem;
+                }
+            }
+        }
+    }
+
+    .add-agenda {
+        display: flex;
+        justify-content: flex-start;
+        margin-top: 0.5rem;
+    }
+}

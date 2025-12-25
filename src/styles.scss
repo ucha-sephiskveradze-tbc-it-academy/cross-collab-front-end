@@ -1,12 +1,79 @@
-/* You can add global styles to this file, and also import other style files */
+/* Global styles entry point */
 @use "./styles/reset";
+@use "./styles/variables" as *;
+@use "./styles/themes/themes" as *;
 
+@import "primeicons/primeicons.css";
+
+/* ✅ Checkbox */
 .p-checkbox {
-    background-color: #000000;
-    border-color: #000000;
+    background-color: var(--surface);
+    border-color: var(--text);
     border-radius: 8px;
 }
 
 .p-checkbox::after {
-    border-color: #000000;
+    border-color: var(--surface);
+}
+
+/* Ensure checked state is visible across themes */
+/* Target the accessible checkbox box element when aria-checked is true */
+.p-checkbox .p-checkbox-box[aria-checked="true"],
+.p-checkbox .p-checkbox-box.p-highlight,
+.p-checkbox.p-highlight .p-checkbox-box {
+    background-color: var(--primary) !important;
+    border-color: var(--primary) !important;
+}
+
+.p-checkbox .p-checkbox-box[aria-checked="true"] .p-checkbox-icon,
+.p-checkbox .p-checkbox-box.p-highlight .p-checkbox-icon,
+.p-checkbox.p-highlight .p-checkbox-box .p-checkbox-icon {
+    color: var(--surface) !important;
+}
+
+/* Also style PrimeNG listbox checkbox box when selected */
+::ng-deep .p-listbox .p-listbox-item.p-highlight .p-checkbox-box {
+    background: var(--primary) !important;
+    border-color: var(--primary) !important;
+}
+::ng-deep .p-listbox .p-listbox-item.p-highlight .p-checkbox-icon {
+    color: var(--surface) !important;
+}
+
+/* ✅ Custom Button Variant */
+.p-button.add-event {
+    background: var(--primary) !important;
+    border: none;
+    color: var(--surface) !important;
+}
+
+.p-button.add-event .pi {
+    color: var(--surface) !important; // icon color
+}
+
+.p-button.add-event:not(.p-disabled):hover {
+    background: var(--accent) !important;
+}
+
+/* ✅ Prevent horizontal scrollbars */
+html,
+body,
+app-root {
+    height: 100%;
+}
+
+body {
+    overflow-x: hidden;
+    background-color: var(--bg);
+    color: var(--text);
+}
+
+:root {
+    --p-button-primary-color: var(--primary) !important;
+    --p-button-primary-hover-color: var(--accent) !important;
+}
+
+canvas {
+    max-width: 100% !important;
+    max-height: 100% !important;
 }

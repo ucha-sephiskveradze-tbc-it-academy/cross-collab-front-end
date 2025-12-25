@@ -1,0 +1,56 @@
+<header>
+  <div class="left">
+    <div class="left__logo">
+      <div></div>
+      <h1>EventHub</h1>
+    </div>
+    <button class="burger-button" (click)="toggleMobileMenu()" [class.active]="isMobileMenuOpen()"
+      aria-label="Toggle menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <nav class="desktop-nav">
+      @if (isAdmin()) {
+      <a routerLink="/admin/main" routerLinkActive="active-link" (click)="closeMobileMenu()">Event Management</a>
+      <a routerLink="/admin/analytics" routerLinkActive="active-link" (click)="closeMobileMenu()">Analytics</a>
+      } @else {
+      <a routerLink="/dashboard" routerLinkActive="active-link" (click)="closeMobileMenu()">Home</a>
+      <a routerLink="/events" routerLinkActive="active-link" (click)="closeMobileMenu()">Browse Events</a>
+      }
+    </nav>
+  </div>
+
+  <!-- Mobile Menu -->
+  @if (isMobileMenuOpen()) {
+  <nav class="mobile-menu">
+    @if (isAdmin()) {
+    <a routerLink="/admin/main" routerLinkActive="active-link" (click)="closeMobileMenu()">Event Management</a>
+    <a routerLink="/admin/analytics" routerLinkActive="active-link" (click)="closeMobileMenu()">Analytics</a>
+    } @else {
+    <a routerLink="/dashboard" routerLinkActive="active-link" (click)="closeMobileMenu()">Home</a>
+    <a routerLink="/events" routerLinkActive="active-link" (click)="closeMobileMenu()">Browse Events</a>
+    }
+  </nav>
+  }
+  <div class="right">
+    <div class="right__notification" routerLink="/notifications">
+      <img src="./assets/icons/notification.svg" alt="Notification Icon" />
+      <div></div>
+    </div>
+    <div class="right__profile" (click)="toggleDropdown()">
+      <div class="profile-info">
+        <h3>{{ getUserName() }}</h3>
+        <p>{{ getUserRole() }}</p>
+      </div>
+
+      <img src="./assets/icons/header/dropdown-arrow.svg" alt="Dropdown Arrow" class="dropdown-arrow"
+        [class.open]="isDropdownOpen()" />
+      @if (isDropdownOpen()) {
+      <div class="dropdown-menu" (click)="$event.stopPropagation()">
+        <button class="dropdown-item" (click)="logout()">Logout</button>
+      </div>
+      }
+    </div>
+  </div>
+</header>

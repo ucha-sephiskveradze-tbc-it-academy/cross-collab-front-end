@@ -1,26 +1,32 @@
-import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-button',
-  imports: [CommonModule],
+  imports: [RouterLink],
   templateUrl: './button.html',
   styleUrl: './button.scss',
 })
 export class Button {
-  @Input() label = 'Button';
-  @Input() type: 'button' | 'submit' | 'reset' = 'button';
-  @Input() variant: 'primary' | 'secondary' = 'primary';
+  @Input() label = '';
+  @Input() type: 'button' | 'submit' = 'button';
+  @Input() variant: 'primary' | 'secondary' | 'danger' = 'primary';
   @Input() disabled = false;
   @Input() loading = false;
+
+  @Input() routerLink?: any[] | string;
 
   @Output() clicked = new EventEmitter<void>();
 
   isHovered = signal(false);
 
-  onClick() {
-    if (!this.disabled && !this.loading) {
-      this.clicked.emit();
+  handleClick(event: Event) {
+    if (this.disabled || this.loading) {
+      event.preventDefault();
+      event.stopPropagation();
+      return;
     }
+
+    this.clicked.emit();
   }
 }

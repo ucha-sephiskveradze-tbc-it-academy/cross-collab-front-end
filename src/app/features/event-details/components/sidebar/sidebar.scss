@@ -1,0 +1,196 @@
+@use "sass:color";
+@use "../../../../../styles/variables" as *;
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xl;
+
+  .sidebar-card {
+    background: $color-white;
+    border: 1px solid $color-border-light;
+    border-radius: $radius-xl;
+    padding: $spacing-xl;
+    box-shadow: $shadow-sm;
+    transition: box-shadow 0.3s ease;
+
+    &:hover {
+      box-shadow: $shadow-md;
+    }
+
+    h3 {
+      font-size: $font-size-xl;
+      font-weight: 700;
+      color: $color-gray-900;
+      margin: 0 0 $spacing-lg 0;
+      padding-bottom: $spacing-md;
+      border-bottom: 2px solid $color-gray-200;
+    }
+
+    // Registration Status
+    .status-info {
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-md;
+      margin-bottom: $spacing-lg;
+
+      .info-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: $spacing-sm 0;
+
+        .label {
+          font-size: $font-size-sm;
+          color: $color-gray-600;
+          font-weight: 500;
+        }
+
+        .value {
+          font-size: $font-size-md;
+          font-weight: 600;
+          color: $color-gray-900;
+
+          &.status-open {
+            color: $color-success;
+          }
+
+          &.status-closed {
+            color: $color-danger;
+          }
+        }
+      }
+    }
+
+    .registration-note {
+      font-size: $font-size-xs;
+      color: $color-gray-600;
+      line-height: 1.5;
+      margin-top: $spacing-md;
+      padding-top: $spacing-md;
+      border-top: 1px solid $color-gray-200;
+    }
+
+    // Organizer Info
+    .organizer-info {
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-xs;
+      align-items: center;
+      text-align: center;
+
+      .organizer-avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: $spacing-sm;
+        overflow: hidden;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+
+      .organizer-name {
+        font-size: $font-size-lg;
+        font-weight: 700;
+        color: $color-gray-900;
+      }
+
+      .organizer-title {
+        font-size: $font-size-md;
+        color: $color-primary;
+        font-weight: 600;
+      }
+
+      .organizer-department {
+        font-size: $font-size-sm;
+        color: $color-gray-600;
+        margin-bottom: $spacing-md;
+      }
+    }
+
+    // Event Details
+    .details-info {
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-md;
+
+      .detail-item {
+        display: flex;
+        flex-direction: column;
+        gap: $spacing-xs;
+        padding: $spacing-sm 0;
+        border-bottom: 1px solid $color-gray-100;
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        .detail-label {
+          font-size: $font-size-sm;
+          color: $color-gray-600;
+          font-weight: 500;
+        }
+
+        .detail-value {
+          font-size: $font-size-md;
+          color: $color-gray-900;
+          line-height: 1.5;
+
+          .view-map-link {
+            color: $color-primary;
+            text-decoration: none;
+            font-weight: 500;
+            margin-left: $spacing-xs;
+            transition: color 0.2s ease;
+
+            &:hover {
+              color: color.adjust($color-primary, $lightness: -10%);
+              text-decoration: underline;
+            }
+          }
+        }
+      }
+    }
+
+    // Need Help
+    .help-text {
+      font-size: $font-size-md;
+      color: $color-gray-700;
+      line-height: 1.6;
+      margin: 0 0 $spacing-md 0;
+    }
+
+    .contact-support-link {
+      display: inline-block;
+      color: $color-primary;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: $font-size-md;
+      transition: color 0.2s ease;
+
+      &:hover {
+        color: color.adjust($color-primary, $lightness: -10%);
+        text-decoration: underline;
+      }
+    }
+
+    // Button styling
+    app-button {
+      width: 100%;
+      margin-top: $spacing-md;
+    }
+  }
+
+  @media (max-width: $breakpoint-tablet) {
+    .sidebar-card {
+      padding: $spacing-lg;
+    }
+  }
+}

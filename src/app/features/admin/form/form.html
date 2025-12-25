@@ -1,0 +1,285 @@
+<app-header></app-header>
+<div class="event-page" [formGroup]="formService.form">
+  <!-- LEFT COLUMN -->
+  <div class="left">
+    <!-- BASIC INFO -->
+    <p-card class="section">
+      <div class="table__header">
+        <div class="icon"><img src="./assets/icons/admin/info.svg" alt="" /></div>
+        <h1>Basic Information</h1>
+      </div>
+      <div class="field">
+        <label>Event Title</label>
+        <input pInputText formControlName="title" placeholder="Enter event title" />
+      </div>
+
+      <div class="field">
+        <label>Category</label>
+        <p-select formControlName="category" [options]="categoryOptions()" optionLabel="label" optionValue="value"
+          placeholder="Select a category">
+        </p-select>
+      </div>
+
+      <div class="field">
+        <label>Description</label>
+        <textarea pInputTextarea rows="4" formControlName="description"
+          placeholder="Provide a detailed description"></textarea>
+      </div>
+    </p-card>
+
+    <!-- DATE & TIME -->
+    <p-card class="section">
+      <div class="table__header">
+        <div class="icon"><img src="./assets/icons/admin/date.svg" alt="" /></div>
+        <h1>Date & Time</h1>
+      </div>
+
+      <div class="grid-2">
+        <div class="field">
+          <label>Event Date</label>
+          <p-datePicker formControlName="date" showIcon />
+        </div>
+
+        <div class="field">
+          <label>Registration Start</label>
+          <p-datePicker formControlName="registrationStart" showIcon />
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="field">
+          <label>Registration End</label>
+          <p-datePicker formControlName="registrationEnd" showIcon />
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="field">
+          <label>Start Time</label>
+          <p-datePicker timeOnly hourFormat="24" formControlName="startTime" />
+        </div>
+
+        <div class="field">
+          <label>End Time</label>
+          <p-datePicker timeOnly hourFormat="24" formControlName="endTime" />
+        </div>
+      </div>
+    </p-card>
+
+    <!-- LOCATION -->
+    <p-card class="section">
+      <div class="table__header">
+        <div class="icon"><img src="./assets/icons/admin/location.svg" alt="" /></div>
+        <h1>Location</h1>
+      </div>
+
+      <div class="location-types">
+        @for (item of locationOptions; track item) {
+        <button pButton type="button" class="p-button-outlined button"
+          [outlined]="formService.form.value.locationType !== item.value"
+          (click)="formService.form.patchValue({ locationType: item.value })">
+          {{ item.label }}
+        </button>
+
+        }
+      </div>
+
+      <div class="grid-2">
+        <input pInputText placeholder="Venue name" formControlName="venue" />
+        <input pInputText placeholder="City" formControlName="city" />
+      </div>
+
+      <div class="field">
+        <input pInputText placeholder="Street address" />
+      </div>
+
+      <div class="grid-2">
+        <p-inputNumber placeholder="Room number" showButtons />
+        <p-inputNumber placeholder="Floor number" showButtons />
+      </div>
+
+      <div class="field">
+        <textarea pInputTextarea rows="2" formControlName="additionalInformation"
+          placeholder="Additional location information"></textarea>
+      </div>
+    </p-card>
+
+    <!-- CAPACITY -->
+    <p-card class="section">
+      <div class="table__header">
+        <div class="icon"><img src="./assets/icons/admin/people.svg" alt="" /></div>
+        <h1>Capacity & Registration</h1>
+      </div>
+
+      <div class="grid-2">
+        <div class="field">
+          <label>Max Capacity</label>
+          <p-inputNumber formControlName="capacity" placeholder="Max capacity" showButtons />
+        </div>
+      </div>
+
+    </p-card>
+
+    <!-- AGENDA -->
+    <p-card class="section">
+      <div class="table__header">
+        <h1>Agenda</h1>
+      </div>
+
+      <div class="agenda-list">
+        <div class="agenda-item" *ngFor="let item of formService.agenda(); let i = index">
+          <div class="agenda-header">
+            <h2>Item {{ i + 1 }}</h2>
+            <button pButton type="button" icon="pi pi-trash" class="p-button-text"
+              (click)="formService.removeAgendaItem(i)"></button>
+          </div>
+
+          <div class="grid-2">
+            <div class="field">
+              <label>Start Time</label>
+              <input pInputText type="time" [value]="item.startTime"
+                (input)="formService.updateAgendaField(i,'startTime',$event.target.value)" />
+            </div>
+            <div class="field">
+              <label>Duration</label>
+              <input pInputText [value]="item.duration" placeholder="HH:MM:SS"
+                (input)="formService.updateAgendaField(i,'duration',$event.target.value)" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Title</label>
+            <input pInputText [value]="item.title"
+              (input)="formService.updateAgendaField(i,'title',$event.target.value)" />
+          </div>
+
+          <div class="field">
+            <label>Description</label>
+            <textarea pInputTextarea rows="2" [value]="item.description"></textarea>
+          </div>
+
+          <div class="grid-2">
+            <div class="field">
+              <label>Type</label>
+              <p-select [options]="agendaTypeOptions" optionLabel="label" optionValue="value"></p-select>
+            </div>
+            <div class="field">
+              <label>Location</label>
+              <input pInputText [value]="item.location"
+                (input)="formService.updateAgendaField(i,'location',$event.target.value)" />
+            </div>
+          </div>
+
+          <div class="tracks">
+            <h3>Tracks</h3>
+            @for (t of item.agendaTracks; track $index) {
+            <div class="track">
+              <input pInputText placeholder="Title" formControlName="title" [value]="t.title" />
+              <input pInputText placeholder="Speaker" [value]="t.speaker"
+                (input)="formService.updateTrackField(i,$index,'speaker',$event.target.value)" />
+              <input pInputText placeholder="Room" [value]="t.room"
+                (input)="formService.updateTrackField(i,$index,'room',$event.target.value)" />
+              <button pButton type="button" icon="pi pi-trash" class="p-button-text"
+                (click)="formService.removeTrack(i,$index)"></button>
+            </div>
+            }
+            <button pButton type="button" label="Add Track" (click)="formService.addTrack(i)"></button>
+          </div>
+        </div>
+
+        <div class="add-agenda">
+          <button pButton type="button" label="Add Agenda Item" (click)="formService.addAgendaItem()"></button>
+        </div>
+      </div>
+
+      <div class="checkbox-row">
+        <p-checkbox binary formControlName="waitlist" label="Enable waitlist"> </p-checkbox>
+        <h2>Enable Waitlist</h2>
+      </div>
+    </p-card>
+
+    <!-- NOTIFICATIONS -->
+    <p-card class="section">
+      <div class="table__header">
+        <div class="icon"><img src="./assets/icons/admin/notification.svg" alt="" /></div>
+        <h1>Notification Settings</h1>
+      </div>
+
+      <div class="checkbox-row">
+        <p-checkbox binary label="Registration confirmation" />
+        <div>
+          <h2>Registration Confirmation</h2>
+          <p>Send confirmation email immediately after registration</p>
+        </div>
+      </div>
+      <div class="checkbox-row">
+        <p-checkbox binary label="24-hour reminder" />
+        <div>
+          <h2>24-Hour Reminder</h2>
+          <p>Remind participants 24 hours before the event</p>
+        </div>
+      </div>
+      <div class="checkbox-row">
+        <p-checkbox binary label="1-hour reminder" />
+        <div>
+          <h2>1-Hour Reminder</h2>
+          <p>Send final reminder 1 hour before event start</p>
+        </div>
+      </div>
+    </p-card>
+  </div>
+
+  <!-- RIGHT COLUMN -->
+  <div class="right">
+    <!-- IMAGE -->
+    <p-card class="section">
+      <ng-template pTemplate="title">Event Image</ng-template>
+
+      <div class="upload-box">
+        <i class="pi pi-image"></i>
+        <div class="field">
+          <input pInputText formControlName="imageUrl" placeholder="Image URL" />
+        </div>
+      </div>
+    </p-card>
+
+    <!-- PREVIEW -->
+    <p-card class="section preview">
+      <ng-template pTemplate="title">Event Preview</ng-template>
+
+      <div class="preview-row">
+        <span>Category</span>
+        <span>{{ selectedCategoryLabel() }}</span>
+      </div>
+
+      <div class="preview-row">
+        <span>Date</span>
+        <span>{{
+          formService.form.value.date
+          ? (formService.form.value.date | date : 'dd MMM yyyy')
+          : 'Not set'
+          }}</span>
+      </div>
+
+      <div class="preview-row">
+        <span>Location</span>
+        <span>{{ formService.form.value.locationType || 'Not Set' }}</span>
+      </div>
+
+      <div class="preview-row">
+        <span>Status</span>
+        <span class="status">Draft</span>
+      </div>
+    </p-card>
+
+    <!-- ACTIONS -->
+    <div class="submit">
+      <button pButton label="Publish Event" class="publish" [disabled]="formService.form.invalid || isSubmitting()"
+        (click)="submit()"></button>
+
+      <button pButton label="Cancel" severity="secondary" outlined (click)="cancel()"></button>
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>

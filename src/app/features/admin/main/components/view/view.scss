@@ -1,0 +1,351 @@
+@use "../../../../../../styles/variables" as *;
+
+.page {
+    padding: 20px 0 60px;
+    max-width: 1120px;
+    margin: 0 auto;
+}
+
+.crumbs {
+    font-size: $font-size-xs;
+    color: $color-gray-700;
+    margin: 6px 0 14px;
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+
+    .sep {
+        color: var(--muted);
+    }
+
+    .muted {
+        color: $color-gray-500;
+    }
+}
+
+.card {
+    background: $color-white;
+    border: 1px solid $color-gray-300;
+    border-radius: $radius-sm;
+    padding: 18px;
+    margin-bottom: $spacing-lg;
+}
+
+.header-card {
+    padding: 18px 18px 14px;
+}
+
+.header-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.title {
+    margin: 0;
+    font-size: $font-size-xxl;
+    font-weight: 600;
+    color: $color-border-dark;
+}
+
+.status-pill {
+    font-size: $font-size-xs;
+    padding: 3px $spacing-sm;
+    border-radius: $spacing-xs;
+    border: 1px solid $color-gray-900;
+    background: $color-gray-900;
+    color: $color-white;
+
+    &.upcoming {
+        background: $color-gray-900;
+        border-color: $color-gray-900;
+    }
+}
+
+.meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    margin-top: 10px;
+    color: $color-gray-800;
+
+    .meta {
+        display: flex;
+        align-items: center;
+        gap: $spacing-sm;
+        font-size: $font-size-sm;
+
+        i {
+            color: $color-gray-700;
+            font-size: $font-size-md;
+        }
+    }
+}
+
+.stats-row {
+    margin-top: $spacing-md;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+
+    .stat {
+        display: inline-flex;
+        align-items: center;
+        gap: $spacing-sm;
+        border: 1px solid $color-gray-300;
+        border-radius: $spacing-xs;
+        padding: 7px 10px;
+        font-size: $font-size-sm;
+        color: $color-gray-900;
+        background: var(--bg);
+
+        i {
+            color: $color-gray-700;
+            font-size: $font-size-md;
+        }
+    }
+}
+
+.actions-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.btn-black,
+.btn-outline {
+    border-radius: $spacing-xs;
+    padding: $spacing-sm $spacing-md;
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-sm;
+    cursor: pointer;
+
+    &.small {
+        padding: 6px 10px;
+        font-size: $font-size-xs;
+    }
+}
+
+.btn-black {
+    background: $color-gray-900;
+    color: $color-white;
+    border: 1px solid $color-gray-900;
+}
+
+.btn-outline {
+    background: $color-white;
+    color: $color-gray-900;
+    border: 1px solid var(--border);
+}
+
+.search-wrap {
+    position: relative;
+    width: 280px;
+    max-width: 100%;
+
+    i {
+        position: absolute;
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: $color-gray-500;
+        font-size: $font-size-md;
+    }
+
+    .search {
+        width: 100%;
+        border: 1px solid $color-gray-200;
+        border-radius: $spacing-xs;
+        padding: 9px $spacing-md 9px 34px;
+        outline: none;
+
+        &:focus {
+            border-color: var(--border);
+        }
+    }
+}
+
+.tabs {
+    display: flex;
+    gap: 18px;
+    border-bottom: 1px solid $color-gray-300;
+    padding: 0 6px 10px;
+    margin: 0 0 10px;
+
+    .tab {
+        background: transparent;
+        border: none;
+        padding: 10px 2px;
+        font-size: $font-size-xs;
+        color: $color-gray-700;
+        cursor: pointer;
+        position: relative;
+
+        &.active {
+            color: $color-gray-900;
+            font-weight: 600;
+
+            &::after {
+                content: "";
+                position: absolute;
+                left: 0;
+                right: 0;
+                bottom: -10px;
+                height: 2px;
+                background: $color-gray-900;
+            }
+        }
+    }
+}
+
+.thin-table {
+    :host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
+        font-size: 12px;
+        color: var(--muted);
+        font-weight: 600;
+        background: var(--bg);
+        border-color: var(--border);
+        padding: 12px 10px;
+    }
+
+    :host ::ng-deep .p-datatable .p-datatable-tbody > tr > td {
+        border-color: var(--border);
+        padding: 12px 10px;
+        vertical-align: middle;
+    }
+}
+
+.sort-icon {
+    margin-left: 6px;
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.person {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    .avatar {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        border: 1px solid $color-gray-200;
+        background: $color-white;
+        display: grid;
+        place-items: center;
+        font-size: 11px;
+        color: $color-gray-900;
+        font-weight: 600;
+    }
+
+    .name {
+        font-size: $font-size-sm;
+        color: $color-gray-900;
+        font-weight: 600;
+        line-height: 1.1;
+    }
+
+    .email {
+        font-size: $font-size-xs;
+        color: $color-gray-500;
+        line-height: 1.1;
+    }
+}
+
+.muted {
+    color: $color-gray-500;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.pill {
+    display: inline-block;
+    font-size: 11px;
+    padding: $spacing-xs $spacing-sm;
+    border-radius: $spacing-xs;
+    border: 1px solid var(--border);
+    color: var(--text);
+    background: var(--surface);
+
+    &.dark {
+        background: $color-gray-900;
+        color: $color-white;
+        border-color: $color-gray-900;
+    }
+}
+
+.icon-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: $color-gray-700;
+    padding: 6px;
+
+    &:hover {
+        color: $color-gray-900;
+    }
+}
+
+.bulk-row {
+    border-top: 1px solid var(--border);
+    margin-top: 10px;
+    padding-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .bulk-actions {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+    }
+}
+
+.link-btn {
+    background: transparent;
+    border: none;
+    color: $color-gray-700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-sm;
+
+    &:hover {
+        color: $color-gray-900;
+    }
+
+    &.danger:hover {
+        color: $color-danger;
+    }
+}
+
+.waitlist-title {
+    font-size: $font-size-md;
+    font-weight: 600;
+    color: $color-gray-900;
+    margin: 26px 0 10px;
+}
+
+.pos {
+    display: inline-grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 999px;
+    background: $color-gray-900;
+    color: $color-white;
+    font-size: $font-size-xs;
+}

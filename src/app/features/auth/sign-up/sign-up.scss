@@ -1,9 +1,10 @@
 .auth-card {
-    width: 420px;
+    width: 100%;
+    max-width: 420px; // cap width for desktop
     margin: 40px auto;
     padding: 32px;
     border-radius: 12px;
-    background: #fff;
+    background: var(--surface);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
     font-family: Inter, sans-serif;
 
@@ -19,9 +20,15 @@
         flex-direction: column;
         margin-bottom: 16px;
 
+        li {
+            margin: 0.5rem 0 0 0.5rem;
+            color: var(--danger);
+            font-size: 12px;
+        }
+
         span {
             font-size: 13px;
-            color: #555;
+            color: var(--muted);
             margin-bottom: 6px;
             font-weight: 600;
         }
@@ -32,19 +39,19 @@
         height: 40px;
         padding: 0 0 0 12px;
         border-radius: 8px;
-        border: 1px solid #e3e3e3;
+        border: 1px solid var(--border);
         font-size: 14px;
         width: 100%;
 
         &:focus {
             outline: none;
-            border-color: #000;
+            border-color: var(--primary);
         }
     }
 
     small {
         font-size: 12px;
-        color: #777;
+        color: var(--muted);
         margin-top: 6px;
     }
 
@@ -69,8 +76,8 @@
         .otp-btn {
             padding: 0 14px;
             border-radius: 8px;
-            border: 1px solid #ddd;
-            background: #f5f5f5;
+            border: 1px solid var(--border);
+            background: var(--bg);
             font-size: 13px;
             cursor: pointer;
         }
@@ -78,14 +85,14 @@
 
     /* OTP */
     .otp-section {
-        border: 1px solid #eee;
+        border: 1px solid var(--border);
         border-radius: 10px;
         padding: 16px;
         margin-bottom: 16px;
 
         .otp-header {
             font-size: 13px;
-            color: #444;
+            color: var(--muted);
             margin-bottom: 12px;
             display: flex;
             align-items: center;
@@ -116,6 +123,16 @@
             a {
                 text-decoration: none;
                 font-weight: 500;
+
+                &:hover {
+                    cursor: pointer;
+                }
+
+                &.disabled {
+                    pointer-events: none;
+                    opacity: 0.6;
+                    cursor: not-allowed;
+                }
             }
         }
     }
@@ -127,12 +144,15 @@
         font-size: 12px;
         margin-bottom: 20px;
         align-items: center;
+
         input {
             width: auto;
             height: auto;
         }
+
         span {
             margin-bottom: 0;
+
             a {
                 text-decoration: none;
                 font-weight: 500;
@@ -158,6 +178,57 @@
         a {
             font-weight: 500;
             text-decoration: none;
+        }
+    }
+
+    /*  Responsive tweaks */
+    @media (max-width: 768px) {
+        margin: 20px;
+        padding: 24px;
+
+        h1 {
+            font-size: 20px;
+        }
+
+        input,
+        select {
+            font-size: 13px;
+            height: 38px;
+        }
+
+        .otp-boxes input {
+            width: 36px;
+            height: 40px;
+            font-size: 16px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        margin: 16px;
+        padding: 20px;
+
+        h1 {
+            font-size: 18px;
+        }
+
+        .row {
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .phone-input {
+            flex-direction: column;
+
+            .otp-btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        .otp-footer {
+            flex-direction: column;
+            gap: 8px;
+            align-items: center;
         }
     }
 }

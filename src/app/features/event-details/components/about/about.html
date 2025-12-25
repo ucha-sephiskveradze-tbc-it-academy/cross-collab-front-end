@@ -1,0 +1,14 @@
+<section class="section-card">
+  <h2>About This Event</h2>
+  <p>{{ event.description }}</p>
+
+  @if (event.about) {
+  <p>{{ event.about }}</p>
+  } @else {
+  <p>
+    Join us for an engaging experience designed to bring our team together. This event offers
+    opportunities for networking, learning, and collaboration in a relaxed and welcoming
+    environment.
+  </p>
+  }
+</section>

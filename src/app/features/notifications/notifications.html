@@ -1,0 +1,69 @@
+<app-header></app-header>
+
+<main>
+  <section class="notification-bar">
+    <!-- LEFT: FILTER TABS -->
+    <div class="tabs">
+      @for (tab of notificationTabs; track tab.key) {
+      <button
+        type="button"
+        class="tab"
+        [class.active]="activeTab() === tab.key"
+        (click)="setActiveTab(tab.key)"
+      >
+        {{ tab.label }}
+        <span class="count">({{ tab.count }})</span>
+      </button>
+      }
+    </div>
+
+    <!-- RIGHT: SORT -->
+    <div class="sort">
+      <span>Sort by:</span>
+      <p-select
+        [options]="sortOptions"
+        optionLabel="label"
+        optionValue="value"
+        placeholder="Sort by"
+        class="w-48"
+      />
+    </div>
+  </section>
+
+  <div class="notifications-page">
+    <!-- LEFT: Notifications -->
+    <section class="notifications-section">
+      <!-- TODAY HEADER -->
+      <div class="day-header">
+        <h3>Today</h3>
+        <span class="date">{{ todayLabel() }}</span>
+      </div>
+
+      <!-- NOTIFICATION LIST -->
+      @for (notification of filteredNotifications(); track notification.id) {
+      <app-notification-card
+        [notification]="notification"
+        (markAsRead)="markRead($event)"
+        (actionClick)="handleAction($event)"
+      />
+      }
+    </section>
+
+    <!-- RIGHT: QUICK FILTERS -->
+    <aside class="quick-filters">
+      <h4>Quick Filters</h4>
+
+      @for (filter of quickFilters; track filter.key) {
+      <button
+        class="filter-item"
+        [class.active]="activeTab() === filter.key"
+        (click)="setActiveTab(filter.key)"
+      >
+        <span class="label">{{ filter.label }}</span>
+        <span class="count">{{ filter.count }}</span>
+      </button>
+      }
+    </aside>
+  </div>
+</main>
+<app-footer></app-footer>

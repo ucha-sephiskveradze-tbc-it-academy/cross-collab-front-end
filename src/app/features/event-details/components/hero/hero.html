@@ -1,0 +1,65 @@
+<section class="event-hero">
+  <!-- Event Banner -->
+  <div class="event-banner">
+    <div class="banner-icon">
+      <img
+        src="./assets/icons/categories/{{
+          event.category.categoryName.toLowerCase().replace(' ', '_')
+        }}.svg"
+        alt="{{ event.category.categoryName }}"
+        onerror="this.style.display='none'"
+      />
+    </div>
+    <h1 class="banner-title">{{ event.title }}</h1>
+  </div>
+
+  <!-- Tags -->
+  <div class="tags">
+    <span class="tag category-tag">{{ event.category.categoryName }}</span>
+    <span class="tag featured-tag">Featured Event</span>
+    <span class="tag spots-tag">{{ event.capacity - event.totalRegistered }} Spots Available</span>
+  </div>
+
+  <!-- Event Title -->
+  <h1 class="event-title">{{ event.title }}</h1>
+
+  <!-- Event Description -->
+  <p class="event-description">{{ event.description }}</p>
+
+  <!-- Event Info -->
+  <div class="event-info">
+    <div class="info-item">
+      <img src="./assets/icons/calendar.svg" alt="Date" class="info-icon" />
+      <span>
+        {{ event.startDateTime | date : 'EEEE, MMMM d, y, h:mm a' }} -
+        {{ event.endDateTime | date : 'h:mm a' }}
+      </span>
+    </div>
+
+    <div class="info-item">
+      <img src="./assets/icons/location.svg" alt="Location" class="info-icon" />
+      <span>{{ event.location }}</span>
+    </div>
+
+    <div class="info-item">
+      <img src="./assets/icons/categories/team_building.svg" alt="Registration" class="info-icon" />
+      <span>
+        {{ event.totalRegistered }} / {{ event.capacity }} Registered,
+        {{ event.capacity - event.totalRegistered }} spots remaining
+      </span>
+    </div>
+  </div>
+
+  <!-- Progress Bar -->
+  <div class="progress-section">
+    <div class="progress-bar">
+      <div
+        class="progress-fill"
+        [style.width.%]="(event.totalRegistered / event.capacity) * 100"
+      ></div>
+    </div>
+    <span class="progress-text"
+      >{{ ((event.totalRegistered / event.capacity) * 100).toFixed(1) }}% Full</span
+    >
+  </div>
+</section>
