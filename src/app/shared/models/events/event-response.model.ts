@@ -5,7 +5,15 @@ export interface EventResponse {
   startsAt: string;
   endsAt: string;
   imageUrl?: string | null;
-  location: string;
+  location: {
+    locationType: string;
+    venueName: string;
+    street: string;
+    city: string;
+    roomNumber: number;
+    floorNumber: number;
+    additionalInformation: string;
+  };
   eventTypeId: number;
   eventTypeName: string;
   myStatus: 'CONFIRMED' | 'CANCELLED' | 'NOT_REGISTERED' | 'WAITLISTED';

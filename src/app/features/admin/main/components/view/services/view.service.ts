@@ -1,23 +1,38 @@
-import { httpResource } from '@angular/common/http';
-import { Injectable, signal } from '@angular/core';
+import { HttpClient, httpResource } from '@angular/common/http';
+import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../../../../../../environments/environment.test';
-import { IEventDetails } from '../../../../../event-details/models/event-details.model';
+import { ApiGroupedParticipantsResponse } from '../models/participants.model';
 
 @Injectable()
 export class ViewService {
   private id = signal<number | null>(null);
+  private http = inject(HttpClient);
 
-  event = httpResource<IEventDetails>(() => {
+  participants = httpResource<ApiGroupedParticipantsResponse>(() => {
     const id = this.id();
     if (id === null) return undefined;
 
     return {
-      url: `${environment.apiUrl}/events/${id}`,
+      url: `${environment.apiUrl}/events/${id}/registrations/grouped`,
       method: 'GET',
     };
   });
 
   load(id: number) {
     this.id.set(id);
+  }
+
+  confirmRegistration(eventId: number, userId: number) {
+    return this.http.post<void>(
+      `${environment.apiUrl}/events/${eventId}/registrations/${userId}/confirm`,
+      {}
+    );
+  }
+
+  rejectRegistration(eventId: number, userId: number) {
+    return this.http.post<void>(
+      `${environment.apiUrl}/events/${eventId}/waitlist/${userId}/reject`,
+      {}
+    );
   }
 }
