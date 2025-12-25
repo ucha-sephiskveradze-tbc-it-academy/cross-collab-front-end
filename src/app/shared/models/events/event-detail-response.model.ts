@@ -11,11 +11,8 @@ export interface EventDetailResponse {
   registeredUsers: number;
   currentWaitlist: number;
   isActive: boolean;
-  myStatus: {
-    id: number;
-    name: string;
-    description: string;
-  };
+  // Backend may return either a simple status string (e.g., 'WAITLISTED', 'CANCELED', 'REGISTERED', 'NOT_REGISTERED')
+  myStatus: 'WAITLISTED' | 'CANCELED' | 'REGISTERED' | 'NOT_REGISTERED' | string;
   featuredSpeakers: string[];
   eventType: {
     id: number;
@@ -57,4 +54,3 @@ export interface EventDetailResponse {
     }>;
   }>;
 }
-

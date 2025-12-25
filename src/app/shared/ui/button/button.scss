@@ -23,6 +23,11 @@ button {
         color: $color-gray-700;
     }
 
+    &.danger {
+        background-color: $color-danger;
+        color: $color-white;
+    }
+
     &:disabled {
         opacity: 0.6;
         cursor: not-allowed;

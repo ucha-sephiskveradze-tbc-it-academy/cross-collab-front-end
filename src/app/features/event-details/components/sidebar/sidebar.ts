@@ -1,7 +1,8 @@
-import { Component, computed, Input } from '@angular/core';
+import { Component, computed, Input, inject } from '@angular/core';
 import { IEventDetails } from '../../models/event-details.model';
 import { Button } from '../../../../shared/ui/button/button';
 import { DatePipe } from '@angular/common';
+import { EventDetailService } from '../../services/event-detail';
 
 @Component({
   selector: 'app-event-sidebar',
@@ -12,9 +13,42 @@ import { DatePipe } from '@angular/common';
 export class Sidebar {
   @Input({ required: true }) event!: IEventDetails;
 
-  onRegister() {
-    // TODO: Implement event registration when backend is ready
-    // this.eventDetailsService.register(this.event.eventId)
+  private eventDetailsService = inject(EventDetailService);
+
+  private get serverStatus() {
+    return this.event.currentUserStatus;
+  }
+
+  get isRegisteredOrWaitlisted(): boolean {
+    const s = this.serverStatus;
+    const optimistic = this.eventDetailsService.optimisticRegisteredEventId();
+    return (
+      s === 'CONFIRMED' || s === 'WAITLISTED' || (!!optimistic && optimistic === this.event.eventId)
+    );
+  }
+
+  get buttonLabel(): string {
+    return this.isRegisteredOrWaitlisted ? 'Unregister from this event' : 'Register for This Event';
+  }
+
+  get buttonVariant(): 'primary' | 'secondary' | 'danger' {
+    return this.isRegisteredOrWaitlisted ? 'danger' : 'primary';
+  }
+
+  get isProcessing(): boolean {
+    return this.eventDetailsService.registering() || this.eventDetailsService.unregistering();
+  }
+
+  async onRegister() {
+    if (!this.event) return;
+
+    const id = this.event.eventId;
+
+    if (this.isRegisteredOrWaitlisted) {
+      await this.eventDetailsService.unregister(id);
+    } else {
+      await this.eventDetailsService.register(id);
+    }
   }
 
   onContactOrganizer() {
@@ -40,17 +74,11 @@ export class Sidebar {
   }
 
   getStatusLabel(): string {
-    switch (this.event.currentUserStatus) {
-      case 'CONFIRMED':
-        return 'Registered';
-      case 'WAITLISTED':
-        return 'Waitlisted';
-      case 'NOT_REGISTERED':
-        return 'Not Registered';
-      case 'NONE':
-      default:
-        return 'Not Registered';
-    }
+    const status = String(this.event.currentUserStatus).toUpperCase();
+    if (status === 'CONFIRMED' || status === 'REGISTERED') return 'Registered';
+    if (status === 'WAITLISTED') return 'Waitlisted';
+    if (status === 'CANCELLED' || status === 'CANCELED') return 'Cancelled';
+    return 'Not Registered';
   }
 
   getRegistrationStatus(): string {
