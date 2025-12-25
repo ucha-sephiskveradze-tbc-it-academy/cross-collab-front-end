@@ -36,7 +36,7 @@ export interface RegisterRequest {
   password: string;
   phoneNumber?: string;
   oneTimePassword?: string;
-  department: number;
+  department: string;
 }
 
 export interface RegisterResponse {

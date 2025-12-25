@@ -120,12 +120,12 @@ header {
             transition: all 0.2s ease;
 
             &:hover {
-                background-color: rgba(0,0,0,0.04);
+                background-color: rgba(0, 0, 0, 0.04);
                 color: var(--text);
             }
 
             &.active-link {
-                background-color: rgba(0,0,0,0.04);
+                background-color: rgba(0, 0, 0, 0.04);
                 color: var(--text);
                 font-weight: 500;
             }
@@ -223,6 +223,7 @@ header {
                 top: 100%;
                 right: 0;
                 margin-top: 8px;
+                border-radius: 8px;
                 background: var(--surface);
                 border: 1px solid var(--border);
 
@@ -238,11 +239,11 @@ header {
                     transition: background-color 0.2s;
 
                     &:hover {
-                        background-color: rgba(0,0,0,0.04);
+                        background-color: rgba(0, 0, 0, 0.04);
                     }
 
                     &:active {
-                        background-color: rgba(0,0,0,0.06);
+                        background-color: rgba(0, 0, 0, 0.06);
                     }
                 }
             }
