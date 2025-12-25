@@ -8,6 +8,7 @@ import { Footer } from '../../shared/ui/footer/footer';
 import { DatePickerModule } from 'primeng/datepicker';
 import { ListboxModule } from 'primeng/listbox';
 import { PaginatorModule } from 'primeng/paginator';
+import { CheckboxModule } from 'primeng/checkbox';
 import { EventCard } from '../../shared/ui/event-card/event-card';
 import { FormsModule } from '@angular/forms';
 import { IEventItem } from '../../shared/ui/event-card/model/event.model';
@@ -20,6 +21,7 @@ import { IEventItem } from '../../shared/ui/event-card/model/event.model';
     ListboxModule,
     DatePickerModule,
     PaginatorModule,
+    CheckboxModule,
     FormsModule,
   ],
   templateUrl: './events.html',
@@ -45,6 +47,14 @@ export class Events implements OnInit {
   selectedLocations = signal<string[]>([]);
   selectedCapacities = signal<string[]>([]);
   selectedStatuses = signal<string[]>([]);
+  includeCancelled = signal<boolean>(false);
+
+  onIncludeCancelledChange(checked: boolean) {
+    this.includeCancelled.set(checked);
+    this.first.set(0);
+    this.syncQueryParams();
+    this.updateApiQueryParams();
+  }
   dateRange = signal<[Date | null, Date | null] | null>(null);
 
   get dateRangeValue(): [Date | null, Date | null] | null {
@@ -132,11 +142,6 @@ export class Events implements OnInit {
         statusCounts['NOT_REGISTERED']++;
       }
     });
-
-    // Debugging: log raw values so we can inspect why counts appear wrong
-    console.log('[Events] myStatuses (filters metadata):', statuses);
-    console.log('[Events] events list:', eventsList);
-    console.log('[Events] computed statusCounts:', statusCounts);
 
     return statuses.map((status) => {
       const statusKey = status.name.toUpperCase();
@@ -237,12 +242,23 @@ export class Events implements OnInit {
           s === 'NotRegistered' ||
           s.toLowerCase() === 'notregistered' ||
           s.toLowerCase() === 'not registered'
-        )
-          return 'NOT_REGISTERED';
+        ) return 'NOT_REGISTERED';
         if (s === 'Cancelled' || s.toLowerCase() === 'cancelled') return 'CANCELLED';
         return s.toUpperCase();
       });
+
+      // If the user asked to include cancelled events, ensure 'CANCELLED' is present
+      if (this.includeCancelled()) {
+        if (!myStatuses.includes('CANCELLED')) {
+          myStatuses.push('CANCELLED');
+        }
+      }
+
       apiParams['MyStatuses'] = myStatuses;
+    } else if (this.includeCancelled()) {
+      // No explicit statuses selected but user wants cancelled included:
+      // Include the default statuses plus CANCELLED so backend returns cancelled events
+      apiParams['MyStatuses'] = ['NOT_REGISTERED', 'CONFIRMED', 'WAITLISTED', 'CANCELLED'];
     }
 
     const dateRange = this.dateRange();
@@ -267,6 +283,7 @@ export class Events implements OnInit {
     if (this.selectedLocations().length) params.Locations = this.selectedLocations();
     if (this.selectedCapacities().length) params.CapacityAvailability = this.selectedCapacities();
     if (this.selectedStatuses().length) params.MyStatuses = this.selectedStatuses();
+    if (this.includeCancelled()) params.includeCancelled = 'true';
 
     if (this.dateRange()) {
       const [from, to] = this.dateRange()!;
@@ -328,6 +345,11 @@ export class Events implements OnInit {
           ? params.getAll('MyStatuses')
           : params.getAll('status');
       this.selectedStatuses.set(statusParam);
+
+      const includeCancelledParam = params.get('includeCancelled') || params.get('IncludeCancelled');
+      this.includeCancelled.set(
+        includeCancelledParam === 'true' || includeCancelledParam === '1' || includeCancelledParam === 'on'
+      );
 
       const from = params.get('From') || params.get('from');
       const to = params.get('To') || params.get('to');

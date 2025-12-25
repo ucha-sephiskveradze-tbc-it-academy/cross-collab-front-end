@@ -24,7 +24,6 @@ export class EventListService {
 
   events = computed<IEventItem[]>(() => {
     const response = this.eventsResource.value();
-    console.log('[EventListService] eventsResource response:', response);
     if (!response) return [];
 
     if (
@@ -34,13 +33,11 @@ export class EventListService {
       Array.isArray(response.items)
     ) {
       const items = response.items.map((item: EventResponse) => mapEventResponseToItem(item));
-      console.log('[EventListService] mapped items:', items);
       return items;
     }
 
     if (Array.isArray(response)) {
       const items = response.map((item: EventResponse) => mapEventResponseToItem(item));
-      console.log('[EventListService] mapped items (array):', items);
       return items;
     }
 
