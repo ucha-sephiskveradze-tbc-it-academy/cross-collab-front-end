@@ -28,4 +28,11 @@ export class ViewService {
       {}
     );
   }
+
+  rejectRegistration(eventId: number, userId: number) {
+    return this.http.post<void>(
+      `${environment.apiUrl}/events/${eventId}/waitlist/${userId}/reject`,
+      {}
+    );
+  }
 }

@@ -97,7 +97,20 @@ export class View {
 
     this.viewService.confirmRegistration(e.id, userId).subscribe({
       next: () => {
-        // 🔄 hard refresh
+        window.location.reload();
+      },
+      error: (err) => {
+        console.error('Promotion failed', err);
+      },
+    });
+  }
+
+  rejectFromWaitlist(userId: number) {
+    const e = this.event();
+    if (!e) return;
+
+    this.viewService.rejectRegistration(e.id, userId).subscribe({
+      next: () => {
         window.location.reload();
       },
       error: (err) => {

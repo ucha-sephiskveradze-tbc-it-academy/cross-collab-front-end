@@ -246,7 +246,7 @@
 
           <td class="align-right">
             <button class="btn-black small" type="button" (click)="promoteFromWaitlist(w.id)">Promote</button>
-            <button class="btn-outline small" type="button">Remove</button>
+            <button class="btn-outline small" type="button" (click)="rejectFromWaitlist(w.id)">Remove</button>
           </td>
         </tr>
       </ng-template>
