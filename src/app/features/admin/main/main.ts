@@ -48,17 +48,6 @@ export class Main {
   private deleteEventService = inject(DeleteEventService);
   private router = inject(Router);
 
-  deleteEvent(eventId: number): void {
-    if (!eventId) return;
-
-    this.deleteEventService.deleteEvent(eventId).subscribe({
-      next: () => {
-        this.events.update((list) => list.filter((e) => e.eventId !== eventId));
-      },
-      error: (err) => console.error(err),
-    });
-  }
-
   statusOptions = [
     { label: 'Registered', value: 'CONFIRMED' },
     { label: 'Pending', value: 'PENDING' },
@@ -120,8 +109,21 @@ export class Main {
     this.router.navigate(['/admin/new']);
   }
 
-  editEvent(event: IEventItem) {
-    this.router.navigate(['/admin/edit', event.eventId]);
+  deleteEvent(eventId: number): void {
+    if (!eventId) return;
+
+    this.deleteEventService.deleteEvent(eventId).subscribe({
+      next: () => {
+        this.events.update((list) => list.filter((e) => e.eventId !== eventId));
+      },
+      error: (err) => console.error(err),
+    });
+  }
+
+  editEvent(eventId: number) {
+    console.log('Edit event:', eventId);
+
+    this.router.navigate(['/admin/edit', eventId]);
   }
 
   deleteSelectedEvents() {
