@@ -5,7 +5,16 @@ import { EventService as BackendEventService } from '../../../shared/services/ev
 import { EventByIdService } from '../../../shared/services/event-by-id.service';
 import { EventResponse } from '../../../shared/models/events';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
+import { from, EMPTY } from 'rxjs';
+import { concatMap, catchError, finalize } from 'rxjs/operators';
+
+import {
+  ReactiveFormsModule,
+  FormsModule,
+  FormArray,
+  FormControl,
+  FormGroup,
+} from '@angular/forms';
 import { FileUploadModule } from 'primeng/fileupload';
 import { InputTextModule } from 'primeng/inputtext';
 import { Select } from 'primeng/select';
@@ -16,7 +25,8 @@ import { CardModule } from 'primeng/card';
 import { Header } from '../../../shared/ui/header/header';
 import { Footer } from '../../../shared/ui/footer/footer';
 import { Checkbox } from 'primeng/checkbox';
-type LocationType = 'in-person' | 'virtual' | 'hybrid';
+import { EventCategoryService } from '../../../shared/services/event-category.service';
+import { AgendaService } from './services/agenda.service';
 
 @Component({
   selector: 'app-form',
@@ -24,6 +34,7 @@ type LocationType = 'in-person' | 'virtual' | 'hybrid';
     CommonModule,
     ReactiveFormsModule,
     InputTextModule,
+    FormsModule,
     Select,
     DatePickerModule,
     InputNumberModule,
@@ -42,15 +53,44 @@ export class Form implements OnInit {
   private router = inject(Router);
   private backendEventService = inject(BackendEventService);
   private eventByIdService = inject(EventByIdService);
+  readonly formService = inject(FormService);
+  private readonly categoryService = inject(EventCategoryService);
+  private agendaService = inject(AgendaService);
 
-  // expose form service to template
-  formService = inject(FormService);
+  // 🔹 expose categories signal to template
+  readonly categories = this.categoryService.categoriesWithoutCount;
+
+  // 🔹 PrimeNG-ready select options
+  readonly categoryOptions = computed(() =>
+    this.categories().map((cat) => ({
+      label: cat.name, // shown to user
+      value: cat.id, // stored in form
+    }))
+  );
+
+  readonly selectedCategoryLabel = computed(() => {
+    const id = this.formService.form.controls['category'].value;
+    return this.categories().find((c) => c.id === id)?.name ?? 'Not set';
+  });
+
+  readonly locationOptions = [
+    { label: 'In-Person', value: 'in-person' },
+    { label: 'Virtual', value: 'virtual' },
+    { label: 'Hybrid', value: 'hybrid' },
+  ];
+
+  readonly agendaTypeOptions = [
+    { label: 'Activity', value: 'Activity' },
+    { label: 'Keynote', value: 'Keynote' },
+    { label: 'Workshop', value: 'Workshop' },
+    { label: 'Registration', value: 'Registration' },
+  ];
 
   isSubmitting = signal(false);
 
   // Get event by ID from API
   eventResource = this.eventByIdService.eventResource;
-  
+
   // Convert API response to AppEvent format
   eventData = computed<AppEvent | null>(() => {
     const response = this.eventResource.value();
@@ -61,19 +101,25 @@ export class Form implements OnInit {
   constructor() {
     // Watch for create event completion
     effect(() => {
-      const createResource = this.backendEventService.createEvent;
-      const isLoading = createResource.isLoading();
-      const createError = createResource.error();
-      const createValue = createResource.value();
-      
-      if (!isLoading && this.isSubmitting()) {
-        if (createValue && !createError) {
-          this.isSubmitting.set(false);
-          this.router.navigate(['/admin/main']);
-        } else if (createError) {
-          console.error('Error creating event:', createError);
-          this.isSubmitting.set(false);
-        }
+      const createRes = this.backendEventService.createEvent;
+
+      if (!this.isSubmitting()) return;
+
+      const isLoading = createRes.isLoading();
+      const err = createRes.error();
+      const created = createRes.value();
+
+      if (isLoading) return;
+
+      if (err) {
+        console.error('Error creating event:', err);
+        this.isSubmitting.set(false);
+        return;
+      }
+
+      if (created?.id) {
+        // ✅ now post agendas, THEN navigate
+        this.postAgendas(created.id);
       }
     });
 
@@ -83,7 +129,7 @@ export class Form implements OnInit {
       const isLoading = updateResource.isLoading();
       const updateError = updateResource.error();
       const updateValue = updateResource.value();
-      
+
       if (!isLoading && this.isSubmitting()) {
         if (updateValue && !updateError) {
           this.isSubmitting.set(false);
@@ -97,13 +143,14 @@ export class Form implements OnInit {
   }
 
   ngOnInit(): void {
+    this.categoryService.getCategoriesWithoutCount();
     const idParam = this.route.snapshot.paramMap.get('id');
     const id = idParam ? Number(idParam) : null;
 
     if (id) {
       // EDIT MODE - Load event from API
       this.eventByIdService.getEventById(id);
-      
+
       // Watch for event data and initialize form
       effect(() => {
         const event = this.eventData();
@@ -117,17 +164,51 @@ export class Form implements OnInit {
     }
   }
 
-  categoryOptions = [
-    { label: 'Workshop', value: 'Workshop' },
-    { label: 'Conference', value: 'Conference' },
-    { label: 'Meetup', value: 'Meetup' },
-  ];
+  private postAgendas(eventId: number) {
+    const agendas = this.formService.mapAgendaForBackend();
 
-  locationOptions: { label: string; value: LocationType }[] = [
-    { label: 'In person', value: 'in-person' },
-    { label: 'Virtual', value: 'virtual' },
-    { label: 'Hybrid', value: 'hybrid' },
-  ];
+    if (!agendas.length) {
+      this.finishSuccess();
+      return;
+    }
+
+    from(agendas)
+      .pipe(
+        concatMap((agenda) => {
+          const payload = {
+            startTime: agenda.startTime,
+            duration: agenda.duration,
+            title: agenda.title,
+            description: agenda.description,
+            type: agenda.type,
+            location: agenda.location,
+            agendaTracks: (agenda.agendaTracks ?? []).map((t) => ({
+              title: t.title ?? '',
+              speaker: t.speaker ?? '',
+              room: t.room ?? '',
+            })),
+          };
+
+          return this.agendaService.createAgenda(eventId, payload);
+        }),
+        catchError((err) => {
+          console.error('Agenda post failed', err);
+          this.isSubmitting.set(false);
+          return EMPTY;
+        }),
+        finalize(() => {
+          // finalize runs after success OR after EMPTY returns
+        })
+      )
+      .subscribe({
+        next: () => {
+          // each agenda posted successfully
+        },
+        complete: () => {
+          this.finishSuccess();
+        },
+      });
+  }
 
   submit(): void {
     if (this.formService.form.invalid || this.isSubmitting()) return;
@@ -139,10 +220,21 @@ export class Form implements OnInit {
       const eventId = this.formService.currentEvent()?.id;
       if (eventId) {
         this.backendEventService.update(eventId, backendPayload);
+        // (optional) if you also need to update agendas, that’s a different flow
+      } else {
+        this.isSubmitting.set(false);
       }
-    } else {
-      this.backendEventService.create(backendPayload);
+      return;
     }
+
+    // CREATE EVENT
+    this.backendEventService.create(backendPayload);
+    this.finishSuccess();
+  }
+
+  private finishSuccess(): void {
+    this.isSubmitting.set(false);
+    this.router.navigate(['/admin/main']);
   }
 
   cancel(): void {
@@ -156,7 +248,7 @@ export class Form implements OnInit {
     // Extract date and time from ISO datetime strings
     const startDate = response.startDateTime ? new Date(response.startDateTime) : new Date();
     const endDate = response.endDateTime ? new Date(response.endDateTime) : new Date();
-    
+
     // Format date as YYYY-MM-DD
     const formatDate = (date: Date): string => {
       const year = date.getFullYear();
@@ -181,7 +273,11 @@ export class Form implements OnInit {
     let floorNumber = 0;
     let additionalInformation = '';
 
-    if (response.location && typeof response.location === 'object' && !Array.isArray(response.location)) {
+    if (
+      response.location &&
+      typeof response.location === 'object' &&
+      !Array.isArray(response.location)
+    ) {
       const location = response.location as {
         locationType?: string;
         address?: {
@@ -193,14 +289,14 @@ export class Form implements OnInit {
         floorNumber?: number;
         additionalInformation?: string;
       };
-      
+
       const locType = location.locationType?.toLowerCase();
       if (locType === 'virtual') {
         locationType = 'virtual';
       } else if (locType === 'hybrid') {
         locationType = 'hybrid';
       }
-      
+
       venue = location.address?.venueName || '';
       street = location.address?.street || '';
       city = location.address?.city || '';
@@ -209,12 +305,10 @@ export class Form implements OnInit {
       additionalInformation = location.additionalInformation || '';
     }
 
-    // Extract category name
-    let category = 'Workshop';
-    if (response.category && typeof response.category === 'object') {
-      category = response.category.categoryName || 'Workshop';
-    } else if (response.eventTypeName) {
-      category = response.eventTypeName;
+    // Extract category id (prefer eventTypeId when available)
+    let category = response.eventTypeId || 0;
+    if (!category && response.category && typeof response.category === 'object') {
+      category = (response.category as any).id || 0;
     }
 
     return {
@@ -243,3 +337,7 @@ export class Form implements OnInit {
     };
   }
 }
+
+// Example: Build the payload from your form
+// If you want to use this outside the class, you need to pass the formService instance.
+// If inside the Form class, use 'this.formService' instead of 'formService':

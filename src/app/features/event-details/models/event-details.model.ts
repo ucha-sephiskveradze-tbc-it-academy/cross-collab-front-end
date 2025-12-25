@@ -52,16 +52,17 @@ export interface IEventDetails {
 }
 
 export interface AgendaItem {
-  id?: number;
   startTime: string;
-  time?: string; // For backward compatibility
-  duration?: string;
+  duration: string;
   title: string;
-  description?: string | null;
-  type?: string;
-  location?: string;
-  speaker?: string;
-  tracks?: any[];
+  description: string;
+  type: string;
+  location: string;
+  agendaTracks: {
+    title: string;
+    speaker?: string;
+    room?: string;
+  }[];
 }
 
 export interface SpeakerItem {

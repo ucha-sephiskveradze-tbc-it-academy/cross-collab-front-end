@@ -15,23 +15,15 @@
 
       <div class="field">
         <label>Category</label>
-        <p-select
-          formControlName="category"
-          [options]="categoryOptions"
-          optionLabel="label"
-          optionValue="value"
-          placeholder="Select a category"
-        />
+        <p-select formControlName="category" [options]="categoryOptions()" optionLabel="label" optionValue="value"
+          placeholder="Select a category">
+        </p-select>
       </div>
 
       <div class="field">
         <label>Description</label>
-        <textarea
-          pInputTextarea
-          rows="4"
-          formControlName="description"
-          placeholder="Provide a detailed description"
-        ></textarea>
+        <textarea pInputTextarea rows="4" formControlName="description"
+          placeholder="Provide a detailed description"></textarea>
       </div>
     </p-card>
 
@@ -83,13 +75,9 @@
 
       <div class="location-types">
         @for (item of locationOptions; track item) {
-        <button
-          pButton
-          type="button"
-          class="p-button-outlined button"
+        <button pButton type="button" class="p-button-outlined button"
           [outlined]="formService.form.value.locationType !== item.value"
-          (click)="formService.form.patchValue({ locationType: item.value })"
-        >
+          (click)="formService.form.patchValue({ locationType: item.value })">
           {{ item.label }}
         </button>
 
@@ -102,21 +90,17 @@
       </div>
 
       <div class="field">
-        <input pInputText placeholder="Street address" formControlName="street" />
+        <input pInputText placeholder="Street address" />
       </div>
 
       <div class="grid-2">
-        <p-inputNumber formControlName="roomNumber" placeholder="Room number" showButtons />
-        <p-inputNumber formControlName="floorNumber" placeholder="Floor number" showButtons />
+        <p-inputNumber placeholder="Room number" showButtons />
+        <p-inputNumber placeholder="Floor number" showButtons />
       </div>
 
       <div class="field">
-        <textarea
-          pInputTextarea
-          rows="2"
-          formControlName="additionalInformation"
-          placeholder="Additional location information"
-        ></textarea>
+        <textarea pInputTextarea rows="2" formControlName="additionalInformation"
+          placeholder="Additional location information"></textarea>
       </div>
     </p-card>
 
@@ -132,9 +116,79 @@
           <label>Max Capacity</label>
           <p-inputNumber formControlName="capacity" placeholder="Max capacity" showButtons />
         </div>
-        <div class="field">
-          <label>Event Type ID</label>
-          <p-inputNumber formControlName="eventTypeId" placeholder="Event Type ID" showButtons />
+      </div>
+
+    </p-card>
+
+    <!-- AGENDA -->
+    <p-card class="section">
+      <div class="table__header">
+        <h1>Agenda</h1>
+      </div>
+
+      <div class="agenda-list">
+        <div class="agenda-item" *ngFor="let item of formService.agenda(); let i = index">
+          <div class="agenda-header">
+            <h2>Item {{ i + 1 }}</h2>
+            <button pButton type="button" icon="pi pi-trash" class="p-button-text"
+              (click)="formService.removeAgendaItem(i)"></button>
+          </div>
+
+          <div class="grid-2">
+            <div class="field">
+              <label>Start Time</label>
+              <input pInputText type="time" [value]="item.startTime"
+                (input)="formService.updateAgendaField(i,'startTime',$event.target.value)" />
+            </div>
+            <div class="field">
+              <label>Duration</label>
+              <input pInputText [value]="item.duration" placeholder="HH:MM:SS"
+                (input)="formService.updateAgendaField(i,'duration',$event.target.value)" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Title</label>
+            <input pInputText [value]="item.title"
+              (input)="formService.updateAgendaField(i,'title',$event.target.value)" />
+          </div>
+
+          <div class="field">
+            <label>Description</label>
+            <textarea pInputTextarea rows="2" [value]="item.description"></textarea>
+          </div>
+
+          <div class="grid-2">
+            <div class="field">
+              <label>Type</label>
+              <p-select [options]="agendaTypeOptions" optionLabel="label" optionValue="value"></p-select>
+            </div>
+            <div class="field">
+              <label>Location</label>
+              <input pInputText [value]="item.location"
+                (input)="formService.updateAgendaField(i,'location',$event.target.value)" />
+            </div>
+          </div>
+
+          <div class="tracks">
+            <h3>Tracks</h3>
+            @for (t of item.agendaTracks; track $index) {
+            <div class="track">
+              <input pInputText placeholder="Title" formControlName="title" [value]="t.title" />
+              <input pInputText placeholder="Speaker" [value]="t.speaker"
+                (input)="formService.updateTrackField(i,$index,'speaker',$event.target.value)" />
+              <input pInputText placeholder="Room" [value]="t.room"
+                (input)="formService.updateTrackField(i,$index,'room',$event.target.value)" />
+              <button pButton type="button" icon="pi pi-trash" class="p-button-text"
+                (click)="formService.removeTrack(i,$index)"></button>
+            </div>
+            }
+            <button pButton type="button" label="Add Track" (click)="formService.addTrack(i)"></button>
+          </div>
+        </div>
+
+        <div class="add-agenda">
+          <button pButton type="button" label="Add Agenda Item" (click)="formService.addAgendaItem()"></button>
         </div>
       </div>
 
@@ -195,16 +249,16 @@
 
       <div class="preview-row">
         <span>Category</span>
-        <span>{{ formService.form.value.category }}</span>
+        <span>{{ selectedCategoryLabel() }}</span>
       </div>
 
       <div class="preview-row">
         <span>Date</span>
         <span>{{
           formService.form.value.date
-            ? (formService.form.value.date | date : 'dd MMM yyyy')
-            : 'Not set'
-        }}</span>
+          ? (formService.form.value.date | date : 'dd MMM yyyy')
+          : 'Not set'
+          }}</span>
       </div>
 
       <div class="preview-row">
@@ -220,13 +274,8 @@
 
     <!-- ACTIONS -->
     <div class="submit">
-      <button
-        pButton
-        label="Publish Event"
-        class="publish"
-        [disabled]="formService.form.invalid || isSubmitting()"
-        (click)="submit()"
-      ></button>
+      <button pButton label="Publish Event" class="publish" [disabled]="formService.form.invalid || isSubmitting()"
+        (click)="submit()"></button>
 
       <button pButton label="Cancel" severity="secondary" outlined (click)="cancel()"></button>
     </div>

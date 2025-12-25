@@ -224,15 +224,14 @@ export class EventDetailService {
     // Map agenda items
     const mapAgenda = (agenda: EventDetailResponse['agenda']): AgendaItem[] => {
       return agenda.map((item) => ({
-        id: item.id,
         startTime: item.startTime,
         time: item.startTime, // For backward compatibility
         duration: item.duration,
         title: item.title,
-        description: item.description || undefined,
+        description: item.description || '',
         type: item.type,
         location: item.location,
-        tracks: item.tracks,
+        agendaTracks: item.tracks,
       }));
     };
 

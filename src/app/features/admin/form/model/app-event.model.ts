@@ -1,7 +1,8 @@
 export interface AppEvent {
   id?: number;
   title: string;
-  category: string;
+  // store category as numeric id in the form
+  category: number;
   description: string;
   date: string;
   startTime: string;
@@ -21,5 +22,6 @@ export interface AppEvent {
   eventTypeId: number;
   minCapacity: number;
   waitlist: boolean;
+  // optional agenda items for editing existing events
+  agenda?: any[];
 }
-
