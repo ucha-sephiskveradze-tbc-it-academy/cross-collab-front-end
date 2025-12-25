@@ -1,27 +1,16 @@
-import { Injectable, signal } from '@angular/core';
-import { httpResource } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { environment } from '../../../environments/environment.test';
 import { EventResponse, CreateEventRequest } from '../models/events';
+import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class EventCreateService {
-  private createTrigger = signal(0);
-  private createPayload = signal<CreateEventRequest | null>(null);
+  private http = inject(HttpClient);
 
-  createEvent = httpResource<EventResponse>(() => {
-    this.createTrigger();
-    const payload = this.createPayload();
-    if (!payload) return undefined;
-
-    return {
-      url: `${environment.apiUrl}/events/create-event`,
-      method: 'POST',
-      body: payload,
-    };
-  });
-
-  create(payload: CreateEventRequest): void {
-    this.createPayload.set(payload);
-    this.createTrigger.update((v) => v + 1);
+  createEvent(payload: CreateEventRequest): Observable<HttpResponse<EventResponse>> {
+    return this.http.post<EventResponse>(`${environment.apiUrl}/events/create-event`, payload, {
+      observe: 'response',
+    });
   }
 }

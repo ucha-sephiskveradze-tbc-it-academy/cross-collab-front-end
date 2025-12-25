@@ -127,15 +127,6 @@ export class SignUp {
     this.errorMessage.set(null);
 
     const dto = mapToDto(this.createAccountModel());
-    console.log('📝 [SIGNUP] Sending registration request:', {
-      userName: dto.userName,
-      email: dto.email,
-      department: dto.department,
-      phoneNumber: dto.phoneNumber,
-      hasOtp: !!dto.oneTimePassword,
-      password: '***hidden***',
-      timestamp: new Date().toISOString(),
-    });
 
     this.authService
       .register({
@@ -152,26 +143,9 @@ export class SignUp {
       )
       .subscribe({
         next: (response) => {
-          console.log('✅ [SIGNUP] Registration successful:', {
-            response,
-            timestamp: new Date().toISOString(),
-          });
-          console.log('🚀 [SIGNUP] Navigating to login page');
           this.router.navigate(['/login']);
         },
         error: (err) => {
-          console.error(`[${new Date().toISOString()}] ❌ [SIGNUP] Registration failed:`, {
-            error: err,
-            errorBody: err.error,
-            errorStringified: JSON.stringify(err.error),
-            errorMessage: err.error?.message || err.error?.errors || err.message,
-            status: err.status,
-            statusText: err.statusText,
-            url: err.url,
-            fullError: err,
-            timestamp: new Date().toISOString(),
-          });
-
           // Extract error message from various possible formats
           let errorMessage = 'Failed to create account. Please try again later.';
           if (err.error) {
@@ -231,15 +205,6 @@ export class SignUp {
         this.errorMessage.set(null);
       },
       error: (err) => {
-        console.error(`[${new Date().toISOString()}] ❌ [SIGNUP] OTP send failed:`, err);
-        console.error(`[${new Date().toISOString()}] ❌ [SIGNUP] Full error details:`, {
-          status: err.status,
-          statusText: err.statusText,
-          error: err.error,
-          errorStringified: JSON.stringify(err.error),
-          headers: err.headers,
-        });
-
         // Check for CORS errors (status 0 typically indicates CORS/network issues)
         if (err.status === 0 || err.statusText === 'Unknown Error') {
           this.errorMessage.set(

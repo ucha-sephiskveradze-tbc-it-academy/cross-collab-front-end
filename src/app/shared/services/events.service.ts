@@ -20,10 +20,6 @@ export class EventService {
     return this.listService.eventsResource;
   }
 
-  get createEvent() {
-    return this.createService.createEvent;
-  }
-
   get updateEvent() {
     return this.updateService.updateEvent;
   }
@@ -44,8 +40,8 @@ export class EventService {
     this.listService.refresh();
   }
 
-  create(payload: CreateEventRequest): void {
-    this.createService.create(payload);
+  createEvent(payload: CreateEventRequest) {
+    return this.createService.createEvent(payload);
   }
 
   update(id: number, payload: CreateEventRequest): void {

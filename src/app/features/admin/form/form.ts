@@ -27,6 +27,7 @@ import { Footer } from '../../../shared/ui/footer/footer';
 import { Checkbox } from 'primeng/checkbox';
 import { EventCategoryService } from '../../../shared/services/event-category.service';
 import { AgendaService } from './services/agenda.service';
+import { UpdateEvent } from './services/update-event';
 
 @Component({
   selector: 'app-form',
@@ -56,6 +57,7 @@ export class Form implements OnInit {
   readonly formService = inject(FormService);
   private readonly categoryService = inject(EventCategoryService);
   private agendaService = inject(AgendaService);
+  private updateEventService = inject(UpdateEvent);
 
   // 🔹 expose categories signal to template
   readonly categories = this.categoryService.categoriesWithoutCount;
@@ -99,45 +101,16 @@ export class Form implements OnInit {
   });
 
   constructor() {
-    // Watch for create event completion
-    effect(() => {
-      const createRes = this.backendEventService.createEvent;
-
-      if (!this.isSubmitting()) return;
-
-      const isLoading = createRes.isLoading();
-      const err = createRes.error();
-      const created = createRes.value();
-
-      if (isLoading) return;
-
-      if (err) {
-        console.error('Error creating event:', err);
-        this.isSubmitting.set(false);
-        return;
-      }
-
-      if (created?.id) {
-        // ✅ now post agendas, THEN navigate
-        this.postAgendas(created.id);
-      }
-    });
-
     // Watch for update event completion
-    effect(() => {
-      const updateResource = this.backendEventService.updateEvent;
-      const isLoading = updateResource.isLoading();
-      const updateError = updateResource.error();
-      const updateValue = updateResource.value();
 
-      if (!isLoading && this.isSubmitting()) {
-        if (updateValue && !updateError) {
-          this.isSubmitting.set(false);
-          this.router.navigate(['/admin/main']);
-        } else if (updateError) {
-          console.error('Error updating event:', updateError);
-          this.isSubmitting.set(false);
-        }
+    effect(() => {
+      const event = this.eventData();
+      const idParam = this.route.snapshot.paramMap.get('id');
+
+      if (event && idParam) {
+        queueMicrotask(() => {
+          this.formService.initEdit(event);
+        });
       }
     });
   }
@@ -152,12 +125,6 @@ export class Form implements OnInit {
       this.eventByIdService.getEventById(id);
 
       // Watch for event data and initialize form
-      effect(() => {
-        const event = this.eventData();
-        if (event) {
-          this.formService.initEdit(event);
-        }
-      });
     } else {
       // CREATE MODE
       this.formService.initCreate();
@@ -195,9 +162,6 @@ export class Form implements OnInit {
           console.error('Agenda post failed', err);
           this.isSubmitting.set(false);
           return EMPTY;
-        }),
-        finalize(() => {
-          // finalize runs after success OR after EMPTY returns
         })
       )
       .subscribe({
@@ -214,31 +178,66 @@ export class Form implements OnInit {
     if (this.formService.form.invalid || this.isSubmitting()) return;
 
     this.isSubmitting.set(true);
-    const backendPayload = this.formService.getBackendPayload();
 
     if (this.formService.isEditMode()) {
       const eventId = this.formService.currentEvent()?.id;
-      if (eventId) {
-        this.backendEventService.update(eventId, backendPayload);
-        // (optional) if you also need to update agendas, that’s a different flow
-      } else {
+      if (!eventId) {
         this.isSubmitting.set(false);
+        return;
       }
-      return;
-    }
 
-    // CREATE EVENT
-    this.backendEventService.create(backendPayload);
-    this.finishSuccess();
+      const payload = this.formService.getUpdatePayload(eventId);
+
+      this.updateEventService.updateEvent(payload).subscribe({
+        next: (response) => {
+          if (response.status === 200 && response.body === 1) {
+            this.postAgendas(eventId);
+          } else {
+            this.isSubmitting.set(false);
+          }
+        },
+        error: (err) => {
+          console.error('Error updating event:', err);
+          this.isSubmitting.set(false);
+        },
+      });
+    } else {
+      const payload = this.formService.getBackendPayload();
+      this.backendEventService.createEvent(payload).subscribe({
+        next: (response) => {
+          if (response.status === 200 && response.body?.id) {
+            this.postAgendas(response.body.id);
+          } else {
+            this.isSubmitting.set(false);
+          }
+        },
+        error: (err) => {
+          console.error('Error creating event:', err);
+          this.isSubmitting.set(false);
+        },
+      });
+    }
   }
 
   private finishSuccess(): void {
     this.isSubmitting.set(false);
-    this.router.navigate(['/admin/main']);
+    setTimeout(() => {
+      this.router.navigate(['/admin/main']).then(() => {
+        window.location.reload();
+      });
+    }, 1500); // 1.5 seconds delay
   }
 
   cancel(): void {
     this.router.navigate(['/events']);
+  }
+
+  onImageSelected(file: File) {
+    const url = URL.createObjectURL(file);
+
+    this.formService.form.patchValue({
+      imageUrl: url,
+    });
   }
 
   /**
@@ -330,7 +329,7 @@ export class Form implements OnInit {
       floorNumber,
       additionalInformation,
       imageUrl: response.imageUrl || '',
-      tagIds: response.tagIds || [],
+      tagIds: Array.isArray(response.tags) ? response.tags.map((t) => t.id) : [],
       eventTypeId: response.eventTypeId || 0,
       minCapacity: 0, // Not in API response, default to 0
       waitlist: false, // Not in API response, default to false

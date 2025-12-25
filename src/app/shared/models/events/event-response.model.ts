@@ -24,7 +24,11 @@ export interface EventResponse {
     categoryId?: number;
     categoryName?: string;
   };
-  tagIds?: number[];
+  tags?: {
+    id: number;
+    name: string;
+    category?: string;
+  }[];
 }
 
 export interface PaginatedEventResponse {
