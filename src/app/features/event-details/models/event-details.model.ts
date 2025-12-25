@@ -30,7 +30,7 @@ export interface IEventDetails {
   currentWaitlist: number;
   isActive: boolean;
 
-  currentUserStatus: 'REGISTERED' | 'CANCELLED' | 'NONE' | 'WAITLISTED';
+  currentUserStatus: 'CONFIRMED' | 'NOT_REGISTERED' | 'NONE' | 'WAITLISTED';
 
   organizer?: {
     id: number;

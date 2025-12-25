@@ -10,7 +10,7 @@ export const MOCK_EVENTS = [
     category: { categoryId: 5, categoryName: 'Happy Friday' },
     capacity: 40,
     totalRegistered: 22,
-    currentUserStatus: 'REGISTERED',
+    currentUserStatus: 'CONFIRMED',
   },
   {
     id: 2,
@@ -23,7 +23,7 @@ export const MOCK_EVENTS = [
     category: { categoryId: 2, categoryName: 'Team Building' },
     capacity: 20,
     totalRegistered: 10,
-    currentUserStatus: 'REGISTERED',
+    currentUserStatus: 'CONFIRMED',
   },
   {
     id: 3,
@@ -36,7 +36,7 @@ export const MOCK_EVENTS = [
     category: { categoryId: 5, categoryName: 'Happy Friday' },
     capacity: 30,
     totalRegistered: 12,
-    currentUserStatus: 'REGISTERED',
+    currentUserStatus: 'CONFIRMED',
   },
   {
     id: 4,
@@ -62,7 +62,7 @@ export const MOCK_EVENTS = [
     category: { categoryId: 5, categoryName: 'Happy Friday' },
     capacity: 60,
     totalRegistered: 48,
-    currentUserStatus: 'REGISTERED',
+    currentUserStatus: 'CONFIRMED',
   },
 ];
 export const DATE_RANGE_OPTIONS = [
@@ -158,7 +158,14 @@ export const CATEGORY_CHART_DATA = {
   datasets: [
     {
       data: [30, 20, 15, 12.5, 10, 12.5],
-      backgroundColor: ['var(--text)', 'var(--muted)', 'var(--muted)', 'var(--muted)', 'var(--border)', 'var(--border)'],
+      backgroundColor: [
+        'var(--text)',
+        'var(--muted)',
+        'var(--muted)',
+        'var(--muted)',
+        'var(--border)',
+        'var(--border)',
+      ],
       borderWidth: 0,
     },
   ],

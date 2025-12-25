@@ -43,7 +43,7 @@ export class EventDetailService {
         | string
         | null
         | undefined
-    ): 'REGISTERED' | 'CANCELLED' | 'NONE' | 'WAITLISTED' => {
+    ): 'CONFIRMED' | 'NOT_REGISTERED' | 'NONE' | 'WAITLISTED' => {
       if (!status) return 'NONE';
 
       // Handle object status
@@ -54,11 +54,15 @@ export class EventDetailService {
         const normalizedStatus = statusName.toUpperCase().trim();
 
         if (normalizedStatus === 'CONFIRMED' || normalizedStatus === 'REGISTERED') {
-          return 'REGISTERED';
+          return 'CONFIRMED';
         }
 
-        if (normalizedStatus === 'CANCELLED' || normalizedStatus === 'CANCELED') {
-          return 'CANCELLED';
+        if (
+          normalizedStatus === 'CANCELLED' ||
+          normalizedStatus === 'CANCELED' ||
+          normalizedStatus === 'NOT_REGISTERED'
+        ) {
+          return 'NOT_REGISTERED';
         }
 
         if (normalizedStatus === 'WAITLISTED') {
@@ -73,11 +77,15 @@ export class EventDetailService {
         const normalizedStatus = status.toUpperCase().trim();
 
         if (normalizedStatus === 'CONFIRMED' || normalizedStatus === 'REGISTERED') {
-          return 'REGISTERED';
+          return 'CONFIRMED';
         }
 
-        if (normalizedStatus === 'CANCELLED' || normalizedStatus === 'CANCELED') {
-          return 'CANCELLED';
+        if (
+          normalizedStatus === 'CANCELLED' ||
+          normalizedStatus === 'CANCELED' ||
+          normalizedStatus === 'NOT_REGISTERED'
+        ) {
+          return 'NOT_REGISTERED';
         }
 
         if (normalizedStatus === 'WAITLISTED') {

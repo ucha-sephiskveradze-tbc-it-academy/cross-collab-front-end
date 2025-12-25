@@ -2,19 +2,25 @@ import { IEventItem } from '../../ui/event-card/model/event.model';
 import { EventResponse } from '../../models/events';
 
 export function mapEventResponseToItem(response: EventResponse | any): IEventItem {
-  const mapStatus = (status: string): 'REGISTERED' | 'CANCELLED' | 'NONE' | 'WAITLISTED' => {
-    if (!status) return 'NONE';
+  const mapStatus = (
+    status: string
+  ): 'CONFIRMED' | 'NOT_REGISTERED' | 'CANCELED' | 'WAITLISTED' => {
+    if (!status) return 'CANCELED';
     const normalizedStatus = status.toUpperCase().trim();
     if (normalizedStatus === 'CONFIRMED' || normalizedStatus === 'REGISTERED') {
-      return 'REGISTERED';
+      return 'CONFIRMED';
     }
-    if (normalizedStatus === 'CANCELLED' || normalizedStatus === 'CANCELED') {
-      return 'CANCELLED';
+    if (
+      normalizedStatus === 'CANCELLED' ||
+      normalizedStatus === 'CANCELED' ||
+      normalizedStatus === 'NOT_REGISTERED'
+    ) {
+      return 'NOT_REGISTERED';
     }
     if (normalizedStatus === 'WAITLISTED') {
       return 'WAITLISTED';
     }
-    return 'NONE';
+    return 'CANCELED';
   };
 
   if ('startsAt' in response && 'endsAt' in response) {

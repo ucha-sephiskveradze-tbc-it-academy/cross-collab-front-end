@@ -57,15 +57,9 @@
     <div class="trending">
       @for (event of trendingEvents(); track event.eventId) {
       <div class="trending-card">
-        <div
-          class="category-icon-wrapper"
-          [style.background]="getCategoryGradient(event.category.categoryName)"
-        >
-          <img
-            [src]="getCategoryIcon(event.category.categoryName)"
-            [alt]="event.category.categoryName"
-            class="category-icon"
-          />
+        <div class="category-icon-wrapper" [style.background]="getCategoryGradient(event.category.categoryName)">
+          <img [src]="getCategoryIcon(event.category.categoryName)" [alt]="event.category.categoryName"
+            class="category-icon" />
         </div>
 
         <h4>{{ event.title }}</h4>
@@ -74,10 +68,7 @@
 
         <p class="registered-count">👥 {{ event.totalRegistered }} registered</p>
 
-        <app-button
-          label="Register"
-          [disabled]="event.currentUserStatus === 'REGISTERED'"
-        ></app-button>
+        <app-button label="Register" [disabled]="event.currentUserStatus === 'CONFIRMED'"></app-button>
       </div>
       }
     </div>
