@@ -65,6 +65,11 @@
           (onChange)="onStatusChange($event.value)"
         />
       </div>
+
+      <div class="filter-block include-cancelled">
+        <label>Include cancelled</label>
+        <p-checkbox [binary]="true" (onChange)="onIncludeCancelledChange($event.checked)"></p-checkbox>
+      </div>
     </aside>
 
     <!-- RESULTS -->

@@ -43,9 +43,11 @@ export function buildEventsQueryParams(
     const statuses = Array.isArray(myStatuses) ? myStatuses : [myStatuses];
     statuses.forEach((status) => queryParams.append('MyStatuses', String(status)));
   } else {
+    // Default to include active statuses AND cancelled so the list reflects all states
     queryParams.append('MyStatuses', 'NOT_REGISTERED');
     queryParams.append('MyStatuses', 'CONFIRMED');
     queryParams.append('MyStatuses', 'WAITLISTED');
+    queryParams.append('MyStatuses', 'CANCELLED');
   }
 
   if (params['IsActive'] !== undefined) {
@@ -55,9 +57,8 @@ export function buildEventsQueryParams(
   const page = params['Page'] !== undefined ? Number(params['Page']) : 1;
   queryParams.set('Page', String(Math.max(1, page)));
 
-  const pageSize = params['PageSize'] !== undefined ? Number(params['PageSize']) : 6;
+  const pageSize = params['PageSize'] !== undefined ? Number(params['PageSize']) : 20;
   queryParams.set('PageSize', String(pageSize));
 
   return queryParams;
 }
-
