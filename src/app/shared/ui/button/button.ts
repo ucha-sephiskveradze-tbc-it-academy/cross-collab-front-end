@@ -10,7 +10,7 @@ import { RouterLink } from '@angular/router';
 export class Button {
   @Input() label = '';
   @Input() type: 'button' | 'submit' = 'button';
-  @Input() variant: 'primary' | 'secondary' = 'primary';
+  @Input() variant: 'primary' | 'secondary' | 'danger' = 'primary';
   @Input() disabled = false;
   @Input() loading = false;
 

@@ -10,66 +10,34 @@
 
       <div class="filter-block">
         <label>Category</label>
-        <p-listbox
-          [options]="categoryOptions()"
-          optionLabel="name"
-          optionValue="id"
-          [multiple]="true"
-          [checkbox]="true"
-          (onChange)="onCategoryChange($event.value)"
-        />
+        <p-listbox [options]="categoryOptions()" optionLabel="name" optionValue="id" [multiple]="true" [checkbox]="true"
+          (onChange)="onCategoryChange($event.value)" />
       </div>
 
       <div class="filter-block">
         <label>Location</label>
-        <p-listbox
-          [options]="locationOptions()"
-          optionLabel="name"
-          optionValue="value"
-          [multiple]="true"
-          [checkbox]="true"
-          (onChange)="onLocationChange($event.value)"
-        />
+        <p-listbox [options]="locationOptions()" optionLabel="name" optionValue="value" [multiple]="true"
+          [checkbox]="true" (onChange)="onLocationChange($event.value)" />
       </div>
 
       <div class="filter-block">
         <label>Date Range</label>
-        <p-datepicker
-          selectionMode="range"
-          [readonlyInput]="true"
-          [(ngModel)]="dateRangeValue"
-          (ngModelChange)="onDateChange($event)"
-        />
+        <p-datepicker selectionMode="range" [readonlyInput]="true" [(ngModel)]="dateRangeValue"
+          (ngModelChange)="onDateChange($event)" />
       </div>
 
       <div class="filter-block">
         <label>Capacity</label>
-        <p-listbox
-          [options]="capacityOptions()"
-          optionLabel="name"
-          optionValue="value"
-          [multiple]="true"
-          [checkbox]="true"
-          (onChange)="onCapacityChange($event.value)"
-        />
+        <p-listbox [options]="capacityOptions()" optionLabel="name" optionValue="value" [multiple]="true"
+          [checkbox]="true" (onChange)="onCapacityChange($event.value)" />
       </div>
 
       <div class="filter-block">
         <label>My Status</label>
-        <p-listbox
-          [options]="statusOptions()"
-          optionLabel="name"
-          optionValue="value"
-          [multiple]="true"
-          [checkbox]="true"
-          (onChange)="onStatusChange($event.value)"
-        />
+        <p-listbox [options]="statusOptions()" optionLabel="name" optionValue="value" [multiple]="true"
+          [checkbox]="true" (onChange)="onStatusChange($event.value)" />
       </div>
 
-      <div class="filter-block include-cancelled">
-        <label>Include cancelled</label>
-        <p-checkbox [binary]="true" (onChange)="onIncludeCancelledChange($event.checked)"></p-checkbox>
-      </div>
     </aside>
 
     <!-- RESULTS -->
@@ -100,12 +68,8 @@
         }
       </div>
 
-      <p-paginator
-        [first]="first()"
-        [rows]="rows()"
-        [totalRecords]="eventsResource.value()?.totalCount || events().length"
-        (onPageChange)="onPageChange($event)"
-      />
+      <p-paginator [first]="first()" [rows]="rows()"
+        [totalRecords]="eventsResource.value()?.totalCount || events().length" (onPageChange)="onPageChange($event)" />
       }
     </section>
   </div>

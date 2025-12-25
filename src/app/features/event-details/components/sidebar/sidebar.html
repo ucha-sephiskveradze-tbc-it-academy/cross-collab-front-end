@@ -26,9 +26,7 @@
         <span class="value">{{ getStatusLabel() }}</span>
       </div>
     </div>
-    <app-button [label]="
-        event.currentUserStatus === 'CONFIRMED' ? 'Already Registered' : 'Register for This Event'
-      " variant="primary" [disabled]="event.currentUserStatus === 'CONFIRMED'" (clicked)="onRegister()" />
+    <app-button [label]="buttonLabel" [variant]="buttonVariant" [disabled]="isProcessing" (clicked)="onRegister()" />
     <p class="registration-note">
       By registering, you agree to attend the full event. Cancellations must be made 48 hours in
       advance.

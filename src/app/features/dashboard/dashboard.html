@@ -68,7 +68,8 @@
 
         <p class="registered-count">👥 {{ event.totalRegistered }} registered</p>
 
-        <app-button label="Register" [disabled]="event.currentUserStatus === 'CONFIRMED'"></app-button>
+        <app-button label="Register" routerLink="/events/{{ event.eventId }}"
+          [disabled]="event.currentUserStatus === 'CONFIRMED'"></app-button>
       </div>
       }
     </div>

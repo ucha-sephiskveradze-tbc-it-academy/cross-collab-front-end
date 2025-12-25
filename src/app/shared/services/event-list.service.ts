@@ -33,11 +33,13 @@ export class EventListService {
       Array.isArray(response.items)
     ) {
       const items = response.items.map((item: EventResponse) => mapEventResponseToItem(item));
+
       return items;
     }
 
     if (Array.isArray(response)) {
       const items = response.map((item: EventResponse) => mapEventResponseToItem(item));
+
       return items;
     }
 

@@ -156,7 +156,9 @@ export class Events implements OnInit {
   });
 
   pagedEvents = computed(() => {
-    return this.events();
+    const list = this.events();
+
+    return list;
   });
 
   onPageChange(e: any) {
@@ -242,7 +244,8 @@ export class Events implements OnInit {
           s === 'NotRegistered' ||
           s.toLowerCase() === 'notregistered' ||
           s.toLowerCase() === 'not registered'
-        ) return 'NOT_REGISTERED';
+        )
+          return 'NOT_REGISTERED';
         if (s === 'Cancelled' || s.toLowerCase() === 'cancelled') return 'CANCELLED';
         return s.toUpperCase();
       });
@@ -346,9 +349,12 @@ export class Events implements OnInit {
           : params.getAll('status');
       this.selectedStatuses.set(statusParam);
 
-      const includeCancelledParam = params.get('includeCancelled') || params.get('IncludeCancelled');
+      const includeCancelledParam =
+        params.get('includeCancelled') || params.get('IncludeCancelled');
       this.includeCancelled.set(
-        includeCancelledParam === 'true' || includeCancelledParam === '1' || includeCancelledParam === 'on'
+        includeCancelledParam === 'true' ||
+          includeCancelledParam === '1' ||
+          includeCancelledParam === 'on'
       );
 
       const from = params.get('From') || params.get('from');

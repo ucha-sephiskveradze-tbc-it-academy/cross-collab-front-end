@@ -4,6 +4,7 @@ import { environment } from '../../../../environments/environment.test';
 import { IEventDetails, AgendaItem, SpeakerItem } from '../models/event-details.model';
 import { EventDetailResponse } from '../../../shared/models/events/event-detail-response.model';
 import { EventService } from '../../../shared/services/events.service';
+import { EventRegistrationService } from '../../../shared/services/event-registration.service';
 
 @Injectable({
   providedIn: 'root',
@@ -25,10 +26,24 @@ export class EventDetailService {
   });
 
   private eventService = inject(EventService);
+  private registrationService = inject(EventRegistrationService);
+
+  // Optimistic state when user registers/unregisters; set on 204 responses
+  optimisticRegisteredEventId = signal<number | null>(null);
+  registering = signal(false);
+  unregistering = signal(false);
 
   event = computed<IEventDetails | null>(() => {
     const response = this.eventResource.value();
-    if (response) return this.mapEventResponseToDetails(response);
+
+    if (response) {
+      const mapped = this.mapEventResponseToDetails(response);
+      // If we have an optimistic registration for this event, reflect it immediately
+      if (this.optimisticRegisteredEventId() === mapped.eventId) {
+        mapped.currentUserStatus = 'WAITLISTED';
+      }
+      return mapped;
+    }
 
     // Prefill from events list while detail API is pending so the user sees consistent status
     const id = this.eventId();
@@ -37,7 +52,7 @@ export class EventDetailService {
         .events()
         .find((e) => e.eventId === id || e.eventId === id);
       if (listEvent) {
-        return {
+        const prefill: IEventDetails = {
           id: listEvent.eventId,
           eventId: listEvent.eventId,
           title: listEvent.title || '',
@@ -59,6 +74,12 @@ export class EventDetailService {
           agenda: [],
           speakers: [],
         };
+
+        if (this.optimisticRegisteredEventId() === id) {
+          prefill.currentUserStatus = 'WAITLISTED';
+        }
+
+        return prefill;
       }
     }
 
@@ -69,6 +90,56 @@ export class EventDetailService {
     // Always update the ID and trigger to force httpResource to make a new request
     this.eventId.set(id);
     this.refreshTrigger.update((v) => v + 1);
+  }
+
+  async register(id: number): Promise<number> {
+    // Prevent duplicate register calls if already confirmed or waitlisted
+    const current = this.event();
+    if (
+      (current &&
+        current.eventId === id &&
+        (current.currentUserStatus === 'WAITLISTED' ||
+          current.currentUserStatus === 'CONFIRMED')) ||
+      this.optimisticRegisteredEventId() === id
+    ) {
+      // Return 409 Conflict to indicate the action is not allowed
+      return 409;
+    }
+
+    this.registering.set(true);
+    try {
+      const status = await this.registrationService.register(id);
+
+      // Backend returns 204 on success; optimistically mark the event as waitlisted
+      if (status === 204) {
+        this.optimisticRegisteredEventId.set(id);
+        // Refresh details so eventual GET will reflect final server state
+        this.refreshTrigger.update((v) => v + 1);
+      }
+
+      return status;
+    } finally {
+      this.registering.set(false);
+    }
+  }
+
+  async unregister(id: number): Promise<number> {
+    this.unregistering.set(true);
+    try {
+      const status = await this.registrationService.unregister(id);
+
+      if (status === 204) {
+        // If we optimistically registered this event, clear that marker
+        if (this.optimisticRegisteredEventId() === id) {
+          this.optimisticRegisteredEventId.set(null);
+        }
+        this.refreshTrigger.update((v) => v + 1);
+      }
+
+      return status;
+    } finally {
+      this.unregistering.set(false);
+    }
   }
 
   private mapEventResponseToDetails(response: EventDetailResponse): IEventDetails {
@@ -196,7 +267,12 @@ export class EventDetailService {
       totalRegistered: response.registeredUsers,
       currentWaitlist: response.currentWaitlist,
       isActive: response.isActive,
-      currentUserStatus: mapStatus(response.myStatus),
+      // Prefer detail `myStatus`; fall back to list's status when detail omits it
+      currentUserStatus: mapStatus(
+        response.myStatus ??
+          this.eventService.events().find((e) => e.eventId === response.id)?.currentUserStatus ??
+          null
+      ),
       organizer: response.organizer,
       tags: response.tags,
       agenda: mapAgenda(response.agenda),
