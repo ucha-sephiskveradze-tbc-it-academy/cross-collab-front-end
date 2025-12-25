@@ -57,7 +57,7 @@
     <div class="trending">
       @for (event of trendingEvents(); track event.eventId) {
       <div class="trending-card">
-        <div class="category-icon-wrapper" [style.background]="getCategoryGradient(event.category.categoryName)">
+        <div class="category-icon-wrapper" [style.background]="getCategoryGradient()">
           <img [src]="getCategoryIcon(event.category.categoryName)" [alt]="event.category.categoryName"
             class="category-icon" />
         </div>

@@ -51,10 +51,6 @@ export class Sidebar {
     }
   }
 
-  onContactOrganizer() {
-    // Placeholder for contact organizer functionality
-  }
-
   getDuration(): string {
     const start = new Date(this.event.startDateTime);
     const end = new Date(this.event.endDateTime);

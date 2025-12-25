@@ -38,7 +38,6 @@ type WaitlistRow = {
   imports: [CommonModule, DatePipe, TableModule, CheckboxModule, Header, Footer, RouterLink],
   templateUrl: './view.html',
   styleUrl: './view.scss',
-  // ✅ IMPORTANT if your service is @Injectable() without providedIn:
   providers: [ViewService],
 })
 export class View {
@@ -100,7 +99,7 @@ export class View {
         window.location.reload();
       },
       error: (err) => {
-        // Handle error silently or add proper error handling
+        console.error('Promotion failed', err);
       },
     });
   }

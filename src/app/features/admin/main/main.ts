@@ -117,7 +117,7 @@ export class Main {
         this.events.update((list) => list.filter((e) => e.eventId !== eventId));
       },
       error: (err) => {
-        // Handle error silently or add proper error handling
+        console.error('Delete event failed', err);
       },
     });
   }

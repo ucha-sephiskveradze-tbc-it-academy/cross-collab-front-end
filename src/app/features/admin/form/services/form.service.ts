@@ -244,20 +244,6 @@ export class FormService {
     };
   }
 
-  // private buildNotificationSettings(): string[] {
-  //   const n = this.form.controls['notificationSettings'].getRawValue();
-
-  //   const selected: string[] = [];
-
-  //   for (const key of NOTIFICATION_PRIORITY) {
-  //     if (n[key]) {
-  //       selected.push(NOTIFICATION_MAP[key]);
-  //     }
-  //   }
-
-  //   return selected.length > 0 ? selected : ['None'];
-  // }
-
   private buildNotificationSettings(): string | null {
     const n = this.form.controls['notificationSettings'].getRawValue();
 
@@ -283,7 +269,7 @@ export class FormService {
     };
 
     return {
-      id: eventId, // ✅ REQUIRED
+      id: eventId,
       title: v.title,
       description: v.description,
       startDateTime,

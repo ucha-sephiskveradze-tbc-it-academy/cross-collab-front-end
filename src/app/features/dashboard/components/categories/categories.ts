@@ -39,7 +39,7 @@ export class Categories {
       id,
       label: data.name,
       count: data.count,
-      icon: CATEGORY_ICONS[data.name] ?? '📌',
+      icon: CATEGORY_ICONS[data.name] ?? './assets/icons/categories/default.svg',
     }));
   });
 }
