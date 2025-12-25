@@ -24,10 +24,9 @@
         <div>
             <h4>Categories</h4>
             <nav>
-                <a href="#">Team Building</a>
-                <a href="#">Workshops</a>
-                <a href="#">Sports</a>
-                <a href="#">Cultural Events</a>
+                @for (category of categories(); track category.id) {
+                <a [routerLink]="['/events']" [queryParams]="{ EventTypeIds: category.id }">{{ category.name }}</a>
+                }
             </nav>
         </div>
         <div>
