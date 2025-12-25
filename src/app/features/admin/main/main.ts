@@ -116,13 +116,13 @@ export class Main {
       next: () => {
         this.events.update((list) => list.filter((e) => e.eventId !== eventId));
       },
-      error: (err) => console.error(err),
+      error: (err) => {
+        // Handle error silently or add proper error handling
+      },
     });
   }
 
   editEvent(eventId: number) {
-    console.log('Edit event:', eventId);
-
     this.router.navigate(['/admin/edit', eventId]);
   }
 

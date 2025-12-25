@@ -1,4 +1,4 @@
-import { Component, inject, signal, effect, computed, OnInit } from '@angular/core';
+import { Component, inject, signal, computed, OnInit, effect } from '@angular/core';
 import { AppEvent, FormService } from './services/form.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EventService as BackendEventService } from '../../../shared/services/events.service';
@@ -8,13 +8,7 @@ import { CommonModule } from '@angular/common';
 import { from, EMPTY } from 'rxjs';
 import { concatMap, catchError, finalize } from 'rxjs/operators';
 
-import {
-  ReactiveFormsModule,
-  FormsModule,
-  FormArray,
-  FormControl,
-  FormGroup,
-} from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { FileUploadModule } from 'primeng/fileupload';
 import { InputTextModule } from 'primeng/inputtext';
 import { Select } from 'primeng/select';
@@ -197,7 +191,7 @@ export class Form implements OnInit {
           }
         },
         error: (err) => {
-          console.error('Error updating event:', err);
+          // Handle error silently or add proper error handling
           this.isSubmitting.set(false);
         },
       });

@@ -75,18 +75,6 @@ export class SignUp {
     });
 
     minLength(schema.otp, 6, { message: 'OTP must be 6 digits' });
-    // validate(schema.otp, ({ value }) => {
-    //   const enteredOtp = value();
-    //   const sentOtp = this.sentOtp(); // signal holding last sent OTP
-    //   if (!sentOtp) {
-    //     return {
-    //       kind: 'otpNotSent',
-    //       message: 'Please request an OTP first',
-    //     };
-    //   }
-
-    //   return null;
-    // });
 
     required(schema.department, { message: 'Department is required' });
 
@@ -117,7 +105,6 @@ export class SignUp {
 
   isSubmitting = signal(false);
   errorMessage = signal<string | null>(null);
-  click: any;
 
   onSubmit(event: Event) {
     event.preventDefault();
@@ -182,15 +169,6 @@ export class SignUp {
     if (!phoneNumber || phoneNumber.trim() === '') {
       phoneNumber = this.createAccountModel().phone;
     }
-
-    console.log(`[${new Date().toISOString()}] 📱 [SIGNUP] Sending OTP request:`, {
-      phoneValue: phoneNumber,
-      phoneType: typeof phoneNumber,
-      isEmpty: !phoneNumber || phoneNumber.trim() === '',
-      fieldValue: phone.value(),
-      modelValue: this.createAccountModel().phone,
-      timestamp: new Date().toISOString(),
-    });
 
     if (!phoneNumber || phoneNumber.trim() === '') {
       this.errorMessage.set('Please enter a valid phone number first');
