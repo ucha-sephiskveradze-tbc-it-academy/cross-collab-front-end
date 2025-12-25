@@ -18,6 +18,9 @@
         <p-select formControlName="category" [options]="categoryOptions()" optionLabel="label" optionValue="value"
           placeholder="Select a category">
         </p-select>
+        <small class="p-error"
+          *ngIf="formService.form.get('category')?.invalid && formService.form.get('category')?.touched">Category is
+          mandatory</small>
       </div>
 
       <div class="field">
@@ -85,7 +88,12 @@
       </div>
 
       <div class="grid-2">
-        <input pInputText placeholder="Venue name" formControlName="venue" />
+        <div class="field">
+          <input pInputText placeholder="Venue name" formControlName="venue" />
+          <small class="p-error"
+            *ngIf="formService.form.get('venue')?.invalid && formService.form.get('venue')?.touched">Venue name is
+            mandatory</small>
+        </div>
         <input pInputText placeholder="City" formControlName="city" />
       </div>
 
@@ -205,22 +213,22 @@
         <h1>Notification Settings</h1>
       </div>
 
-      <div class="checkbox-row">
-        <p-checkbox binary label="Registration confirmation" />
+      <div class="checkbox-row" formGroupName="notificationSettings">
+        <p-checkbox binary label="Registration confirmation" formControlName="registrationConfirmation" />
         <div>
           <h2>Registration Confirmation</h2>
           <p>Send confirmation email immediately after registration</p>
         </div>
       </div>
-      <div class="checkbox-row">
-        <p-checkbox binary label="24-hour reminder" />
+      <div class="checkbox-row" formGroupName="notificationSettings">
+        <p-checkbox binary label="24-hour reminder" formControlName="twentyFourHourReminder" />
         <div>
           <h2>24-Hour Reminder</h2>
           <p>Remind participants 24 hours before the event</p>
         </div>
       </div>
-      <div class="checkbox-row">
-        <p-checkbox binary label="1-hour reminder" />
+      <div class="checkbox-row" formGroupName="notificationSettings">
+        <p-checkbox binary label="1-hour reminder" formControlName="oneHourReminder" />
         <div>
           <h2>1-Hour Reminder</h2>
           <p>Send final reminder 1 hour before event start</p>
@@ -238,7 +246,11 @@
       <div class="upload-box">
         <i class="pi pi-image"></i>
         <div class="field">
-          <input pInputText formControlName="imageUrl" placeholder="Image URL" />
+          <p-fileUpload mode="basic" accept="image/*" (onSelect)="onImageSelected($event.files[0])">
+          </p-fileUpload>
+
+          <img *ngIf="formService.form.value.imageUrl" [src]="formService.form.value.imageUrl"
+            style="max-width: 100%; border-radius: 8px;" />
         </div>
       </div>
     </p-card>
@@ -275,7 +287,7 @@
     <!-- ACTIONS -->
     <div class="submit">
       <button pButton label="Publish Event" class="publish" [disabled]="formService.form.invalid || isSubmitting()"
-        (click)="submit()"></button>
+        [loading]="isSubmitting()" (click)="submit()"></button>
 
       <button pButton label="Cancel" severity="secondary" outlined (click)="cancel()"></button>
     </div>
