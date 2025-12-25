@@ -1,11 +1,12 @@
-import { httpResource } from '@angular/common/http';
-import { Injectable, signal } from '@angular/core';
+import { HttpClient, httpResource } from '@angular/common/http';
+import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../../../../../../environments/environment.test';
 import { ApiGroupedParticipantsResponse } from '../models/participants.model';
 
 @Injectable()
 export class ViewService {
   private id = signal<number | null>(null);
+  private http = inject(HttpClient);
 
   participants = httpResource<ApiGroupedParticipantsResponse>(() => {
     const id = this.id();
@@ -19,5 +20,12 @@ export class ViewService {
 
   load(id: number) {
     this.id.set(id);
+  }
+
+  confirmRegistration(eventId: number, userId: number) {
+    return this.http.post<void>(
+      `${environment.apiUrl}/events/${eventId}/registrations/${userId}/confirm`,
+      {}
+    );
   }
 }

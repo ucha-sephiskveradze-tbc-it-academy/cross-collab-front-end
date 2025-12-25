@@ -91,6 +91,21 @@ export class View {
     ];
   });
 
+  promoteFromWaitlist(userId: number) {
+    const e = this.event();
+    if (!e) return;
+
+    this.viewService.confirmRegistration(e.id, userId).subscribe({
+      next: () => {
+        // 🔄 hard refresh
+        window.location.reload();
+      },
+      error: (err) => {
+        console.error('Promotion failed', err);
+      },
+    });
+  }
+
   // counts
   registeredCount = computed(
     () => this.participantsAll().filter((p) => p.status === 'CONFIRMED').length
