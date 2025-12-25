@@ -23,18 +23,23 @@ export class Categories {
     const eventsList = this.events();
     if (eventsList.length === 0) return [];
 
-    const map = new Map<string, number>();
+    const map = new Map<number, { name: string; count: number }>();
 
     for (const event of eventsList) {
-      const label = event.category.categoryName;
+      const categoryId = event.category.categoryId;
+      const categoryName = event.category.categoryName;
 
-      map.set(label, (map.get(label) ?? 0) + 1);
+      if (!map.has(categoryId)) {
+        map.set(categoryId, { name: categoryName, count: 0 });
+      }
+      map.get(categoryId)!.count++;
     }
 
-    return Array.from(map.entries()).map(([label, count]) => ({
-      label,
-      count,
-      icon: CATEGORY_ICONS[label] ?? '📌',
+    return Array.from(map.entries()).map(([id, data]) => ({
+      id,
+      label: data.name,
+      count: data.count,
+      icon: CATEGORY_ICONS[data.name] ?? '📌',
     }));
   });
 }
