@@ -122,7 +122,7 @@ export class Events implements OnInit {
 
     eventsList.forEach((event) => {
       const frontendStatus = event.currentUserStatus?.toUpperCase();
-      if (frontendStatus === 'REGISTERED') {
+      if (frontendStatus === 'REGISTERED' || frontendStatus === 'CONFIRMED') {
         statusCounts['CONFIRMED']++;
       } else if (frontendStatus === 'WAITLISTED') {
         statusCounts['WAITLISTED']++;
@@ -132,6 +132,11 @@ export class Events implements OnInit {
         statusCounts['NOT_REGISTERED']++;
       }
     });
+
+    // Debugging: log raw values so we can inspect why counts appear wrong
+    console.log('[Events] myStatuses (filters metadata):', statuses);
+    console.log('[Events] events list:', eventsList);
+    console.log('[Events] computed statusCounts:', statusCounts);
 
     return statuses.map((status) => {
       const statusKey = status.name.toUpperCase();

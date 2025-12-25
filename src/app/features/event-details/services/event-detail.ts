@@ -1,8 +1,9 @@
 import { httpResource } from '@angular/common/http';
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, signal, computed, inject } from '@angular/core';
 import { environment } from '../../../../environments/environment.test';
 import { IEventDetails, AgendaItem, SpeakerItem } from '../models/event-details.model';
 import { EventDetailResponse } from '../../../shared/models/events/event-detail-response.model';
+import { EventService } from '../../../shared/services/events.service';
 
 @Injectable({
   providedIn: 'root',
@@ -23,10 +24,45 @@ export class EventDetailService {
     };
   });
 
+  private eventService = inject(EventService);
+
   event = computed<IEventDetails | null>(() => {
     const response = this.eventResource.value();
-    if (!response) return null;
-    return this.mapEventResponseToDetails(response);
+    if (response) return this.mapEventResponseToDetails(response);
+
+    // Prefill from events list while detail API is pending so the user sees consistent status
+    const id = this.eventId();
+    if (id) {
+      const listEvent = this.eventService
+        .events()
+        .find((e) => e.eventId === id || e.eventId === id);
+      if (listEvent) {
+        return {
+          id: listEvent.eventId,
+          eventId: listEvent.eventId,
+          title: listEvent.title || '',
+          description: listEvent.description || '',
+          startDateTime: listEvent.startDateTime,
+          endDateTime: listEvent.endDateTime,
+          registrationStart: '',
+          registrationEnd: '',
+          location: listEvent.location,
+          locationDetails: undefined,
+          category: listEvent.category,
+          capacity: listEvent.capacity || 0,
+          totalRegistered: listEvent.totalRegistered || 0,
+          currentWaitlist: 0,
+          isActive: true,
+          currentUserStatus: listEvent.currentUserStatus as any,
+          organizer: undefined,
+          tags: [],
+          agenda: [],
+          speakers: [],
+        };
+      }
+    }
+
+    return null;
   });
 
   loadEvent(id: number) {
@@ -44,12 +80,12 @@ export class EventDetailService {
         | null
         | undefined
     ): 'CONFIRMED' | 'NOT_REGISTERED' | 'NONE' | 'WAITLISTED' => {
-      if (!status) return 'NONE';
+      if (!status) return 'NOT_REGISTERED';
 
       // Handle object status
       if (typeof status === 'object' && 'name' in status) {
         const statusName = status.name;
-        if (!statusName) return 'NONE';
+        if (!statusName) return 'NOT_REGISTERED';
 
         const normalizedStatus = statusName.toUpperCase().trim();
 
@@ -69,7 +105,7 @@ export class EventDetailService {
           return 'WAITLISTED';
         }
 
-        return 'NONE';
+        return 'NOT_REGISTERED';
       }
 
       // Handle string status (backward compatibility)
@@ -93,7 +129,7 @@ export class EventDetailService {
         }
       }
 
-      return 'NONE';
+      return 'NOT_REGISTERED';
     };
 
     // Format location string

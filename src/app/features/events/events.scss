@@ -129,12 +129,12 @@
     transition: all 0.2s;
 
     &:hover {
-        background: rgba(0,0,0,0.04);
+        background: rgba(0, 0, 0, 0.04);
         border-color: var(--border);
     }
 
     &:active {
-        background: rgba(0,0,0,0.04);
+        background: rgba(0, 0, 0, 0.04);
     }
 }
 
@@ -142,7 +142,7 @@
     font-size: 13px;
     color: var(--muted);
     margin-bottom: 8px;
-} 
+}
 
 /* =======================
    Event List
