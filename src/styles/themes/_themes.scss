@@ -1,0 +1,72 @@
+/* Theme system using CSS custom properties */
+
+:root {
+    --bg: #ffffff;
+    --surface: #ffffff;
+    --text: #171717;
+    --muted: #737373;
+    --border: #e5e7eb;
+    --primary: #16a34a;
+    --accent: #ef4444;
+    --danger: #ef4444;
+}
+
+/* Light theme - default */
+.theme-light {
+    --bg: #ffffff;
+    --surface: #ffffff;
+    --text: #171717;
+    --muted: #737373;
+    --border: #e5e7eb;
+    --primary: #16a34a;
+    --accent: #10b981;
+}
+
+/* Dark theme */
+.theme-dark {
+    --bg: #0b1220;
+    --surface: #0f1724;
+    --text: #e6eef8;
+    --muted: #9aa7b8;
+    --border: #1f2937;
+    --primary: #3b82f6;
+    --accent: #60a5fa;
+}
+
+/* Single-color / mono theme (blue example) */
+.theme-blue {
+    --bg: #f8fbff;
+    --surface: #ffffff;
+    --text: #0f1724;
+    --muted: #6b7280;
+    --border: #e6eef8;
+    --primary: #1e40af;
+    --accent: #1d4ed8;
+}
+
+/* Custom preview theme (from user) */
+.theme-custom {
+    --bg: #fff7ed;
+    --surface: #ffffff;
+    --text: #1c1917;
+    --muted: #78716c;
+    --border: #fed7aa;
+    --primary: #ea580c;
+    --accent: #16a34a;
+    --danger: #dc2626;
+}
+
+/* Helper class to apply base surface and text colors */
+.theme-aware {
+    background-color: var(--bg);
+    color: var(--text);
+}
+
+/* Map Prime button CSS variables to theme variables (optional) */
+.theme-light,
+.theme-dark,
+.theme-blue,
+.theme-custom {
+    --p-button-primary-color: var(--primary);
+    --p-button-primary-hover-color: var(--accent);
+}

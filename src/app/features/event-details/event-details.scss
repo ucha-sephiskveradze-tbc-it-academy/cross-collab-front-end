@@ -23,11 +23,11 @@
   }
 
   .error-state {
-    background: #fef2f2;
-    border: 1px solid #fecaca;
+    background: rgba(255, 99, 132, 0.06);
+    border: 1px solid var(--accent);
 
     p {
-      color: #991b1b;
+      color: var(--accent);
     }
   }
 

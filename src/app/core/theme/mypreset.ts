@@ -22,7 +22,7 @@ const MyPreset = definePreset(Aura, {
         checkbox: {
           background: '{primary.color}',
           borderColor: '{primary.color}',
-          iconColor: '#ffffff',
+          iconColor: 'var(--surface)',
 
           hoverBackground: '{primary.color}',
           hoverBorderColor: '{primary.color}',
@@ -40,7 +40,7 @@ const MyPreset = definePreset(Aura, {
         checkbox: {
           background: '{primary.color}',
           borderColor: '{primary.color}',
-          iconColor: '#ffffff',
+          iconColor: 'var(--surface)',
 
           hoverBackground: '{primary.color}',
           hoverBorderColor: '{primary.color}',

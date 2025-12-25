@@ -15,7 +15,7 @@
     gap: $spacing-sm;
 
     .sep {
-        color: #a3a3a3;
+        color: var(--muted);
     }
 
     .muted {
@@ -105,7 +105,7 @@
         padding: 7px 10px;
         font-size: $font-size-sm;
         color: $color-gray-900;
-        background: #fafafa;
+        background: var(--bg);
 
         i {
             color: $color-gray-700;
@@ -145,7 +145,7 @@
 .btn-outline {
     background: $color-white;
     color: $color-gray-900;
-    border: 1px solid #d4d4d4;
+    border: 1px solid var(--border);
 }
 
 .search-wrap {
@@ -170,7 +170,7 @@
         outline: none;
 
         &:focus {
-            border-color: #bdbdbd;
+            border-color: var(--border);
         }
     }
 }
@@ -211,15 +211,15 @@
 .thin-table {
     :host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
         font-size: 12px;
-        color: #737373;
+        color: var(--muted);
         font-weight: 600;
-        background: #fafafa;
-        border-color: #eee;
+        background: var(--bg);
+        border-color: var(--border);
         padding: 12px 10px;
     }
 
     :host ::ng-deep .p-datatable .p-datatable-tbody > tr > td {
-        border-color: #f0f0f0;
+        border-color: var(--border);
         padding: 12px 10px;
         vertical-align: middle;
     }
@@ -228,7 +228,7 @@
 .sort-icon {
     margin-left: 6px;
     font-size: 12px;
-    color: #a3a3a3;
+    color: var(--muted);
 }
 
 .person {
@@ -276,9 +276,9 @@
     font-size: 11px;
     padding: $spacing-xs $spacing-sm;
     border-radius: $spacing-xs;
-    border: 1px solid #d4d4d4;
-    color: $color-gray-800;
-    background: $color-gray-100;
+    border: 1px solid var(--border);
+    color: var(--text);
+    background: var(--surface);
 
     &.dark {
         background: $color-gray-900;
@@ -300,7 +300,7 @@
 }
 
 .bulk-row {
-    border-top: 1px solid #eee;
+    border-top: 1px solid var(--border);
     margin-top: 10px;
     padding-top: 10px;
     display: flex;

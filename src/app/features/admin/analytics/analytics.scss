@@ -26,7 +26,7 @@
 
             button {
                 padding: $spacing-lg;
-                border: 1px solid #a1a1a1;
+                border: 1px solid var(--border);
                 border-radius: $radius-xl;
                 display: flex;
                 align-items: center;
@@ -34,7 +34,7 @@
                 gap: $spacing-sm;
 
                 &:hover {
-                    background-color: #e2e2e2;
+                    background-color: var(--border);
                 }
             }
         }

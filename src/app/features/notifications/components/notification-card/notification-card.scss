@@ -2,20 +2,20 @@
     display: flex;
     gap: 1rem;
     padding: 1rem;
-    border: 1px solid #e5e7eb;
-    background: #fff;
+    border: 1px solid var(--border);
+    background: var(--surface);
     border-radius: 6px;
 
     &.unread {
-        background: #f9fafb;
+        background: rgba(0,0,0,0.04);
     }
 }
 
 .icon {
     width: 40px;
     height: 40px;
-    background: #111827;
-    color: #fff;
+    background: var(--text);
+    color: var(--surface);
     border-radius: 4px;
     display: grid;
     place-items: center;
@@ -32,20 +32,20 @@
 
     .time {
         font-size: 0.75rem;
-        color: #6b7280;
+        color: var(--muted);
     }
 }
 
 .message {
     margin: 0.5rem 0;
-    color: #374151;
+    color: var(--muted);
 }
 
 .meta {
     display: flex;
     gap: 0.75rem;
     font-size: 0.75rem;
-    color: #6b7280;
+    color: var(--muted);
 }
 
 .actions {
@@ -55,18 +55,18 @@
 
     .btn {
         padding: 0.35rem 0.75rem;
-        border: 1px solid #d1d5db;
-        background: #fff;
+        border: 1px solid var(--border);
+        background: var(--surface);
         cursor: pointer;
 
         &.primary {
-            background: #111827;
-            color: #fff;
+            background: var(--text);
+            color: var(--surface);
         }
 
         &.danger {
-            border-color: #ef4444;
-            color: #ef4444;
+            border-color: var(--danger);
+            color: var(--danger);
         }
     }
 
@@ -75,7 +75,7 @@
         background: none;
         border: none;
         font-size: 0.75rem;
-        color: #6b7280;
+        color: var(--muted);
         cursor: pointer;
     }
-}
+} 

@@ -2,6 +2,7 @@ import { Component, inject, computed, signal, HostListener } from '@angular/core
 import { RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { AuthTokenService } from '../../../core/services/auth-token.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { ThemeService, ThemeName } from '../../../core/services/theme.service';
 
 /**
  * Header component displaying navigation links.
@@ -17,6 +18,13 @@ export class Header {
   private authTokenService = inject(AuthTokenService);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private themeService = inject(ThemeService);
+  theme = signal(this.themeService.getTheme());
+
+  onThemeChange(newTheme: ThemeName): void {
+    this.themeService.setTheme(newTheme);
+    this.theme.set(newTheme);
+  }
 
   /**
    * Computed signal indicating if the current user is an admin.
