@@ -34,7 +34,7 @@ export const routes: Routes = [
 
   {
     path: 'dashboard',
-    // canActivate: [employeeGuard],
+    canActivate: [employeeGuard],
     loadComponent: () => import('./features/dashboard/dashboard').then((c) => c.Dashboard),
   },
   {

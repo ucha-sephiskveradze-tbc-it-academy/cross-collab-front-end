@@ -8,7 +8,6 @@ import { NotificationTab, NotificationTabKey } from './models/notification-tab.m
 import { FormControl } from '@angular/forms';
 import { NotificationCard } from './components/notification-card/notification-card';
 import { Notification, NotificationFilterKey, QuickFilter } from './models/notification.model';
-import { NOTIFICATIONS_MOCK } from './data/notifications.mock';
 
 @Component({
   selector: 'app-notifications',

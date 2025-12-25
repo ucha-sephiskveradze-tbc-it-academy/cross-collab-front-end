@@ -7,7 +7,7 @@ import { environment } from '../../../environments/environment.test';
  */
 export const ngrokInterceptor: HttpInterceptorFn = (req, next) => {
   // Only apply to requests going to ngrok URL
-  if (req.url.startsWith(environment.authApiUrl)) {
+  if (!environment.production && req.url.startsWith(environment.authApiUrl)) {
     // Only add ngrok header, let Angular handle Content-Type automatically
     const ngrokReq = req.clone({
       setHeaders: {
@@ -19,4 +19,3 @@ export const ngrokInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req);
 };
-

@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://unperfidiously-agrostographical-rudy.ngrok-free.dev/api',
-  authApiUrl: 'https://unperfidiously-agrostographical-rudy.ngrok-free.dev/api',
+  apiUrl: 'http://34.76.60.107:5000/api',
+  authApiUrl: 'http://34.76.60.107:5000/api',
   featureFlags: {
     enableMockData: false,
   },
