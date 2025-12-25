@@ -1,44 +1,51 @@
 /* Global styles entry point */
 @use "./styles/reset";
 @use "./styles/variables" as *;
+@use "./styles/themes/themes" as *;
 
 @import "primeicons/primeicons.css";
 
 /* ✅ Checkbox */
 .p-checkbox {
-    background-color: #000000;
-    border-color: #000000;
+    background-color: var(--surface);
+    border-color: var(--text);
     border-radius: 8px;
 }
 
 .p-checkbox::after {
-    border-color: #000000;
+    border-color: var(--surface);
 }
 
 /* ✅ Custom Button Variant */
 .p-button.add-event {
-    background: #16a34a !important;
+    background: var(--primary) !important;
     border: none;
-    color: white !important;
+    color: var(--surface) !important;
 }
 
 .p-button.add-event .pi {
-    color: white !important; // icon color
+    color: var(--surface) !important; // icon color
 }
 
 .p-button.add-event:not(.p-disabled):hover {
-    background: #15803d !important;
+    background: var(--accent) !important;
 }
 
 /* ✅ Prevent horizontal scrollbars */
+html, body, app-root {
+    height: 100%;
+}
+
 body {
     overflow-x: hidden;
+    background-color: var(--bg);
+    color: var(--text);
 }
 
 :root {
-    --p-button-primary-color: #222 !important;
-    --p-button-primary-hover-color: #131313 !important;
-}
+    --p-button-primary-color: var(--primary) !important;
+    --p-button-primary-hover-color: var(--accent) !important;
+} 
 
 canvas {
     max-width: 100% !important;

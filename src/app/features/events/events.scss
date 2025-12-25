@@ -6,7 +6,7 @@
         font-size: 28px;
         font-weight: 600;
         margin-bottom: 24px;
-        color: #111827;
+        color: var(--text);
     }
 }
 
@@ -26,8 +26,8 @@
 ======================= */
 
 .filters {
-    background: #ffffff;
-    border: 1px solid #e5e7eb;
+    background: var(--surface);
+    border: 1px solid var(--border);
     border-radius: 12px;
     padding: 20px;
     position: sticky;
@@ -37,7 +37,7 @@
         font-size: 16px;
         font-weight: 600;
         margin-bottom: 20px;
-        color: #111827;
+        color: var(--text);
     }
 }
 
@@ -54,7 +54,7 @@
         font-size: 13px;
         font-weight: 600;
         margin-bottom: 8px;
-        color: #374151;
+        color: var(--muted);
     }
 
     /* PrimeNG sizing consistency */
@@ -80,12 +80,12 @@
     align-items: center;
     gap: 8px;
     font-size: 13px;
-    color: #374151;
+    color: var(--muted);
 
     input[type="checkbox"] {
         width: 14px;
         height: 14px;
-        accent-color: #111827;
+        accent-color: var(--text);
         cursor: pointer;
     }
 
@@ -113,36 +113,36 @@
 
 .total-count {
     font-size: 14px;
-    color: #6b7280;
+    color: var(--muted);
     font-weight: 500;
 }
 
 .sort-button {
     padding: 8px 16px;
-    background: #ffffff;
-    border: 1px solid #e5e7eb;
+    background: var(--surface);
+    border: 1px solid var(--border);
     border-radius: 8px;
     font-size: 14px;
     font-weight: 500;
-    color: #374151;
+    color: var(--muted);
     cursor: pointer;
     transition: all 0.2s;
 
     &:hover {
-        background: #f9fafb;
-        border-color: #d1d5db;
+        background: rgba(0,0,0,0.04);
+        border-color: var(--border);
     }
 
     &:active {
-        background: #f3f4f6;
+        background: rgba(0,0,0,0.04);
     }
 }
 
 .meta {
     font-size: 13px;
-    color: #6b7280;
+    color: var(--muted);
     margin-bottom: 8px;
-}
+} 
 
 /* =======================
    Event List
@@ -161,8 +161,8 @@
 ::ng-deep .p-paginator {
     margin-top: 24px;
     border-radius: 12px;
-    background: #ffffff;
-    border: 1px solid #e5e7eb;
+    background: var(--surface);
+    border: 1px solid var(--border);
     padding: 12px;
 }
 

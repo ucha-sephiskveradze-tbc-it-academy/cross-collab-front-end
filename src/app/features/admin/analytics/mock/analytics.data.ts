@@ -128,8 +128,8 @@ export const REGISTRATION_TREND_DATA = {
       backgroundColor: (ctx: any) => {
         const currentMonthIndex = new Date().getMonth();
         return ctx.dataIndex === currentMonthIndex
-          ? '#111111' // current month (black)
-          : '#d4d4d4'; // other months (gray)
+          ? 'var(--text)' // current month
+          : 'var(--muted)'; // other months
       },
 
       borderRadius: 4,
@@ -147,7 +147,7 @@ export const REGISTRATION_TREND_OPTIONS = {
       grid: { display: false },
     },
     y: {
-      grid: { color: '#e5e7eb' },
+      grid: { color: 'var(--border)' },
       ticks: { display: false },
     },
   },
@@ -158,7 +158,7 @@ export const CATEGORY_CHART_DATA = {
   datasets: [
     {
       data: [30, 20, 15, 12.5, 10, 12.5],
-      backgroundColor: ['#111111', '#4b5563', '#6b7280', '#9ca3af', '#d1d5db', '#e5e7eb'],
+      backgroundColor: ['var(--text)', 'var(--muted)', 'var(--muted)', 'var(--muted)', 'var(--border)', 'var(--border)'],
       borderWidth: 0,
     },
   ],

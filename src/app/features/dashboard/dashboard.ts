@@ -59,6 +59,6 @@ export class Dashboard implements OnInit {
   }
 
   getCategoryGradient(categoryName: string): string {
-    return 'linear-gradient(135deg, #6b7280 0%, #4b5563 100%)';
+    return 'linear-gradient(135deg, var(--muted) 0%, var(--border) 100%)';
   }
 }

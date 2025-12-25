@@ -7,7 +7,7 @@
 
   // Event Banner
   .event-banner {
-    background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+    background: linear-gradient(135deg, var(--text) 0%, var(--muted) 100%);
     border-radius: $radius-xl;
     padding: $spacing-xxxl;
     margin-bottom: $spacing-xl;
@@ -75,13 +75,13 @@
       }
 
       &.featured-tag {
-        background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-        color: #92400e;
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.08) 0%, rgba(239, 68, 68, 0.04) 100%);
+        color: var(--accent);
       }
 
       &.spots-tag {
-        background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
-        color: #065f46;
+        background: linear-gradient(135deg, rgba(22, 163, 74, 0.08) 0%, rgba(22, 163, 74, 0.04) 100%);
+        color: var(--primary);
       }
     }
   }

@@ -64,23 +64,23 @@
 }
 
 .status.registered {
-    background: #e6f4ea;
-    color: #1e7f4f;
+    background: rgba(0,0,0,0.04);
+    color: $color-success;
 }
 
 .status.waitlisted {
-    background: #fef3c7;
-    color: #d97706;
+    background: rgba(0,0,0,0.04);
+    color: $color-warning;
 }
 
 .status.not-registered {
-    background: #f3f4f6;
-    color: #6b7280;
+    background: $color-gray-100;
+    color: $color-gray-500;
 }
 
 .status.cancelled {
-    background: #fee2e2;
-    color: #dc2626;
+    background: rgba(0,0,0,0.04);
+    color: $color-danger;
 }
 
 /* META */
