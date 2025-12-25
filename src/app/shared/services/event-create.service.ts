@@ -14,7 +14,7 @@ export class EventCreateService {
     if (!payload) return undefined;
 
     return {
-      url: `${environment.apiUrl}/events`,
+      url: `${environment.apiUrl}/events/create-event`,
       method: 'POST',
       body: payload,
     };
