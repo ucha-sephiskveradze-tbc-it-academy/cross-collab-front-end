@@ -35,7 +35,7 @@ export class Events implements OnInit {
   events = this.eventService.events;
   eventsResource = this.eventService.eventsResource;
   filtersMetaResource = this.filtersMetaService.filtersMetaResource;
-  categoriesResource = this.categoryService.categoriesResource;
+  categoriesResource = this.categoryService.categoriesWithCountResource;
 
   totalCount = computed(() => {
     return this.eventsResource.value()?.totalCount || 0;
@@ -66,11 +66,11 @@ export class Events implements OnInit {
   }
 
   categoryOptions = computed(() => {
-    const categories = this.categoryService.categories();
+    const categories = this.categoryService.categoriesWithCount();
     return categories.map((cat) => ({
       id: cat.id,
-      name: `${cat.name} (${cat.count})`,
-      count: cat.count,
+      name: `${cat.name || 'Unknown'} (${cat.count ?? 0})`,
+      count: cat.count ?? 0,
     }));
   });
 
@@ -285,7 +285,7 @@ export class Events implements OnInit {
 
   ngOnInit() {
     this.filtersMetaService.refresh();
-    this.categoryService.withCount();
+    this.categoryService.getCategoriesWithCount();
 
     this.route.queryParamMap.subscribe((params) => {
       const pageParam = params.get('Page') || params.get('page');

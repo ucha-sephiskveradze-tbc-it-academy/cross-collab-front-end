@@ -14,35 +14,57 @@ export interface CategoriesResponse {
 
 @Injectable({ providedIn: 'root' })
 export class EventCategoryService {
-  private refreshTrigger = signal(0);
-  private withCountsFlag = signal<boolean>(false);
+  private withCountsRefreshTrigger = signal(0);
+  private withoutCountsRefreshTrigger = signal(0);
 
-  categoriesResource = httpResource<CategoriesResponse>(() => {
-    this.refreshTrigger();
-    const withCounts = this.withCountsFlag();
-
-    const url = withCounts
-      ? `${environment.apiUrl}/events/categories?withCounts=true`
-      : `${environment.apiUrl}/events/categories`;
-
+  categoriesWithCountResource = httpResource<CategoriesResponse>(() => {
+    this.withCountsRefreshTrigger();
     return {
-      url,
+      url: `${environment.apiUrl}/events/categories?withCounts=true`,
       method: 'GET',
     };
   });
 
-  categories = computed<CategoryOption[]>(() => {
-    const response = this.categoriesResource.value();
-    return response?.categories || [];
+  categoriesWithoutCountResource = httpResource<CategoriesResponse>(() => {
+    this.withoutCountsRefreshTrigger();
+    return {
+      url: `${environment.apiUrl}/events/categories`,
+      method: 'GET',
+    };
   });
 
-  getCategories(): void {
-    this.withCountsFlag.set(false);
-    this.refreshTrigger.update((v) => v + 1);
+  categoriesWithCount = computed<CategoryOption[]>(() => {
+    const response = this.categoriesWithCountResource.value();
+    if (!response?.categories) return [];
+    
+    return response.categories.map((cat: any) => {
+      const countValue = cat.count ?? cat.eventCount ?? cat.totalCount ?? cat.numberOfEvents ?? cat.eventsCount ?? 0;
+      const count = typeof countValue === 'string' ? parseInt(countValue, 10) || 0 : (countValue ?? 0);
+      
+      return {
+        id: cat.id,
+        name: cat.name || cat.categoryName || 'Unknown',
+        count: count,
+      };
+    });
+  });
+
+  categoriesWithoutCount = computed<CategoryOption[]>(() => {
+    const response = this.categoriesWithoutCountResource.value();
+    if (!response?.categories) return [];
+    
+    return response.categories.map((cat: any) => ({
+      id: cat.id,
+      name: cat.name || cat.categoryName || 'Unknown',
+      count: 0,
+    }));
+  });
+
+  getCategoriesWithCount(): void {
+    this.withCountsRefreshTrigger.update((v) => v + 1);
   }
 
-  withCount(): void {
-    this.withCountsFlag.set(true);
-    this.refreshTrigger.update((v) => v + 1);
+  getCategoriesWithoutCount(): void {
+    this.withoutCountsRefreshTrigger.update((v) => v + 1);
   }
 }
