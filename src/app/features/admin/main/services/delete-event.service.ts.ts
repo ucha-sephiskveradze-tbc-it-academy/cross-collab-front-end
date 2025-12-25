@@ -10,7 +10,7 @@ export class DeleteEventService {
   private http = inject(HttpClient);
 
   deleteEvent(eventId: number): Observable<void> {
-    const params = new HttpParams().set('id', eventId.toString());
+    const params = new HttpParams().set('eventId', eventId.toString());
     return this.http.delete<void>(`${environment.apiUrl}/events/delete-event`, { params });
   }
 }
